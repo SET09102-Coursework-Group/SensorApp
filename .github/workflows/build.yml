@@ -13,13 +13,13 @@ jobs:
         - name: Setup .NET
           uses: actions/setup-dotnet@v4
           with: 
-            dotnet-version: 8.0
+            dotnet-version: 8.0.x
             
         - name: Restore workloads
           run: dotnet workload restore ${{ vars.CSPROJ_PATH }}
           
         - name: Restore dependencies
-          run: dotnet restore ${{ vars.CSPROJ_PATH }}
+          run: dotnet restore ${{ vars.CSPROJ_PATH }} --framework net8.0-windows10.0.19041.0
              
         - name: Build project
-          run: dotnet build ${{ vars.CSPROJ_PATH }} --framework net8.0
+          run: dotnet build ${{ vars.CSPROJ_PATH }} --framework net8.0-windows10.0.19041.0
