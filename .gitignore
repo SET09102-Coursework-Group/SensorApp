@@ -78,3 +78,12 @@ $RECYCLE.BIN/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+SET09102-coursework/bin/
+SET09102-coursework/obj/
+SET09102-coursework.Database/obj/
+SET09102-coursework.Database/bin/
+SET09102-coursework.Database/appsettings.json
+SET09102-coursework.Migrations/obj/
+SET09102-coursework.Migrations/bin/
+.vscode
