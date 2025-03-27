@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SET09102_coursework.Database.Models;
-    
+
 namespace SET09102_coursework.Database.Data;
 
 public class CourseworkDbContext : DbContext
@@ -15,20 +15,33 @@ public class CourseworkDbContext : DbContext
 
     public DbSet<Sensor> Sensors { get; set; }
 
-     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
- {
-     var a = Assembly.GetExecutingAssembly();
-     var resources = a.GetManifestResourceNames();
-     using var stream = a.GetManifestResourceStream("SET09102_coursework.Database.appsettings.json");
-    
-     var config = new ConfigurationBuilder()
-         .AddJsonStream(stream)
-         .Build();
-    
-     optionsBuilder.UseSqlServer(
-         config.GetConnectionString("DevelopmentConnection"),
-         m => m.MigrationsAssembly("SET09102_coursework.Migrations")
-     );
- }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        var ConnectionName = "TestConnection";
+        var connectionString = Environment.GetEnvironmentVariable($"ConnectionStrings__{ConnectionName}");
 
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            using var stream = assembly.GetManifestResourceStream("SET09102-coursework.Database.appsettings.json");
+
+            if (stream != null)
+            {
+                var config = new ConfigurationBuilder()
+                    .AddJsonStream(stream)
+                    .Build();
+
+                connectionString = config.GetConnectionString(ConnectionName);
+            }
+        }
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new InvalidOperationException("Database connection string is not configured.");
+        }
+
+        optionsBuilder.UseSqlServer(
+            connectionString,
+            m => m.MigrationsAssembly("SET09102-coursework.Migrations"));
+    }
 }
