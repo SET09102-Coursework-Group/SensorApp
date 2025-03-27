@@ -9,7 +9,17 @@ jobs:
         steps:
         - name: Checkout code
           uses: actions/checkout@v4
-          
+
+        - name: Download SqlServer
+          uses: potatoqualitee/mssqlsuite@v1.7
+          with:
+            install: sqlengine, sqlpackage
+
+        - name: Run sqlclient
+          run: |
+            sqlcmd -S localhost -U sa -P dbatools.I0 -Q "CREATE DATABASE TestDb;"
+            sqlcmd -S localhost -U sa -P dbatools.I0 -d TestDb -Q "SELECT @@version;"
+
         - name: Setup .NET
           uses: actions/setup-dotnet@v4
           with: 
@@ -22,4 +32,6 @@ jobs:
           run: dotnet restore ${{ vars.CSPROJ_PATH }}
              
         - name: Build project
+          env: 
+            ConnectionStrings__TestConnection: ${{ secrets.TestConnection_CONNECTION_STRING }}
           run: dotnet build ${{ vars.CSPROJ_PATH }} --framework net8.0-windows10.0.19041.0
