@@ -7,13 +7,11 @@ public class AdminService
 {
     private readonly HttpClient _httpClient;
 
-    public AdminService()
+    public AdminService(HttpClient httpClient)
     {
-        _httpClient = new HttpClient
-        {
-            BaseAddress = new Uri(AuthService.BaseAddress)
-        };
+        _httpClient = httpClient;
     }
+
 
     //TODO separate in its own class
     private async Task SetAuthTokenAsync()

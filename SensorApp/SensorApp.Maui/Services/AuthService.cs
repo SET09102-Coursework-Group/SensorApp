@@ -6,16 +6,13 @@ namespace SensorApp.Maui.Services;
 
 public class AuthService
 {
-    HttpClient _httpClient;
+    private HttpClient _httpClient;
 
-    //TODO extract this to a config file
-    public static string BaseAddress = "https://0efa-77-97-219-86.ngrok-free.app";
+    public string StatusMessage = null!;
 
-    public string StatusMessage;
-
-    public AuthService()
+    public AuthService(HttpClient httpClient)
     {
-        _httpClient = new() { BaseAddress = new Uri(BaseAddress) };
+        _httpClient = httpClient;
     }
 
     public async Task<AuthResponseModel> Login(LoginModel loginModel)
@@ -26,7 +23,15 @@ public class AuthService
             response.EnsureSuccessStatusCode();
             StatusMessage = "Login Successful";
 
-            return JsonConvert.DeserializeObject<AuthResponseModel>(await response.Content.ReadAsStringAsync());
+            var jsonContent = await response.Content.ReadAsStringAsync();
+            var authResponse = JsonConvert.DeserializeObject<AuthResponseModel>(jsonContent);
+
+            if (authResponse == null)
+            {
+                throw new InvalidOperationException("Failed to deserialize the authentication response.");
+            }
+
+            return authResponse;
         }
         catch (Exception ex)
         {
@@ -34,11 +39,4 @@ public class AuthService
             return new AuthResponseModel();
         }
     }
-
-    public async Task SetAuthToken()
-    {
-        var token = await SecureStorage.GetAsync("Token");
-        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-    }
-
 }

@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using SensorApp.Maui.Extensions;
 using SensorApp.Maui.Pages;
 using SensorApp.Maui.Services;
 using SensorApp.Maui.ViewModels;
+using System.Reflection;
 
 namespace SensorApp.Maui;
 
@@ -10,30 +12,35 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<App>()
+
+        var assembly = Assembly.GetExecutingAssembly();
+        using var stream = assembly.GetManifestResourceStream("SensorApp.Maui.appsettings.Development.json");
+        var config = new ConfigurationBuilder().AddJsonStream(stream!).Build();
+
+        builder.Configuration.AddConfiguration(config);
+        builder.Services.AddSingleton<IConfiguration>(config);
+
+        builder.UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-#if DEBUG
-        builder.Logging.AddDebug();
-#endif
-        builder.Services.AddTransient<AuthService>();
+        builder.Services.AddHttpClient<AuthService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<AdminService>().ConfigureApiHttpClient();
+
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<LoginPage>();
+        builder.Services.AddSingleton<LogoutPage>();
+        builder.Services.AddTransient<AdminUsersPage>();
+        builder.Services.AddSingleton<LoadingPage>();
 
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<LogoutViewModel>();
-
-        builder.Services.AddTransient<AdminService>();
         builder.Services.AddTransient<AdminUsersViewModel>();
-        builder.Services.AddTransient<AdminUsersPage>();
-        builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<LoadingPage>();
-        builder.Services.AddSingleton<LoginPage>();
-        builder.Services.AddSingleton<LogoutPage>();
+
         return builder.Build();
     }
 }
