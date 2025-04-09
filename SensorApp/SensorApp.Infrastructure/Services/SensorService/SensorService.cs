@@ -1,4 +1,4 @@
-﻿using SensorApp.Infrastructure.Data.Models;
+﻿using SensorApp.Infrastructure.Domain.Models;
 using SensorApp.Infrastructure.Repositories;
 
 namespace SensorApp.Infrastructure.Services.SensorService;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SensorApp.Infrastructure.Data.Models;
-using SensorApp.Infrastructure.DataSeeder;
+using SensorApp.Infrastructure.Data.DataSeeder;
+using SensorApp.Infrastructure.Domain.Models;
 
 namespace SensorApp.Infrastructure.Data;
 

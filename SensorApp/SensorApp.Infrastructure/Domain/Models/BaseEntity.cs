@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SensorApp.Infrastructure.Data.Models;
+namespace SensorApp.Infrastructure.Domain.Models;
 
 public abstract class BaseEntity
 {

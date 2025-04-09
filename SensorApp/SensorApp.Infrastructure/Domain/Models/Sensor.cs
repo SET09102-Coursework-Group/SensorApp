@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace SensorApp.Infrastructure.Data.Models;
+namespace SensorApp.Infrastructure.Domain.Models;
 
 [Table("sensor")]
 public class Sensor : BaseEntity

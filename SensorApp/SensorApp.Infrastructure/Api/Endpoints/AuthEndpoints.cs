@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SensorApp.Infrastructure.Api.Dtos;
 using SensorApp.Infrastructure.Services.Auth;
 
-namespace SensorApp.Infrastructure.Api;
+namespace SensorApp.Infrastructure.Api.Endpoints;
 
 public static class AuthEndpoints
 {
@@ -30,19 +31,4 @@ public static class AuthEndpoints
         }).AllowAnonymous();
 
     }
-}
-
-
-//TODO
-internal class LoginDto
-{
-    public string Username { get; set; }
-    public string Password { get; set; }
-}
-
-internal class AuthResponseDto
-{
-    public string UserId { get; set; }
-    public string Username { get; set; }
-    public string Token { get; set; }
 }

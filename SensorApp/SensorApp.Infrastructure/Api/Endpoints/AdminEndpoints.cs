@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SensorApp.Infrastructure.Api.Dtos;
 
-namespace SensorApp.Infrastructure.Api;
+namespace SensorApp.Infrastructure.Api.Endpoints;
 
 public static class AdminEndpoints
 {
@@ -8,7 +10,7 @@ public static class AdminEndpoints
     {
         routes.MapGet("/admin/users", async (UserManager<IdentityUser> userManager) =>
         {
-            var users = userManager.Users.ToList();
+            var users = await userManager.Users.ToListAsync();
             var result = new List<UserWithRoleDto>();
 
             foreach (var user in users)
@@ -18,21 +20,13 @@ public static class AdminEndpoints
                 result.Add(new UserWithRoleDto
                 {
                     Id = user.Id,
-                    Username = user.UserName,
-                    Email = user.Email,
-                    Role = role
+                    Username = user.UserName!,
+                    Email = user.Email!,
+                    Role = role!
                 });
             }
 
             return Results.Ok(result);
         }).RequireAuthorization(policy => policy.RequireRole("Administrator"));
     }
-}
-
-internal class UserWithRoleDto
-{
-    public string Id { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
-    public string Role { get; set; }
 }

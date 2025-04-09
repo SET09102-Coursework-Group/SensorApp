@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SensorApp.Infrastructure.Data.Models;
+using SensorApp.Infrastructure.Domain.Models;
 
-namespace SensorApp.Infrastructure.DataSeeder;
+namespace SensorApp.Infrastructure.Data.DataSeeder;
 
 public static class ModelBuilderExtensions
 {
@@ -110,7 +110,16 @@ public static class ModelBuilderExtensions
                 DeploymentDate = new DateTime(2023, 3, 10),
                 Longitude = 2.3522f,
                 Latitude = 48.8566f
-            }
+            },
+             new Sensor
+             {
+                 Id = 4,
+                 Type = "Pressure",
+                 DeploymentDate = new DateTime(2023, 3, 10),
+                 Longitude = 2.3522f,
+                 Latitude = 48.8566f
+             }
+
         );
     }
 }

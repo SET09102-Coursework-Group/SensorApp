@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SensorApp.Infrastructure.Api;
+using SensorApp.Infrastructure.Api.Endpoints;
 using SensorApp.Infrastructure.Data;
+using SensorApp.Infrastructure.Domain.Models;
 using SensorApp.Infrastructure.Repositories;
 using SensorApp.Infrastructure.Services.Auth;
 using Serilog;
@@ -55,8 +55,8 @@ public class Program
             options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
         });
 
-        var conn = new SqliteConnection($"Data Source=C:\\sensorlistdb\\sensorlist.db");
-        builder.Services.AddDbContext<SensorDbContext>(o => o.UseSqlite(conn));
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        builder.Services.AddDbContext<SensorDbContext>(options => options.UseSqlite(connectionString));
 
         builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<SensorDbContext>().AddDefaultTokenProviders();
 
@@ -79,15 +79,17 @@ public class Program
             };
         });
 
+
+
         builder.Services.AddAuthorization(options =>
         {
-            options.FallbackPolicy = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                                                                     .RequireAuthenticatedUser().Build();
+            options.FallbackPolicy = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
         });
 
         builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
-        ;
+        builder.Services.AddScoped<IRepository<Sensor>, DbRepository<Sensor>>();
+
+       
 
         builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 
