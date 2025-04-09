@@ -6,28 +6,19 @@ namespace SensorApp.Maui.Services;
 public class AdminService
 {
     private readonly HttpClient _httpClient;
+    private readonly TokenService _tokenService;
 
-    public AdminService(HttpClient httpClient)
+    public AdminService(HttpClient httpClient, TokenService tokenService)
     {
         _httpClient = httpClient;
-    }
-
-
-    //TODO separate in its own class
-    private async Task SetAuthTokenAsync()
-    {
-        var token = await SecureStorage.GetAsync("Token");
-        if (!string.IsNullOrWhiteSpace(token))
-        {
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-        }
+        _tokenService = tokenService;
     }
 
     public async Task<List<UserWithRoleDto>> GetAllUsersAsync()
     {
-        await SetAuthTokenAsync();
+        await _tokenService.SetAuthHeaderAsync(_httpClient);
+
         var result = await _httpClient.GetFromJsonAsync<List<UserWithRoleDto>>("/admin/users");
-        return result ?? new List<UserWithRoleDto>();
+        return result ?? [];
     }
 }

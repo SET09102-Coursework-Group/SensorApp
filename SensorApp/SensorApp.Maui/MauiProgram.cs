@@ -30,6 +30,8 @@ public static class MauiProgram
         builder.Services.AddHttpClient<AuthService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<AdminService>().ConfigureApiHttpClient();
 
+        builder.Services.AddSingleton<TokenService>();
+
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<LogoutPage>();

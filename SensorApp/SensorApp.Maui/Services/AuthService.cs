@@ -6,7 +6,7 @@ namespace SensorApp.Maui.Services;
 
 public class AuthService
 {
-    private HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
     public string StatusMessage = null!;
 
