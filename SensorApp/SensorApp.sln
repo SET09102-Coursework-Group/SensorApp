@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Infrastructure", "SensorApp.Infrastructure\SensorApp.Infrastructure.csproj", "{62509E75-EBE1-498E-BB6F-01072C5651B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Maui", "SensorApp.Maui\SensorApp.Maui.csproj", "{9866CB05-F95B-4476-89D9-584C69D5DC01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF71F235-C592-4671-9282-B73CF34C9A11}
+	EndGlobalSection
+EndGlobal
