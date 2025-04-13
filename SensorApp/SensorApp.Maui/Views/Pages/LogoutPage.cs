@@ -1,6 +1,6 @@
 ﻿using SensorApp.Maui.ViewModels;
 
-namespace SensorApp.Maui.Pages;
+namespace SensorApp.Maui.Views.Pages;
 
 public class LogoutPage : ContentPage
 {

@@ -1,4 +1,4 @@
-﻿using SensorApp.Maui.Pages;
+﻿using SensorApp.Maui.Views.Pages;
 
 namespace SensorApp.Maui;
 

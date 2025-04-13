@@ -189,9 +189,9 @@ namespace SensorApp.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "1be7785f-e80c-4de6-b589-b1ebaf7d31cc", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEPDVzdgA+92+WSw5i8SuKRd1tXBBmB52S6lCzuFtd00Bj7uU2umNzzMQDBDQN0wu1A==", null, false, "7d45feee-1a75-4c09-bb42-f29ede34ef26", false, "scientist@sensor.com" },
-                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "93c65951-df58-4263-a107-ee1b523861a2", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAEFkjYuoNaseiRxAAeBXpE25i6El/BOePBrBe84e85C63UvmDfulS0K5BxNlc0lQgaQ==", null, false, "405d667e-5ad0-4dcc-a1b1-700197a3e40b", false, "ops@sensor.com" },
-                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "c1375efb-ec86-42e3-884f-01d6c446a908", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAEEpoZUXQiztLxn3erwKHrC94SeuxmA2FUh6beeZia6WrAcOM7KdiGPuntsWj9h866A==", null, false, "33d42fe3-aaab-4fc0-ab07-0ea40f513f09", false, "admin@sensor.com" }
+                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "5c1ff2f9-a78e-45fc-bfd9-97523cfcf942", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEKeh1pnllPKvl+AviVhKO9RopOGjh27SfogsRudKXLtk8+FPb0kKBhD3j4ujgijucw==", null, false, "de46f987-f814-4f42-8706-3d9ad50cbc68", false, "scientist@sensor.com" },
+                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "f6e86fcc-c3ba-4aaf-a8ab-0ffb37937812", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAEOSta0GGyGx8gNDV1RVTQ79jqjKBks21vfjKLdfTroFtuPOdFOXJGy3Jg1H/6JsMuw==", null, false, "cf5992c8-c69b-40aa-9f17-05d7a8a50379", false, "ops@sensor.com" },
+                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "03964d3e-b96b-48ac-990d-0eec26b79ac0", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAEKqITM2LyE+LGr6aE6tkreiahW67lNTocrWqcOLJmxTKh/ng/LcmlDLlOZhmCGiFwg==", null, false, "175fad37-b693-4118-9c2d-b47394a008c6", false, "admin@sensor.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -201,7 +201,8 @@ namespace SensorApp.Infrastructure.Migrations
                 {
                     { 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 139.6917f, 35.6895f, "Temperature" },
                     { 2, new DateTime(2023, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 40.7128f, -74.006f, "Humidity" },
-                    { 3, new DateTime(2023, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 48.8566f, 2.3522f, "Pressure" }
+                    { 3, new DateTime(2023, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 48.8566f, 2.3522f, "Pressure" },
+                    { 4, new DateTime(2023, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 48.8566f, 2.3522f, "Pressure" }
                 });
 
             migrationBuilder.InsertData(

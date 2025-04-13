@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
-using SensorApp.Maui.Pages;
 using SensorApp.Maui.Services;
 using SensorApp.Maui.ViewModels;
+using SensorApp.Maui.Views.Pages;
 using System.Reflection;
 
 namespace SensorApp.Maui;

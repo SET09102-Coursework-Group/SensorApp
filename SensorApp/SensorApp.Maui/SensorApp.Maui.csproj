@@ -64,15 +64,6 @@
     <EmbeddedResource Include="appsettings.Development.json" />
   </ItemGroup>
 
-
-  <ItemGroup>
-	  <Content Include="Pages\appsettings.Development.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
-	</ItemGroup>
-
   <ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
@@ -87,22 +78,22 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\AdminUsersPage.xaml.cs">
+	  <Compile Update="Views\Pages\AdminUsersPage.xaml.cs">
 	    <DependentUpon>AdminUsersPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Controls\FlyOutHeader.xaml">
+	  <MauiXaml Update="Views\Controls\FlyOutHeader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\AdminUsersPage.xaml">
+	  <MauiXaml Update="Views\Pages\AdminUsersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\LoadingPage.xaml">
+	  <MauiXaml Update="Views\Pages\LoadingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\LoginPage.xaml">
+	  <MauiXaml Update="Views\Pages\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SensorApp.Maui.Helpers;
+using SensorApp.Maui.Helpers.MenuRoles;
 using SensorApp.Maui.Models;
 using SensorApp.Maui.Services;
 using System.IdentityModel.Tokens.Jwt;

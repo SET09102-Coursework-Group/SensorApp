@@ -1,6 +1,6 @@
-﻿using SensorApp.Maui.Helpers;
+﻿using SensorApp.Maui.Helpers.MenuRoles;
 using SensorApp.Maui.Models;
-using SensorApp.Maui.Pages;
+using SensorApp.Maui.Views.Pages;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 

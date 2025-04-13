@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
              xmlns:models="clr-namespace:SensorApp.Maui.Models"
-             x:Class="SensorApp.Maui.Pages.AdminUsersPage"
+             x:Class="SensorApp.Maui.Views.Pages.AdminUsersPage"
              x:DataType="viewmodel:AdminUsersViewModel"
              Title="Admin: Manage Users">
 

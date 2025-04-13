@@ -1,4 +1,4 @@
-namespace SensorApp.Maui.Controls;
+namespace SensorApp.Maui.Views.Controls;
 
 public partial class FlyOutHeader : StackLayout
 {
