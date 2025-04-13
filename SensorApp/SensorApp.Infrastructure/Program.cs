@@ -93,7 +93,6 @@ public class Program
         });
 
         builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped<IRepository<Sensor>, DbRepository<Sensor>>();
 
        
 

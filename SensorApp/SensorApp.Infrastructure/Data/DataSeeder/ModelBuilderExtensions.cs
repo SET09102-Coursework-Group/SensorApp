@@ -84,43 +84,5 @@ public static class ModelBuilderExtensions
             }
         );
     }
-    public static void SeedSensors(this ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Sensor>().HasData(
-            new Sensor
-            {
-                Id = 1,
-                Type = "Temperature",
-                DeploymentDate = new DateTime(2023, 1, 1),
-                Longitude = 35.6895f,
-                Latitude = 139.6917f
-            },
-            new Sensor
-            {
-                Id = 2,
-                Type = "Humidity",
-                DeploymentDate = new DateTime(2023, 2, 15),
-                Longitude = -74.0060f,
-                Latitude = 40.7128f
-            },
-            new Sensor
-            {
-                Id = 3,
-                Type = "Pressure",
-                DeploymentDate = new DateTime(2023, 3, 10),
-                Longitude = 2.3522f,
-                Latitude = 48.8566f
-            },
-             new Sensor
-             {
-                 Id = 4,
-                 Type = "Pressure",
-                 DeploymentDate = new DateTime(2023, 3, 10),
-                 Longitude = 2.3522f,
-                 Latitude = 48.8566f
-             }
-
-        );
-    }
 }
 
