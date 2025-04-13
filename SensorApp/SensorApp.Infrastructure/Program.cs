@@ -54,11 +54,17 @@ public class Program
         {
             options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
         });
-
+        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+        builder.Services.AddOptions<JwtSettings>()
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<SensorDbContext>(options => options.UseSqlite(connectionString));
 
         builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<SensorDbContext>().AddDefaultTokenProviders();
+
+        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+
 
         builder.Services.AddAuthentication(options =>
         {
@@ -70,12 +76,12 @@ public class Program
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                ValidIssuer = jwtSettings!.Issuer,
                 ValidateAudience = true,
-                ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                ValidAudience = jwtSettings.Audience,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
             };
         });
 
