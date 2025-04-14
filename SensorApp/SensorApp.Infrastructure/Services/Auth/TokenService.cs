@@ -7,12 +7,16 @@ using System.Text;
 
 namespace SensorApp.Infrastructure.Services.Auth;
 
+/// <summary>
+/// Service responsible for generating JWT tokens for authenticated users.
+/// </summary>
 public class TokenService : ITokenService
 {
     private readonly JwtSettings _jwtSettings;
 
     public TokenService(IOptions<JwtSettings> jwtOptions)
     {
+        // Retrieve the JWT settings from the configuration.
         _jwtSettings = jwtOptions.Value;
     }
 

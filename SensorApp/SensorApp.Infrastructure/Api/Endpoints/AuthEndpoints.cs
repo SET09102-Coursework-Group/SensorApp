@@ -4,6 +4,10 @@ using SensorApp.Infrastructure.Services.Auth;
 
 namespace SensorApp.Infrastructure.Api.Endpoints;
 
+/// <summary>
+/// Maps the authentication endpoints.
+/// The /login endpoint authenticates the user and returns a JWT token if successful.
+/// </summary>
 public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this IEndpointRouteBuilder routes, IConfiguration configuration)

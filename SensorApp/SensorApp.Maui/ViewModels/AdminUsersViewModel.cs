@@ -1,23 +1,30 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using SensorApp.Maui.Models;
 using SensorApp.Maui.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// View model for managing the administration of user data.
+/// </summary>
 public partial class AdminUsersViewModel : BaseViewModel
 {
     private readonly AdminService adminService;
+    private readonly ILogger<AdminUsersViewModel> logger;
 
     [ObservableProperty]
     private ObservableCollection<UserWithRoleDto> users;
 
-    public AdminUsersViewModel(AdminService adminService)
+    public AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger)
     {
         this.adminService = adminService;
+        this.logger = logger;
         users = new ObservableCollection<UserWithRoleDto>();
     }
+
 
     [RelayCommand]
     public async Task LoadUsersAsync()
@@ -35,7 +42,7 @@ public partial class AdminUsersViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            //TODO add logging - extract on its own class for future use
+            logger.LogError(ex, "Error occurred while loading users.");
         }
         finally
         {

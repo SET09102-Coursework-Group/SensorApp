@@ -4,6 +4,10 @@ using SensorApp.Infrastructure.Api.Dtos;
 
 namespace SensorApp.Infrastructure.Api.Endpoints;
 
+/// <summary>
+/// Maps all admin-specific endpoints.
+/// Authorization is required to be an Administrator. 
+/// </summary>
 public static class AdminEndpoints
 {
     public static void MapAdminEndpoints(this IEndpointRouteBuilder routes)

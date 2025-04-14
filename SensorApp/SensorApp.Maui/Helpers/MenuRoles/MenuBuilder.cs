@@ -3,6 +3,9 @@ using SensorApp.Maui.Views.Pages;
 
 namespace SensorApp.Maui.Helpers.MenuRoles;
 
+/// <summary>
+/// Builds and configures the menu for the application based on the current user role.
+/// </summary>
 public static class MenuBuilder
 {
     public static void BuildMenu()

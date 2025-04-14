@@ -2,6 +2,9 @@
 
 namespace SensorApp.Maui.Services;
 
+/// <summary>
+/// Service for managing the authentication token and setting it on HTTP requests.
+/// </summary>
 public class TokenService
 {
     public async Task<string?> GetAuthTokenAsync()

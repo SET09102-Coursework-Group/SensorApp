@@ -1,5 +1,9 @@
 ﻿namespace SensorApp.Maui.Models;
 
+
+/// <summary>
+/// Data transfer object representing a user along with their assigned role.
+/// </summary>
 public class UserWithRoleDto
 {
     public string Id { get; set; }
