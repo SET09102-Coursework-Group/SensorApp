@@ -3,10 +3,14 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Maui.Services;
 
+/// <summary>
+/// Service that provides administrator-specific operations
+/// </summary>
 public class AdminService
 {
     private readonly HttpClient _httpClient;
     private readonly TokenService _tokenService;
+
 
     public AdminService(HttpClient httpClient, TokenService tokenService)
     {
@@ -14,6 +18,10 @@ public class AdminService
         _tokenService = tokenService;
     }
 
+    /// <summary>
+    /// Retrieves a list of all users with their roles by making an API call.
+    /// </summary>
+    /// <returns>A list of UserWithRoleDto objects. Returns an empty list if the response is null.</returns>
     public async Task<List<UserWithRoleDto>> GetAllUsersAsync()
     {
         await _tokenService.SetAuthHeaderAsync(_httpClient);

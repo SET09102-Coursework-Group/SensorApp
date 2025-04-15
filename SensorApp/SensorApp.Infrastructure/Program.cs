@@ -6,8 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SensorApp.Infrastructure.Api.Endpoints;
 using SensorApp.Infrastructure.Data;
-using SensorApp.Infrastructure.Domain.Models;
-using SensorApp.Infrastructure.Repositories;
 using SensorApp.Infrastructure.Services.Auth;
 using Serilog;
 using System.Text;
@@ -49,15 +47,16 @@ public class Program
             };
             options.AddSecurityRequirement(securityRequirement);
         });
-
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
         });
+
+
         builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-        builder.Services.AddOptions<JwtSettings>()
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
+        builder.Services.AddOptions<JwtSettings>().ValidateDataAnnotations().ValidateOnStart();
+       
+        
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<SensorDbContext>(options => options.UseSqlite(connectionString));
 
@@ -70,8 +69,7 @@ public class Program
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
+        }).AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {

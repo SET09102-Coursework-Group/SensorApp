@@ -2,6 +2,10 @@
 
 namespace SensorApp.Infrastructure.Domain.Models;
 
+/// <summary>
+/// Abstract base class that other domain entities inherit from.
+/// Provides a primary key Id for each entity.
+/// </summary>
 public abstract class BaseEntity
 {
     [Key]

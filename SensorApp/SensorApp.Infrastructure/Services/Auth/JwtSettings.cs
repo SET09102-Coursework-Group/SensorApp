@@ -2,6 +2,9 @@
 
 namespace SensorApp.Infrastructure.Services.Auth;
 
+/// <summary>
+/// Holds the configuration settings for JWT token generation.
+/// </summary>
 public class JwtSettings
 {
     [Required]

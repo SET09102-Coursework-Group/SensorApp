@@ -4,6 +4,9 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Maui.Services;
 
+/// <summary>
+/// Service for handling authentication requests.
+/// </summary>
 public class AuthService
 {
     private readonly HttpClient _httpClient;
@@ -14,6 +17,15 @@ public class AuthService
     {
         _httpClient = httpClient;
     }
+
+    /// <summary>
+    /// Attempts to log in the user by sending their credentials to the API.
+    /// </summary>
+    /// <param name="loginModel">Contains username and password.</param>
+    /// <returns>
+    /// An AuthResponseModel containing the user ID, username, and token on successful login.
+    /// Returns an empty model on failure.
+    /// </returns>
 
     public async Task<AuthResponseModel> Login(LoginModel loginModel)
     {

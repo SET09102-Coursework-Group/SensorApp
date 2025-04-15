@@ -3,6 +3,9 @@ using SensorApp.Maui.Views.Pages;
 
 namespace SensorApp.Maui.Factories.MenuFactory;
 
+/// <summary>
+/// Factory for creating menu items for administrator users.
+/// </summary>
 public class AdminMenuFactory : IMenuFactory
 {
     public List<FlyoutItem> CreateMenu()
