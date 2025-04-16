@@ -1,13 +1,9 @@
 ﻿using Newtonsoft.Json;
 using SensorApp.Shared.Dtos;
 using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 
 namespace SensorApp.Shared.Services;
 
-/// <summary>
-/// Service for handling authentication requests.
-/// </summary>
 public class AuthService
 {
     private readonly HttpClient _httpClient;
@@ -20,8 +16,11 @@ public class AuthService
     }
 
     /// <summary>
-    /// Attempts to log in the user by sending their credentials to the API.
+    /// Sends the user's login credentials to the backend and processes the response
     /// </summary>
+    /// <param name="loginDto">The login credentials entered by the user.</param>
+    /// <returns> a <see cref="AuthResponseDto"/> with JWT  and basic user info
+    /// </returns>
     public async Task<AuthResponseDto> Login(LoginDto loginDto)
     {
         try
@@ -31,8 +30,7 @@ public class AuthService
 
             StatusMessage = "Login Successful";
             var jsonContent = await response.Content.ReadAsStringAsync();
-            var authResponse = JsonConvert.DeserializeObject<AuthResponseDto>(jsonContent)
-                               ?? new AuthResponseDto();
+            var authResponse = JsonConvert.DeserializeObject<AuthResponseDto>(jsonContent) ?? new AuthResponseDto();
 
             return authResponse;
         }

@@ -7,54 +7,49 @@ using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
-/// <summary>
-/// View model for managing the administration of user data.
-/// </summary>
+
 public partial class AdminUsersViewModel : BaseViewModel
 {
     private readonly AdminService _adminService;
     private readonly ILogger<AdminUsersViewModel> _logger;
-    [ObservableProperty]
-    private ObservableCollection<UserWithRoleDto> _users = new();
-
 
     public AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger)
     {
-        this._adminService = adminService;
-        this._logger = logger;
-        this._users = [];
+        _adminService = adminService;
+        _logger = logger;
     }
 
+    [ObservableProperty]
+    private ObservableCollection<UserWithRoleDto> users = new();
 
     [RelayCommand]
     public async Task LoadUsersAsync()
     {
         if (IsLoading) return;
+
         IsLoading = true;
+
         try
         {
-            var token = await SecureStorage.GetAsync("Token"); 
+            var token = await SecureStorage.GetAsync("Token");
+
             if (string.IsNullOrEmpty(token))
             {
-
+                _logger.LogWarning("Token is missing. Cannot load users.");
                 return;
             }
 
             var list = await _adminService.GetAllUsersAsync(token);
-            Users.Clear();
-            foreach (var user in list)
-            {
-                Users.Add(user);
-            }
+            Users = new ObservableCollection<UserWithRoleDto>(list);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while loading users.");
+            _logger.LogError(ex, "Failed to load users.");
+            await Shell.Current.DisplayAlert("Error", "Unable to load users.", "OK");
         }
         finally
         {
             IsLoading = false;
         }
     }
-
 }

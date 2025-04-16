@@ -11,5 +11,5 @@ public partial class BaseViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsNotLoading))]
     bool isLoading;
 
-    public bool IsNotLoading => !isLoading;
+    public bool IsNotLoading => !IsLoading;
 }

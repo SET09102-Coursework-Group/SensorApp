@@ -3,24 +3,26 @@ using SensorApp.Shared.Interfaces;
 
 namespace SensorApp.Shared.Factories;
 
-/// <summary>
-/// Resolves the proper menu factory based on the specified user role.
-/// </summary>
 public static class MenuFactoryResolver
 {
     /// <summary>
-    /// Returns the appropriate IMenuFactory implementation for the given user role.
+    /// Resolves the appropriate <see cref="IMenuFactory"/> implementation based on the user's role.
+    ///
+    /// For example:
+    /// - An Administrator will get the <see cref="AdminMenuFactory"/>, which generates admin-specific menu items.
+    /// 
+    /// If the provided role is not recognized or not yet supported, the method throws an exception.
     /// </summary>
-    /// <param name="role">The user role to resolve a menu for.</param>
-    /// <returns>An implementation of IMenuFactory.</returns>
-    /// <exception cref="NotSupportedException">
-    /// Thrown when a user role is not supported.
-    /// </exception>
+    /// <param name="role">The user's role</param>
+    /// <returns>An instance of <see cref="IMenuFactory"/> responsible for generating the correct menu for the user</returns>
     public static IMenuFactory Resolve(UserRole role)
     {
         return role switch
         {
-            UserRole.Administrator => new AdminMenuFactory(), // <- This is the problem
+            UserRole.Administrator => new AdminMenuFactory(),
+
+            // TODO: Remaining two roles should be defined here with their factory
+
             _ => throw new NotSupportedException($"Role '{role}' is not supported.")
         };
     }

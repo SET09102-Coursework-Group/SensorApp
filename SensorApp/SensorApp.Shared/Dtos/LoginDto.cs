@@ -1,7 +1,8 @@
 ﻿namespace SensorApp.Shared.Dtos;
 
 /// <summary>
-/// Represents the login credentials required to authenticate a user.
+/// Data Transfer Object used to send user login information from the frontend to the backend authentication API (/login).
+/// Contains user input for username and password
 /// </summary>
 public class LoginDto
 {

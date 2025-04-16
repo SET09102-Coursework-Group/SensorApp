@@ -1,5 +1,4 @@
-﻿using SensorApp.Maui.Helpers.MenuRoles;
-using SensorApp.Maui.Views.Pages;
+﻿using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,40 +13,40 @@ public partial class LoadingPageViewModel : BaseViewModel
     public LoadingPageViewModel(IMenuBuilder menuBuilder)
     {
         _menuBuilder = menuBuilder;
-        CheckUserLoginDetails();
+        _ = InitializeAsync();
     }
 
-    private async void CheckUserLoginDetails()
+    private async Task InitializeAsync()
+    {
+        await CheckUserLoginDetailsAsync();
+    }
+    private async Task CheckUserLoginDetailsAsync()
     {
         var token = await SecureStorage.GetAsync("Token");
+
         if (string.IsNullOrEmpty(token))
         {
             await GoToLoginPage();
+            return;
         }
-        else
+
+        if (new JwtSecurityTokenHandler().ReadToken(token) is not JwtSecurityToken jwt || jwt.ValidTo < DateTime.UtcNow)
         {
-            var jsonToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
-
-            if (jsonToken.ValidTo < DateTime.UtcNow)
-            {
-                SecureStorage.Remove("Token");
-                await GoToLoginPage();
-            }
-            else
-            {
-                var role = jsonToken.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Role)?.Value;
-
-                App.UserInfo = new UserInfo
-                {
-                    Username = jsonToken.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Email)?.Value,
-                    Role = role
-                };
-
-                _menuBuilder.BuildMenu(App.UserInfo);
-                await GoToMainPage();
-            }
+            SecureStorage.Remove("Token");
+            await GoToLoginPage();
+            return;
         }
+
+        App.UserInfo = LoadingPageViewModel.ParseUserInfo(jwt);
+        _menuBuilder.BuildMenu(App.UserInfo);
+        await GoToMainPage();
     }
+
+    private static UserInfo ParseUserInfo(JwtSecurityToken token) => new()
+    {
+        Username = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+        Role = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value
+    };
 
     private async Task GoToLoginPage()
     {
