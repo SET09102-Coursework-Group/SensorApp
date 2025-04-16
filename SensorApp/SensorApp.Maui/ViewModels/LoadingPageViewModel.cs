@@ -1,6 +1,7 @@
 ﻿using SensorApp.Maui.Helpers.MenuRoles;
-using SensorApp.Maui.Models;
 using SensorApp.Maui.Views.Pages;
+using SensorApp.Shared.Interfaces;
+using SensorApp.Shared.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -8,14 +9,16 @@ namespace SensorApp.Maui.ViewModels;
 
 public partial class LoadingPageViewModel : BaseViewModel
 {
-    public LoadingPageViewModel()
+    private readonly IMenuBuilder _menuBuilder;
+
+    public LoadingPageViewModel(IMenuBuilder menuBuilder)
     {
+        _menuBuilder = menuBuilder;
         CheckUserLoginDetails();
     }
 
     private async void CheckUserLoginDetails()
     {
-
         var token = await SecureStorage.GetAsync("Token");
         if (string.IsNullOrEmpty(token))
         {
@@ -32,14 +35,15 @@ public partial class LoadingPageViewModel : BaseViewModel
             }
             else
             {
-                var role = jsonToken.Claims.FirstOrDefault(q => q.Type.Equals(ClaimTypes.Role))?.Value;
+                var role = jsonToken.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Role)?.Value;
 
-                App.UserInfo = new UserInfo()
+                App.UserInfo = new UserInfo
                 {
-                    Username = jsonToken.Claims.FirstOrDefault(q => q.Type.Equals(ClaimTypes.Email))?.Value,
+                    Username = jsonToken.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Email)?.Value,
                     Role = role
                 };
-                MenuBuilder.BuildMenu();
+
+                _menuBuilder.BuildMenu(App.UserInfo);
                 await GoToMainPage();
             }
         }

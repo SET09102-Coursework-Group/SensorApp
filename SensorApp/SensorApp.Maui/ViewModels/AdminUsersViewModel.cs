@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using SensorApp.Maui.Models;
-using SensorApp.Maui.Services;
+using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
@@ -12,17 +12,17 @@ namespace SensorApp.Maui.ViewModels;
 /// </summary>
 public partial class AdminUsersViewModel : BaseViewModel
 {
-    private readonly AdminService adminService;
-    private readonly ILogger<AdminUsersViewModel> logger;
-
+    private readonly AdminService _adminService;
+    private readonly ILogger<AdminUsersViewModel> _logger;
     [ObservableProperty]
-    private ObservableCollection<UserWithRoleDto> users;
+    private ObservableCollection<UserWithRoleDto> _users = new();
+
 
     public AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger)
     {
-        this.adminService = adminService;
-        this.logger = logger;
-        users = new ObservableCollection<UserWithRoleDto>();
+        this._adminService = adminService;
+        this._logger = logger;
+        this._users = [];
     }
 
 
@@ -33,7 +33,14 @@ public partial class AdminUsersViewModel : BaseViewModel
         IsLoading = true;
         try
         {
-            var list = await adminService.GetAllUsersAsync();
+            var token = await SecureStorage.GetAsync("Token"); 
+            if (string.IsNullOrEmpty(token))
+            {
+
+                return;
+            }
+
+            var list = await _adminService.GetAllUsersAsync(token);
             Users.Clear();
             foreach (var user in list)
             {
@@ -42,11 +49,12 @@ public partial class AdminUsersViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error occurred while loading users.");
+            _logger.LogError(ex, "Error occurred while loading users.");
         }
         finally
         {
             IsLoading = false;
         }
     }
+
 }

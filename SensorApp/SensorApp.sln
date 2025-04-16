@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Infrastructure", "SensorApp.Infrastructure\SensorApp.Infrastructure.csproj", "{62509E75-EBE1-498E-BB6F-01072C5651B2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Maui", "SensorApp.Maui\SensorApp.Maui.csproj", "{9866CB05-F95B-4476-89D9-584C69D5DC01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Shared", "SensorApp.Shared\SensorApp.Shared.csproj", "{36D86B3D-9858-4425-8205-FFFE1348E1B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Api", "SensorApp.Api\SensorApp.Api.csproj", "{AE095598-267C-4D58-930F-69FF9E14770B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Core", "SensorApp.Core\SensorApp.Core.csproj", "{FA5B3156-6C32-4282-970E-35C12D619CFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Database", "SensorApp.Database\SensorApp.Database.csproj", "{39F7CF93-0F70-4D46-B088-8EDCC9849C5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorApp.Tests", "SensorApp.Tests\SensorApp.Tests.csproj", "{A55AA6B1-CD7B-408F-A55B-30F69E409856}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +21,32 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62509E75-EBE1-498E-BB6F-01072C5651B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9866CB05-F95B-4476-89D9-584C69D5DC01}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{36D86B3D-9858-4425-8205-FFFE1348E1B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D86B3D-9858-4425-8205-FFFE1348E1B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D86B3D-9858-4425-8205-FFFE1348E1B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D86B3D-9858-4425-8205-FFFE1348E1B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE095598-267C-4D58-930F-69FF9E14770B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE095598-267C-4D58-930F-69FF9E14770B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE095598-267C-4D58-930F-69FF9E14770B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE095598-267C-4D58-930F-69FF9E14770B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA5B3156-6C32-4282-970E-35C12D619CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA5B3156-6C32-4282-970E-35C12D619CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA5B3156-6C32-4282-970E-35C12D619CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA5B3156-6C32-4282-970E-35C12D619CFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39F7CF93-0F70-4D46-B088-8EDCC9849C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39F7CF93-0F70-4D46-B088-8EDCC9849C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39F7CF93-0F70-4D46-B088-8EDCC9849C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39F7CF93-0F70-4D46-B088-8EDCC9849C5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A55AA6B1-CD7B-408F-A55B-30F69E409856}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A55AA6B1-CD7B-408F-A55B-30F69E409856}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A55AA6B1-CD7B-408F-A55B-30F69E409856}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A55AA6B1-CD7B-408F-A55B-30F69E409856}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

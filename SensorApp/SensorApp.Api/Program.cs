@@ -3,17 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using SensorApp.Infrastructure.Api.Endpoints;
-using SensorApp.Infrastructure.Data;
-using SensorApp.Infrastructure.Services;
-using SensorApp.Shared.Interfaces;
+using SensorApp.Api.Endpoints;
+using SensorApp.Api.Swagger;
+using SensorApp.Core.Services.Auth;
+using SensorApp.Database.Data;
 using SensorApp.Shared.Models;
-using SensorApp.Shared.Services;
 using Serilog;
 using System.Text;
 
-namespace SensorApp.Infrastructure;
+namespace SensorApp.Api;
 
 public class Program
 {
@@ -22,50 +20,21 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(options =>
-        {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Sensor API", Version = "v1" });
-
-            var securitySchema = new OpenApiSecurityScheme
-            {
-                Description = "JWT Authorization header \"Authorization: Bearer {token}\"",
-                Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            };
-            options.AddSecurityDefinition("Bearer", securitySchema);
-
-            var securityRequirement = new OpenApiSecurityRequirement
-            {
-                {
-                    securitySchema, new string[] {}
-                }
-            };
-            options.AddSecurityRequirement(securityRequirement);
-        });
+        builder.Services.AddSwaggerWithJwt();
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
         });
 
-
-        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+        var jwtSection = builder.Configuration.GetSection("JwtSettings");
+        builder.Services.Configure<JwtSettings>(jwtSection);
         builder.Services.AddOptions<JwtSettings>().ValidateDataAnnotations().ValidateOnStart();
-       
-        
+        var jwtSettings = jwtSection.Get<JwtSettings>();
+
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<SensorDbContext>(options => options.UseSqlite(connectionString));
 
         builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<SensorDbContext>().AddDefaultTokenProviders();
-
-        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
 
         builder.Services.AddAuthentication(options =>
@@ -93,9 +62,8 @@ public class Program
             options.FallbackPolicy = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
         });
 
-        builder.Services.AddScoped<ITokenService, TokenService>();
 
-       
+        builder.Services.AddScoped<ITokenService, TokenService>();
 
         builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 
@@ -109,9 +77,7 @@ public class Program
         app.UseAuthorization();
         app.UseCors("AllowAll");
 
-
-
-        app.MapAuthEndpoints(builder.Configuration);
+        app.MapAuthEndpoints();
         app.MapAdminEndpoints();
 
         app.Run();

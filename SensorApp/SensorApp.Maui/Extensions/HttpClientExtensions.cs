@@ -2,15 +2,15 @@
 
 namespace SensorApp.Maui.Extensions;
 
-
 public static class HttpClientExtensions
 {
     /// <summary>
-    /// Configures the HttpClient with the API base address defined in the application configuration.
+    /// Configures an <see cref="HttpClient"/> with a base address under the appsettings key "ApiSettings:BaseAddress", note that in dev we are using ngrok (https://ngrok.com/)
     /// </summary>
-    /// <param name="builder">The IHttpClientBuilder used to configure the HttpClient.</param>
-    /// <returns>An IHttpClientBuilder with the API base address configured.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the API base address is not properly configured.</exception>
+    /// <param name="builder">The HTTP client builder used in DI registration.</param>
+    /// <returns>The updated <see cref="IHttpClientBuilder"/> with the base address configured.</returns>
+    /// <exception cref="InvalidOperationException"> is thrown if the base address is not found or is empty in configuration.
+    /// </exception>
     public static IHttpClientBuilder ConfigureApiHttpClient(this IHttpClientBuilder builder)
     {
         return builder.ConfigureHttpClient((serviceProvider, httpClient) =>

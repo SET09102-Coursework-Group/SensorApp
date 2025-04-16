@@ -1,4 +1,4 @@
-﻿using SensorApp.Maui.Models;
+﻿using SensorApp.Shared.Models;
 
 namespace SensorApp.Maui;
 public partial class App : Application

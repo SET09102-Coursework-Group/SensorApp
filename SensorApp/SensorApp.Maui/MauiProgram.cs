@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
-using SensorApp.Maui.Services;
+using SensorApp.Maui.Helpers.MenuRoles;
 using SensorApp.Maui.ViewModels;
 using SensorApp.Maui.Views.Pages;
+using SensorApp.Shared.Interfaces;
+using SensorApp.Shared.Services;
 using System.Reflection;
 
 namespace SensorApp.Maui;
@@ -27,10 +29,15 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddHttpClient<AuthService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<AuthService>()
+            .ConfigureApiHttpClient()
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            });
         builder.Services.AddHttpClient<AdminService>().ConfigureApiHttpClient();
 
-        builder.Services.AddSingleton<TokenService>();
+        builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<LoginPage>();
