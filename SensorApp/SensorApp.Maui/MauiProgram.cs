@@ -6,6 +6,8 @@ using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Services;
 using System.Reflection;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls.Maps;
 
 namespace SensorApp.Maui;
 
@@ -27,7 +29,9 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+            })
+            .UseMauiMaps();
+
 
         builder.Services.AddHttpClient<AuthService>()
             .ConfigureApiHttpClient()
@@ -44,6 +48,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<LogoutPage>();
         builder.Services.AddTransient<AdminUsersPage>();
         builder.Services.AddSingleton<LoadingPage>();
+        builder.Services.AddTransient<SensorMapPage>();
 
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();

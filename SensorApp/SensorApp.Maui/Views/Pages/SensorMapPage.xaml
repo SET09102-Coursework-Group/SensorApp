@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+              xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
+              xmlns:models="clr-namespace:SensorApp.Maui.Models"
+              x:Class="SensorApp.Maui.Views.Pages.SensorMapPage"
+              Title="App: Sensor Map">
+
+    <maps:Map x:Name="SensorMap"
+           IsShowingUser="True"
+           MapType="Street"
+           VerticalOptions="FillAndExpand"
+           HorizontalOptions="FillAndExpand"/>
+</ContentPage>
