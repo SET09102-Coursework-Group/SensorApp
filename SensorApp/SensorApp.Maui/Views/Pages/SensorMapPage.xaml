@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-              xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
-              xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
-              xmlns:models="clr-namespace:SensorApp.Maui.Models"
-              x:Class="SensorApp.Maui.Views.Pages.SensorMapPage"
-              Title="App: Sensor Map">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+            xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"  
+            xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"  
+            xmlns:models="clr-namespace:SensorApp.Shared.Models;assembly=SensorApp.Shared"  
+            x:Class="SensorApp.Maui.Views.Pages.SensorMapPage"  
+            x:DataType="viewmodel:SensorMapViewModel"  
+            Title="App: Sensor Map">  
 
-    <maps:Map x:Name="SensorMap"
-           IsShowingUser="True"
-           MapType="Street"
-           VerticalOptions="FillAndExpand"
-           HorizontalOptions="FillAndExpand"/>
+   <CollectionView ItemsSource="{Binding Sensors}">  
+       <CollectionView.ItemTemplate>  
+           <DataTemplate x:DataType="models:SensorModel">  
+               <Frame BorderColor="Gray" Margin="10" Padding="10" CornerRadius="10">  
+                   <VerticalStackLayout>  
+                       <Label Text="{Binding Type}" FontAttributes="Bold" FontSize="18"/>  
+                       <Label Text="{Binding Status}" />  
+                       <Label Text="{Binding Site_zone}" />  
+                       <Label Text="{Binding Latitude}" />  
+                       <Label Text="{Binding Longitude}" />  
+
+                       <Label Text="Latest Measurement:" FontAttributes="Bold" />  
+                       <Label Text="{Binding LatestMeasurement.Value}" />  
+                       <Label Text="{Binding LatestMeasurement.Timestamp}" FontSize="12"/>  
+                   </VerticalStackLayout>  
+               </Frame>  
+           </DataTemplate>  
+       </CollectionView.ItemTemplate>  
+   </CollectionView>  
+
+   <!--<maps:Map x:Name="SensorMap"  
+         IsShowingUser="True"  
+         MapType="Street"  
+         VerticalOptions="FillAndExpand"  
+         HorizontalOptions="FillAndExpand"/>-->  
 </ContentPage>

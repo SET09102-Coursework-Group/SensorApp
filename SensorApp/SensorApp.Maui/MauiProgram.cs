@@ -40,6 +40,7 @@ public static class MauiProgram
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             });
         builder.Services.AddHttpClient<AdminService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
 
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
 
