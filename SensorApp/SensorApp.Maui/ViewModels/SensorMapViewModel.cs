@@ -42,7 +42,7 @@ public partial class SensorMapViewModel : BaseViewModel
                     Label = sensor.IsThresholdBreached
                         ? $"⚠️ {sensor.Type} - ALERT"
                         : $"{sensor.Type} - {sensor.Status}",
-                    Location = new Location(sensor.Latitude, sensor.Longitude),
+                    Location = new Location(sensor.Longitude, sensor.Latitude),
                     Type = PinType.Place,
                     Address = $"Zone: {sensor.Site_zone}\nLatest: {sensor.LatestMeasurement?.Value} @ {sensor.LatestMeasurement?.Timestamp}"
                 };
