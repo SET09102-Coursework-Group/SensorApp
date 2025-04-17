@@ -80,7 +80,7 @@ public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClass
             Username = email,
             Email = email,
             Password = "TestP@ssword123",
-            Role = UserRole.OperationsManager.ToString()
+            Role = UserRole.OperationsManager
         };
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/admin/users")
@@ -98,7 +98,7 @@ public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClass
         var created = await response.Content.ReadFromJsonAsync<UserWithRoleDto>();
         created.Should().NotBeNull();
         created!.Email.Should().Be(newUser.Email);
-        created.Role.Should().Be(newUser.Role);
+        created.Role.Should().Be(newUser.Role.ToString());
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClass
             Username = "admin@sensor.com",
             Email = "admin@sensor.com",
             Password = "MyP@ssword123",
-            Role = UserRole.Administrator.ToString()
+            Role = UserRole.Administrator
         };
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/admin/users")

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Enums;
 using SensorApp.Shared.Services;
 using System.Net;
 using System.Text;
@@ -68,4 +69,51 @@ public class AdminServiceTests
         Assert.NotNull(result);
         Assert.Empty(result);
     }
+
+    [Fact]
+    public async Task AddUser_ReturnsTrue_WhenSuccessful()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Created);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var newUser = new CreateUserDto
+        {
+            Username = "test",
+            Email = "test@sensor.com",
+            Password = "TestP@ssword123",
+            Role = UserRole.Administrator
+        };
+
+        // Act
+        var result = await service.AddUserAsync("goodToken", newUser);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task AddUser_ReturnsFalse_WhenConflict()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Conflict);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var newUser = new CreateUserDto
+        {
+            Username = "existing",
+            Email = "admin@sensor.com",
+            Password = "TestP@ss123",
+            Role = UserRole.Administrator
+        };
+
+        // Act
+        var result = await service.AddUserAsync("goodToken", newUser);
+
+        // Assert
+        Assert.False(result);
+    }
+
 }
