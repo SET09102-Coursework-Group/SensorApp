@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
+    x:Class="SensorApp.Maui.Views.Pages.NewUserPage"
+    x:DataType="viewmodel:NewUserViewModel"
+    Title="Create New User">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+
+            <!-- Username -->
+            <Label Text="Username" />
+            <Entry Text="{Binding Username}" Placeholder="Enter username" />
+
+            <!-- Email -->
+            <Label Text="Email" />
+            <Entry Text="{Binding Email}" Placeholder="Enter email" Keyboard="Email" />
+
+            <!-- Password -->
+            <Label Text="Password" />
+            <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Enter password" />
+
+            <!-- Role Picker -->
+            <Label Text="Role" />
+            <Picker
+        ItemsSource="{Binding Roles}"
+        SelectedItem="{Binding SelectedRole}"
+        Title="Select role" />
+
+            <!-- Submit -->
+            <Button
+        Text="Submit"
+        BackgroundColor="Blue"
+        TextColor="White"
+        Command="{Binding CreateUserCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

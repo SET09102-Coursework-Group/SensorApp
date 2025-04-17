@@ -10,6 +10,7 @@
     <VerticalStackLayout Spacing="10" Padding="10">
         <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
 
+        <Button Text="Create New User" BackgroundColor="Green" TextColor="White" Command="{Binding GoToCreateUserCommand}" />
         <CollectionView ItemsSource="{Binding Users}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:UserWithRoleDto">
