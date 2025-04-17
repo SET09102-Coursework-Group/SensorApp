@@ -7,6 +7,8 @@ using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace SensorApp.Maui.ViewModels;
 
@@ -21,11 +23,17 @@ public partial class SensorMapViewModel : BaseViewModel
         this.sensorService = sensorService;
     }
 
+    public event Action<IEnumerable<SensorModel>>? ThresholdBreached;
+
+    private System.Timers.Timer? updateTimer;
+
     public async Task LoadSensors()
     {
         var token = await SecureStorage.GetAsync("Token");
 
         var sensors = await sensorService.GetSensorsAsync(token);
+        var breached = new List<SensorModel>();
+
         MainThread.BeginInvokeOnMainThread(() =>
         {
             Pins.Clear();
@@ -36,6 +44,9 @@ public partial class SensorMapViewModel : BaseViewModel
                 Sensors.Add(sensor);
                 if (sensor.Latitude == 0 && sensor.Longitude == 0)
                     continue;
+
+                if (sensor.IsThresholdBreached)
+                    breached.Add(sensor);
 
                 var pin = new Pin
                 {
@@ -48,8 +59,31 @@ public partial class SensorMapViewModel : BaseViewModel
                 };
 
                 Pins.Add(pin);
+
+                if (breached.Any())
+                {
+                    ThresholdBreached?.Invoke(breached);
+                }
             }  
         });
+    }
+
+    public void StartRealTimeUpdates(int intervalMs = 10000)
+    {
+        updateTimer = new Timer(intervalMs);
+        updateTimer.Elapsed += async (s, e) => await LoadSensors();
+        updateTimer.AutoReset = true;
+        updateTimer.Enabled = true;
+    }
+
+    public void StopRealTimeUpdates()
+    {
+        if (updateTimer != null)
+        {
+            updateTimer?.Stop();
+            updateTimer?.Dispose();
+            updateTimer = null;
+        }
     }
 
 }
