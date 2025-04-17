@@ -32,21 +32,8 @@ public partial class SensorMapPage : ContentPage
     {
         SensorMap.Pins.Clear();
 
-        foreach (var sensor in sensors)
+        foreach (var pin in mapViewModel.Pins)
         {
-            if (sensor.Latitude == 0 && sensor.Longitude == 0)
-                continue;
-
-            var pin = new Pin
-            {
-                Label = sensor.IsThresholdBreached
-                    ? $"⚠️ {sensor.Type} - ALERT"
-                    : $"{sensor.Type} - {sensor.Status}",
-                Location = new Location(sensor.Latitude, sensor.Longitude),
-                Type = PinType.Place,
-                Address = $"Zone: {sensor.Site_zone}\nLatest: {sensor.LatestMeasurement?.Value} @ {sensor.LatestMeasurement?.Timestamp}"
-            };
-
             SensorMap.Pins.Add(pin);
         }
 
