@@ -6,6 +6,24 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<ItemGroup>
+		<None Remove="Data\Resources\Air_quality.csv" />
+		<None Remove="Data\Resources\Water_quality.csv" />
+		<None Remove="Data\Resources\Weather.csv" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Data\Resources\Air_quality.csv">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Data\Resources\Water_quality.csv">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Data\Resources\Weather.csv">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
@@ -20,5 +38,9 @@
   <ItemGroup>
     <ProjectReference Include="..\SensorApp.Shared\SensorApp.Shared.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Migrations\" />
+	</ItemGroup>
 
 </Project>

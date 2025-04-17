@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SensorApp.Database.Data.DataSeeder;
+using System.Diagnostics.Metrics;
+using SensorApp.Database.Models;
 
 namespace SensorApp.Database.Data;
 
@@ -10,9 +12,14 @@ namespace SensorApp.Database.Data;
 /// </summary>
 public class SensorDbContext(DbContextOptions<SensorDbContext> options) : IdentityDbContext(options)
 {
+    public DbSet<Measurand> Measurand { get; set; }
+    public DbSet<Measurement> Measurement { get; set; }
+    public DbSet<Sensor> Sensors { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.SeedIdentity();
+        modelBuilder.SeedMeasurands();
+        modelBuilder.SeedSensors();
     }
 }
