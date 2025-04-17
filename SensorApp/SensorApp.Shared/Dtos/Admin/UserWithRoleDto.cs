@@ -1,4 +1,4 @@
-﻿namespace SensorApp.Shared.Dtos;
+﻿namespace SensorApp.Shared.Dtos.Admin;
 
 
 /// <summary>

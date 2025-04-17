@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using SensorApp.Api;
 using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Dtos.Admin;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;

@@ -1,8 +1,8 @@
-﻿using SensorApp.Shared.Dtos;
+﻿using Newtonsoft.Json;
+using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Services;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 
 namespace SensorApp.Tests.UnitTests.Services;
 
@@ -21,7 +21,7 @@ public class AdminServiceTests
             new() { Id = "2", Username = "ops", Email = "ops@sensor.com", Role = "Operations Manager" }
         };
 
-        var json = JsonSerializer.Serialize(mockUsers);
+        var json = JsonConvert.SerializeObject(mockUsers);
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent(json, Encoding.UTF8, "application/json")
