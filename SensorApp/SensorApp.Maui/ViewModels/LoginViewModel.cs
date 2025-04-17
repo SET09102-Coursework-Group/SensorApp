@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SensorApp.Maui.Helpers.MenuRoles;
-using SensorApp.Maui.Models;
-using SensorApp.Maui.Services;
+using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Interfaces;
+using SensorApp.Shared.Models;
+using SensorApp.Shared.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -10,9 +11,13 @@ namespace SensorApp.Maui.ViewModels;
 
 public partial class LoginViewModel : BaseViewModel
 {
-    public LoginViewModel(AuthService authService)
+    private readonly AuthService _authService;
+    private readonly IMenuBuilder _menuBuilder;
+
+    public LoginViewModel(AuthService authService, IMenuBuilder menuBuilder)
     {
-        this.authService = authService;
+        _authService = authService;
+        _menuBuilder = menuBuilder;
     }
 
     [ObservableProperty]
@@ -20,7 +25,6 @@ public partial class LoginViewModel : BaseViewModel
 
     [ObservableProperty]
     string password;
-    private AuthService authService;
 
     [RelayCommand]
     async Task Login()
@@ -28,38 +32,35 @@ public partial class LoginViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
             await DisplayLoginMessage("Invalid Login Attempt");
+            return;
+        }
+
+        var loginDto = new LoginDto(username, password);
+        var response = await _authService.Login(loginDto);
+
+        await DisplayLoginMessage(_authService.StatusMessage);
+
+        if (!string.IsNullOrEmpty(response.Token))
+        {
+            await SecureStorage.SetAsync("Token", response.Token);
+
+            var jsonToken = new JwtSecurityTokenHandler().ReadToken(response.Token) as JwtSecurityToken;
+
+            var role = jsonToken?.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Role)?.Value;
+            var email = jsonToken?.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Email)?.Value;
+
+            App.UserInfo = new UserInfo
+            {
+                Username = email ?? Username,
+                Role = role
+            };
+
+            _menuBuilder.BuildMenu(App.UserInfo);
+            await Shell.Current.GoToAsync($"{nameof(MainPage)}");
         }
         else
         {
-            var loginModel = new LoginModel(username, password);
-
-            var response = await authService.Login(loginModel);
-
-            await DisplayLoginMessage(authService.StatusMessage);
-
-            if (!string.IsNullOrEmpty(response.Token))
-            {
-                await SecureStorage.SetAsync("Token", response.Token);
-
-                var jsonToken = new JwtSecurityTokenHandler().ReadToken(response.Token) as JwtSecurityToken;
-
-                var role = jsonToken.Claims.FirstOrDefault(q => q.Type.Equals(ClaimTypes.Role))?.Value;
-
-                App.UserInfo = new UserInfo()
-                {
-                    Username = Username,
-                    Role = role
-                };
-
-
-                MenuBuilder.BuildMenu();
-                await Shell.Current.GoToAsync($"{nameof(MainPage)}");
-
-            }
-            else
-            {
-                await DisplayLoginMessage("Invalid Login Attempt");
-            }
+            await DisplayLoginMessage("Invalid Login Attempt");
         }
     }
 

@@ -1,48 +1,51 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using SensorApp.Maui.Models;
-using SensorApp.Maui.Services;
+using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
-/// <summary>
-/// View model for managing the administration of user data.
-/// </summary>
+
 public partial class AdminUsersViewModel : BaseViewModel
 {
-    private readonly AdminService adminService;
-    private readonly ILogger<AdminUsersViewModel> logger;
-
-    [ObservableProperty]
-    private ObservableCollection<UserWithRoleDto> users;
+    private readonly AdminService _adminService;
+    private readonly ILogger<AdminUsersViewModel> _logger;
 
     public AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger)
     {
-        this.adminService = adminService;
-        this.logger = logger;
-        users = new ObservableCollection<UserWithRoleDto>();
+        _adminService = adminService;
+        _logger = logger;
     }
 
+    [ObservableProperty]
+    private ObservableCollection<UserWithRoleDto> users = new();
 
     [RelayCommand]
     public async Task LoadUsersAsync()
     {
         if (IsLoading) return;
+
         IsLoading = true;
+
         try
         {
-            var list = await adminService.GetAllUsersAsync();
-            Users.Clear();
-            foreach (var user in list)
+            var token = await SecureStorage.GetAsync("Token");
+
+            if (string.IsNullOrEmpty(token))
             {
-                Users.Add(user);
+                _logger.LogWarning("Token is missing. Cannot load users.");
+                return;
             }
+
+            var list = await _adminService.GetAllUsersAsync(token);
+            Users = new ObservableCollection<UserWithRoleDto>(list);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error occurred while loading users.");
+            _logger.LogError(ex, "Failed to load users.");
+            await Shell.Current.DisplayAlert("Error", "Unable to load users.", "OK");
         }
         finally
         {
