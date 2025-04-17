@@ -8,9 +8,11 @@
             x:DataType="viewmodel:SensorMapViewModel"  
             Title="App: Sensor Map">
 
-    <maps:Map x:Name="SensorMap"
-             IsShowingUser="True"
-             MapType="Street"
-             VerticalOptions="FillAndExpand"
-             HorizontalOptions="FillAndExpand"/>
+    <Grid RowDefinitions="*">
+        <maps:Map x:Name="SensorMap"
+                   IsShowingUser="True"
+                   MapType="Street"
+                   Grid.Row="0"/>
+    </Grid>
+
 </ContentPage>
