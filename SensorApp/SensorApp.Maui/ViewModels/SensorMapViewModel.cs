@@ -7,7 +7,6 @@ using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
-using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace SensorApp.Maui.ViewModels;
@@ -67,7 +66,6 @@ public partial class SensorMapViewModel : BaseViewModel
             }  
         });
     }
-
     public void StartRealTimeUpdates(int intervalMs = 10000)
     {
         updateTimer = new Timer(intervalMs);

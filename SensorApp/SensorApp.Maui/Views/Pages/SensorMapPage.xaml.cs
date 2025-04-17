@@ -50,7 +50,7 @@ public partial class SensorMapPage : ContentPage
 
         if (first != null)
         {
-            var location = new Location(first.Latitude, first.Longitude);
+            var location = new Location(first.Longitude, first.Latitude);
             var mapSpan = MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(5));
             SensorMap.MoveToRegion(mapSpan);
         }
