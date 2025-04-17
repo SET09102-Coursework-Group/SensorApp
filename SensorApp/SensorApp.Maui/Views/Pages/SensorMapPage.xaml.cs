@@ -14,6 +14,7 @@ public partial class SensorMapPage : ContentPage
     {
         InitializeComponent();
         mapViewModel = new SensorMapViewModel(sensorService);
+        mapViewModel.ThresholdBreached += OnThresholdBreached;
         BindingContext = mapViewModel;
     }
     protected override async void OnAppearing()
@@ -21,6 +22,12 @@ public partial class SensorMapPage : ContentPage
         base.OnAppearing();
 
         await LoadAndDisplaySensorsAsync();
+        mapViewModel.StartRealTimeUpdates();
+    }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        mapViewModel.StopRealTimeUpdates();
     }
     private async Task LoadAndDisplaySensorsAsync()
     {
@@ -54,5 +61,13 @@ public partial class SensorMapPage : ContentPage
             var mapSpan = MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(5));
             SensorMap.MoveToRegion(mapSpan);
         }
+    }
+
+    private async void OnThresholdBreached(IEnumerable<SensorModel> breachedSensors)
+    {
+        string message = string.Join("\n", breachedSensors.Select(b =>
+            $"{b.Type} sensor in Zone {b.Site_zone} breached at {b.LatestMeasurement?.Timestamp}. \n\n{b.LatestMeasurement?.MeasurementType.Name} measurement registered a threshold breach value of {b.LatestMeasurement?.Value}"));
+
+        await DisplayAlert("Sensor Alert ⚠️", message, "OK");
     }
 };
