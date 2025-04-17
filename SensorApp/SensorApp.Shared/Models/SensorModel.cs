@@ -12,4 +12,23 @@ public class SensorModel
 
     public MeasurementModel? LatestMeasurement =>
         Measurements?.OrderByDescending(m => m.Timestamp).FirstOrDefault();
+
+    public bool IsThresholdBreached
+    {
+        get
+        {
+            if (LatestMeasurement == null || LatestMeasurement.MeasurementType == null)
+                return false;
+
+            float value = LatestMeasurement.Value;
+            var measurand = LatestMeasurement.MeasurementType;
+
+            return value < measurand.Min_safe_threshold || value > measurand.Max_safe_threshold;
+        }
+    }
+
+    public string? ThresholdMessage =>
+        IsThresholdBreached
+            ? $"⚠️ {Type} is out of safe range!"
+            : null;
 }

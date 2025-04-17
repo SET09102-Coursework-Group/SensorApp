@@ -6,31 +6,11 @@
             xmlns:models="clr-namespace:SensorApp.Shared.Models;assembly=SensorApp.Shared"  
             x:Class="SensorApp.Maui.Views.Pages.SensorMapPage"  
             x:DataType="viewmodel:SensorMapViewModel"  
-            Title="App: Sensor Map">  
+            Title="App: Sensor Map">
 
-   <CollectionView ItemsSource="{Binding Sensors}">  
-       <CollectionView.ItemTemplate>  
-           <DataTemplate x:DataType="models:SensorModel">  
-               <Frame BorderColor="Gray" Margin="10" Padding="10" CornerRadius="10">  
-                   <VerticalStackLayout>  
-                       <Label Text="{Binding Type}" FontAttributes="Bold" FontSize="18"/>  
-                       <Label Text="{Binding Status}" />  
-                       <Label Text="{Binding Site_zone}" />  
-                       <Label Text="{Binding Latitude}" />  
-                       <Label Text="{Binding Longitude}" />  
-
-                       <Label Text="Latest Measurement:" FontAttributes="Bold" />  
-                       <Label Text="{Binding LatestMeasurement.Value}" />  
-                       <Label Text="{Binding LatestMeasurement.Timestamp}" FontSize="12"/>  
-                   </VerticalStackLayout>  
-               </Frame>  
-           </DataTemplate>  
-       </CollectionView.ItemTemplate>  
-   </CollectionView>  
-
-   <!--<maps:Map x:Name="SensorMap"  
-         IsShowingUser="True"  
-         MapType="Street"  
-         VerticalOptions="FillAndExpand"  
-         HorizontalOptions="FillAndExpand"/>-->  
+    <maps:Map x:Name="SensorMap"
+             IsShowingUser="True"
+             MapType="Street"
+             VerticalOptions="FillAndExpand"
+             HorizontalOptions="FillAndExpand"/>
 </ContentPage>

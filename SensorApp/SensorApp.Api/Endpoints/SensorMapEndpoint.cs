@@ -29,7 +29,15 @@ public static class SensorMapEndpoint
                         Sensor_id = m.Sensor_id,
                         Value = m.Value,
                         Timestamp = m.Timestamp,
-                        Measurement_type_id = m.Measurement_type_id
+                        Measurement_type_id = m.Measurement_type_id,
+                        MeasurementType = new MeasurandDto
+                        {
+                            Id = m.Measurement_type.Id,
+                            Name = m.Measurement_type.Name,
+                            Unit = m.Measurement_type.Unit,
+                            Min_safe_threshold = m.Measurement_type.Min_safe_threshold,
+                            Max_safe_threshold = m.Measurement_type.Max_safe_threshold
+                        }
                     }).ToList()
                 })
                 .ToListAsync();
