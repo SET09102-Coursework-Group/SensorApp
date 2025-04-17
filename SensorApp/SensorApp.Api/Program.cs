@@ -10,12 +10,13 @@ using SensorApp.Database.Data;
 using SensorApp.Shared.Models;
 using Serilog;
 using System.Text;
+using SensorApp.Database.Data.CSVHandling;
 
 namespace SensorApp.Api;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +80,8 @@ public class Program
         builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 
         var app = builder.Build();
+
+        await MeasurementSeeder.SeedDatabaseAsync(app.Services);
 
         app.UseSwagger();
         app.UseSwaggerUI();
