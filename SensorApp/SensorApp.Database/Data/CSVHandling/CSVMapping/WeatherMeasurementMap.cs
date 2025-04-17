@@ -9,9 +9,9 @@ public class WeatherMeasurementMap : ClassMap<WeatherMeasurement>
     public WeatherMeasurementMap()
     {
         Map(m => m.Temperature).TypeConverter<NullConverter>();
-        Map(m => m.Relative_humidity).TypeConverter<NullConverter>();
-        Map(m => m.Wind_speed).TypeConverter<NullConverter>();
-        Map(m => m.Wind_direction).TypeConverter<NullConverter>();
+        Map(m => m.RelativeHumidity).TypeConverter<NullConverter>();
+        Map(m => m.WindSpeed).TypeConverter<NullConverter>();
+        Map(m => m.WindDirection).TypeConverter<NullConverter>();
         Map(m => m.Timestamp);
     }
 }

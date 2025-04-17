@@ -11,7 +11,6 @@ using SensorApp.Shared.Models;
 using Serilog;
 using System.Text;
 using SensorApp.Database.Data.CSVHandling;
-using SensorApp.Infrastructure.Data.CSVHandling.Seeding;
 
 namespace SensorApp.Api;
 

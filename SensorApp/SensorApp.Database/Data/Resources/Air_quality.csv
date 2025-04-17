@@ -1,4 +1,4 @@
-﻿Date,Time,Nitrogen_dioxide,Sulphur_dioxide,PM25_particulate_matter,PM10_particulate_matter
+﻿Date,Time,NitrogenDioxide,SulphurDioxide,PM25ParticulateMatter,PM10ParticulateMatter
 01/02/2025,01:00:00,26.3925,1.59654,5.094,8.3
 01/02/2025,02:00:00,22.5675,1.33045,5.094,7.9
 01/02/2025,03:00:00,14.535,1.4635,5.755,8.5

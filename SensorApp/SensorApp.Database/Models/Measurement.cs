@@ -11,8 +11,6 @@ public class Measurement : BaseEntity
     public DateTime Timestamp { get; set; }
     [Required]
     public float Value { get; set; }
-    [Required]
-    public int Id { get; set; }
     public int Sensor_id { get; set; }
     [ForeignKey("Sensor_id")]
     public Sensor Sensor { get; set; }

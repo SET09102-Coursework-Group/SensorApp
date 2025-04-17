@@ -9,10 +9,10 @@ public class AirQualityMeasurementMap : ClassMap<AirQualityMeasurement>
 {
     public AirQualityMeasurementMap()
     {
-        Map(m => m.Nitrogen_dioxide).TypeConverter<NullConverter>();
-        Map(m => m.Sulphur_dioxide).TypeConverter<NullConverter>();
-        Map(m => m.PM25_particulate_matter).TypeConverter<NullConverter>();
-        Map(m => m.PM10_particulate_matter).TypeConverter<NullConverter>();
+        Map(m => m.NitrogenDioxide).TypeConverter<NullConverter>();
+        Map(m => m.SulphurDioxide).TypeConverter<NullConverter>();
+        Map(m => m.PM25ParticulateMatter).TypeConverter<NullConverter>();
+        Map(m => m.PM10ParticulateMatter).TypeConverter<NullConverter>();
         Map(m => m.Date).TypeConverter<DateConverter>();
         Map(m => m.Time);
     }
