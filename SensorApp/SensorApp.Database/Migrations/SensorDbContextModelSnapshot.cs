@@ -15,337 +15,572 @@ namespace SensorApp.Database.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                b.ToTable("AspNetRoles", (string)null);
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "3d52c1e5-6aec-45de-91c1-e0ebf20464e3",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c",
-                            Name = "Operations Manager",
-                            NormalizedName = "OPERATIONS MANAGER"
-                        },
-                        new
-                        {
-                            Id = "9b7f193f-bfc4-4eb7-927f-55960e45a82a",
-                            Name = "Environmental Scientist",
-                            NormalizedName = "ENVIRONMENTAL SCIENTIST"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        Id = "3d52c1e5-6aec-45de-91c1-e0ebf20464e3",
+                        Name = "Administrator",
+                        NormalizedName = "ADMINISTRATOR"
+                    },
+                    new
+                    {
+                        Id = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c",
+                        Name = "Operations Manager",
+                        NormalizedName = "OPERATIONS MANAGER"
+                    },
+                    new
+                    {
+                        Id = "9b7f193f-bfc4-4eb7-927f-55960e45a82a",
+                        Name = "Environmental Scientist",
+                        NormalizedName = "ENVIRONMENTAL SCIENTIST"
+                    });
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("RoleId")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "fab66dad-9f12-45a0-9fd8-6352336a696d",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "37db67b8-4faa-49af-bdf3-4f1f261617cf",
-                            Email = "admin@sensor.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@SENSOR.COM",
-                            NormalizedUserName = "ADMIN@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGoxx4Sj1qyGk/0260HWndmE0yxg2n+/dRzSsR76mZYNd8yFM5hDzvbnAMZI8xDpsQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "2545e6c4-13aa-42f4-8128-d07376fa6281",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@sensor.com"
-                        },
-                        new
-                        {
-                            Id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "5b00f504-39e6-4d1e-8e2f-6a9edfebff46",
-                            Email = "ops@sensor.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "OPS@SENSOR.COM",
-                            NormalizedUserName = "OPS@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAED2nWQOVWgVcKPo5c79Jn3RtbM3deAj+FDc9/Txe715xDu3frePfB/FAlmyWtgaN8A==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "19284033-5c81-417b-b58b-7b630d87b498",
-                            TwoFactorEnabled = false,
-                            UserName = "ops@sensor.com"
-                        },
-                        new
-                        {
-                            Id = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "db3bd552-6112-47f6-8872-6efad06eb18c",
-                            Email = "scientist@sensor.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "SCIENTIST@SENSOR.COM",
-                            NormalizedUserName = "SCIENTIST@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMWF6Eof6SHzlePtb6IbUm/EL1NgXWMwUqkbWIqr8dJg1sBqhXsVKDGJzjdubDUsNg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "3ae8d5a3-478b-430b-b9a9-d54dbe4c6b74",
-                            TwoFactorEnabled = false,
-                            UserName = "scientist@sensor.com"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        Id = "fab66dad-9f12-45a0-9fd8-6352336a696d",
+                        AccessFailedCount = 0,
+                        ConcurrencyStamp = "631ba4d4-763f-482c-8b39-84d9b095b4b8",
+                        Email = "admin@sensor.com",
+                        EmailConfirmed = true,
+                        LockoutEnabled = false,
+                        NormalizedEmail = "ADMIN@SENSOR.COM",
+                        NormalizedUserName = "ADMIN@SENSOR.COM",
+                        PasswordHash = "AQAAAAIAAYagAAAAEGcVLUZHCBSuD+pJ2Fjuaas5gsGwahjlJ2SF5ST8zJI+Kcf/cXkbzXNFU1hxSboqVQ==",
+                        PhoneNumberConfirmed = false,
+                        SecurityStamp = "d510fee3-7b9c-4558-8169-aafe69b3e00b",
+                        TwoFactorEnabled = false,
+                        UserName = "admin@sensor.com"
+                    },
+                    new
+                    {
+                        Id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
+                        AccessFailedCount = 0,
+                        ConcurrencyStamp = "caef29bf-6ed6-4bd7-8a6c-70e31426894a",
+                        Email = "ops@sensor.com",
+                        EmailConfirmed = true,
+                        LockoutEnabled = false,
+                        NormalizedEmail = "OPS@SENSOR.COM",
+                        NormalizedUserName = "OPS@SENSOR.COM",
+                        PasswordHash = "AQAAAAIAAYagAAAAEHKnYfJIW39H44YuAZYIjvwoTZZOWMQjJMB30v2LoKFI5FKm6mn9ztWWZeP9DiGWAA==",
+                        PhoneNumberConfirmed = false,
+                        SecurityStamp = "b678bdcc-d5ab-46b0-a21a-ef650cb67115",
+                        TwoFactorEnabled = false,
+                        UserName = "ops@sensor.com"
+                    },
+                    new
+                    {
+                        Id = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
+                        AccessFailedCount = 0,
+                        ConcurrencyStamp = "53a30203-0298-4f46-ad56-e2e039a48249",
+                        Email = "scientist@sensor.com",
+                        EmailConfirmed = true,
+                        LockoutEnabled = false,
+                        NormalizedEmail = "SCIENTIST@SENSOR.COM",
+                        NormalizedUserName = "SCIENTIST@SENSOR.COM",
+                        PasswordHash = "AQAAAAIAAYagAAAAENP+FNMMjxWfiProMscLEw4/onxAsbDwfWvekwMi4fHo+x49eRE0TdtULrQoXLJ/Jg==",
+                        PhoneNumberConfirmed = false,
+                        SecurityStamp = "e51cefbd-2261-4919-8664-8c0b10a59923",
+                        TwoFactorEnabled = false,
+                        UserName = "scientist@sensor.com"
+                    });
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
+                b.ToTable("AspNetUserClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+            {
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ProviderKey")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ProviderDisplayName")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
+                b.ToTable("AspNetUserLogins", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+            {
+                b.Property<string>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("TEXT");
+                b.Property<string>("RoleId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "RoleId");
+                b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                b.ToTable("AspNetUserRoles", (string)null);
 
-                    b.HasData(
-                        new
-                        {
-                            UserId = "fab66dad-9f12-45a0-9fd8-6352336a696d",
-                            RoleId = "3d52c1e5-6aec-45de-91c1-e0ebf20464e3"
-                        },
-                        new
-                        {
-                            UserId = "99166c0c-7f14-442b-8c57-9141f3ac1681",
-                            RoleId = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c"
-                        },
-                        new
-                        {
-                            UserId = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
-                            RoleId = "9b7f193f-bfc4-4eb7-927f-55960e45a82a"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        UserId = "fab66dad-9f12-45a0-9fd8-6352336a696d",
+                        RoleId = "3d52c1e5-6aec-45de-91c1-e0ebf20464e3"
+                    },
+                    new
+                    {
+                        UserId = "99166c0c-7f14-442b-8c57-9141f3ac1681",
+                        RoleId = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c"
+                    },
+                    new
+                    {
+                        UserId = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
+                        RoleId = "9b7f193f-bfc4-4eb7-927f-55960e45a82a"
+                    });
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+            {
+                b.Property<string>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Value")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
+                b.ToTable("AspNetUserTokens", (string)null);
+            });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Measurand", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<float>("Max_safe_threshold")
+                    .HasColumnType("REAL");
+
+                b.Property<float>("Min_safe_threshold")
+                    .HasColumnType("REAL");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("Unit")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
+
+                b.HasKey("Id");
+
+                b.ToTable("measurand");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        Max_safe_threshold = 50f,
+                        Min_safe_threshold = 10f,
+                        Name = "Nitrogen Dioxide",
+                        Unit = "ug/m3"
+                    },
+                    new
+                    {
+                        Id = 2,
+                        Max_safe_threshold = 2f,
+                        Min_safe_threshold = 0.8f,
+                        Name = "Sulphur Dioxide",
+                        Unit = "ug/m3"
+                    },
+                    new
+                    {
+                        Id = 3,
+                        Max_safe_threshold = 20f,
+                        Min_safe_threshold = 1.5f,
+                        Name = "PM2.5 Particulate Matter",
+                        Unit = "ug/m3"
+                    },
+                    new
+                    {
+                        Id = 4,
+                        Max_safe_threshold = 12f,
+                        Min_safe_threshold = 2f,
+                        Name = "PM10 Particulate Matter",
+                        Unit = "ug/m3"
+                    },
+                    new
+                    {
+                        Id = 5,
+                        Max_safe_threshold = 25f,
+                        Min_safe_threshold = 20f,
+                        Name = "Nitrate",
+                        Unit = "mg/l"
+                    },
+                    new
+                    {
+                        Id = 6,
+                        Max_safe_threshold = 1.5f,
+                        Min_safe_threshold = 1.1f,
+                        Name = "Nitrite",
+                        Unit = "mg/l"
+                    },
+                    new
+                    {
+                        Id = 7,
+                        Max_safe_threshold = 0.07f,
+                        Min_safe_threshold = 0.02f,
+                        Name = "Phosphate",
+                        Unit = "mg/l"
+                    },
+                    new
+                    {
+                        Id = 8,
+                        Max_safe_threshold = 0.1f,
+                        Min_safe_threshold = 0f,
+                        Name = "Escherichia coli",
+                        Unit = "cfu/100ml"
+                    },
+                    new
+                    {
+                        Id = 9,
+                        Max_safe_threshold = 40f,
+                        Min_safe_threshold = -10f,
+                        Name = "Temperature",
+                        Unit = "C"
+                    },
+                    new
+                    {
+                        Id = 10,
+                        Max_safe_threshold = 100f,
+                        Min_safe_threshold = 80f,
+                        Name = "Relative Humidity",
+                        Unit = "%"
+                    },
+                    new
+                    {
+                        Id = 11,
+                        Max_safe_threshold = 30f,
+                        Min_safe_threshold = 0f,
+                        Name = "Wind Speed",
+                        Unit = "m/s"
+                    },
+                    new
+                    {
+                        Id = 12,
+                        Max_safe_threshold = 0f,
+                        Min_safe_threshold = 0f,
+                        Name = "Wind Direction",
+                        Unit = "degree"
+                    });
+            });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Measurement", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("Measurement_type_id")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("Sensor_id")
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime>("Timestamp")
+                    .HasColumnType("TEXT");
+
+                b.Property<float>("Value")
+                    .HasColumnType("REAL");
+
+                b.HasKey("Id");
+
+                b.HasIndex("Measurement_type_id");
+
+                b.HasIndex("Sensor_id");
+
+                b.ToTable("measurement");
+            });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Sensor", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
+
+                b.Property<float>("Latitude")
+                    .HasColumnType("REAL");
+
+                b.Property<float>("Longitude")
+                    .HasColumnType("REAL");
+
+                b.Property<string>("Site_zone")
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("Status")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("Type")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
+
+                b.HasKey("Id");
+
+                b.ToTable("sensor");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        Latitude = -3.183991f,
+                        Longitude = 55.94476f,
+                        Site_zone = "Central Scotland",
+                        Status = "Active",
+                        Type = "Air Quality"
+                    },
+                    new
+                    {
+                        Id = 2,
+                        Latitude = -3.253889f,
+                        Longitude = 55.86111f,
+                        Site_zone = "Glencorse B",
+                        Status = "Active",
+                        Type = "Water Quality"
+                    },
+                    new
+                    {
+                        Id = 3,
+                        Latitude = -3.5856323f,
+                        Longitude = 55.008785f,
+                        Status = "Active",
+                        Type = "Weather"
+                    });
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Measurement", b =>
+            {
+                b.HasOne("SensorApp.Database.Models.Measurand", "Measurement_type")
+                    .WithMany("Measurements")
+                    .HasForeignKey("Measurement_type_id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("SensorApp.Database.Models.Sensor", "Sensor")
+                    .WithMany("Measurements")
+                    .HasForeignKey("Sensor_id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Measurement_type");
+
+                b.Navigation("Sensor");
+            });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Measurand", b =>
+            {
+                b.Navigation("Measurements");
+            });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Sensor", b =>
+            {
+                b.Navigation("Measurements");
+            });
 #pragma warning restore 612, 618
         }
     }
