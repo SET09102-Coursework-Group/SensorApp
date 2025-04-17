@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using SensorApp.Api;
 using SensorApp.Shared.Dtos;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
@@ -14,7 +12,7 @@ namespace SensorApp.Tests.IntegrationTests.ApiEndpoints;
 /// Integration tests for the protected /admin/users endpoint.
 /// These tests verify that role-based authorisation is working as expected using the in-memory API.
 /// </summary>
-public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client = factory.CreateClient();
 
@@ -127,8 +125,6 @@ public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClass
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
-
-
 
     private async Task<string> LoginAndGetToken(string username, string password)
     {
