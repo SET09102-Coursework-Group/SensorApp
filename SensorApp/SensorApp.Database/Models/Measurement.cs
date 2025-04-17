@@ -13,7 +13,8 @@ public class Measurement : BaseEntity
     public float Value { get; set; }
     [Required]
     public int Id { get; set; }
-    [ForeignKey("Id")]
+    public int Sensor_id { get; set; }
+    [ForeignKey("Sensor_id")]
     public Sensor Sensor { get; set; }
     public int Measurement_type_id { get; set; }
     [ForeignKey("Measurement_type_id")]
