@@ -181,7 +181,9 @@ public static class ModelBuilderExtensions
             {
                 Id = 12,
                 Name = "Wind Direction",
-                Unit = "degree"
+                Unit = "degree",
+                Min_safe_threshold = null,
+                Max_safe_threshold = null
             }
         );
     }

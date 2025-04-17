@@ -11,8 +11,8 @@ namespace SensorApp.Maui.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public float Min_safe_threshold { get; set; }
-        public float Max_safe_threshold { get; set; }
+        public float? Min_safe_threshold { get; set; }
+        public float? Max_safe_threshold { get; set; }
 
         public ICollection<MeasurementModel> Measurements { get; set; }
     }

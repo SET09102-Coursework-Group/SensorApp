@@ -10,25 +10,15 @@ public class SensorModel
     public string Status { get; set; }
     public ICollection<MeasurementModel> Measurements { get; set; } = new List<MeasurementModel>();
 
-    public MeasurementModel? LatestMeasurement =>
-        Measurements?.OrderByDescending(m => m.Timestamp).FirstOrDefault();
-
-    public bool IsThresholdBreached
-    {
-        get
-        {
-            if (LatestMeasurement == null || LatestMeasurement.MeasurementType == null)
-                return false;
-
-            float value = LatestMeasurement.Value;
-            var measurand = LatestMeasurement.MeasurementType;
-
-            return value < measurand.Min_safe_threshold || value > measurand.Max_safe_threshold;
-        }
-    }
-
-    public string? ThresholdMessage =>
-        IsThresholdBreached
-            ? $"⚠️ {Type} is out of safe range!"
-            : null;
+    public Dictionary<int, MeasurementModel> LatestMeasurementsByType =>
+       Measurements
+           .GroupBy(m => m.Measurement_type_id)
+           .ToDictionary(
+               g => g.Key,
+               g => g.OrderByDescending(m => m.Timestamp).First()
+           );
+    public bool IsThresholdBreached =>
+        LatestMeasurementsByType.Values.Any(m =>
+            m.MeasurementType != null &&
+            (m.Value < m.MeasurementType.Min_safe_threshold || m.Value > m.MeasurementType.Max_safe_threshold));
 }

@@ -28,6 +28,7 @@ public partial class SensorMapPage : ContentPage
     {
         base.OnDisappearing();
         mapViewModel.StopRealTimeUpdates();
+        mapViewModel.ThresholdBreached -= OnThresholdBreached;
     }
     private async Task LoadAndDisplaySensorsAsync()
     {
@@ -65,8 +66,18 @@ public partial class SensorMapPage : ContentPage
 
     private async void OnThresholdBreached(IEnumerable<SensorModel> breachedSensors)
     {
-        string message = string.Join("\n", breachedSensors.Select(b =>
-            $"{b.Type} sensor in Zone {b.Site_zone} breached at {b.LatestMeasurement?.Timestamp}. \n\n{b.LatestMeasurement?.MeasurementType.Name} measurement registered a threshold breach value of {b.LatestMeasurement?.Value}"));
+        string message = string.Join("\n\n", breachedSensors.Select(sensor =>
+        {
+            var breaches = sensor.LatestMeasurementsByType.Values
+                .Where(m =>
+                    m.MeasurementType != null && m.MeasurementType.Min_safe_threshold.HasValue && m.MeasurementType.Max_safe_threshold.HasValue &&
+                    (m.Value < m.MeasurementType.Min_safe_threshold || m.Value > m.MeasurementType.Max_safe_threshold))
+                .Select(m => $"- {m.MeasurementType.Name}: {m.Value} (Safe Range: {m.MeasurementType.Min_safe_threshold}–{m.MeasurementType.Max_safe_threshold}) at {m.Timestamp}");
+
+            string breachesText = string.Join("\n", breaches);
+
+            return $"{sensor.Type} sensor in Zone {sensor.Site_zone} has breached the following thresholds:\n{breachesText}";
+        }));
 
         await DisplayAlert("Sensor Alert ⚠️", message, "OK");
     }

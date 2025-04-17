@@ -47,26 +47,29 @@ public partial class SensorMapViewModel : BaseViewModel
                 if (sensor.IsThresholdBreached)
                     breached.Add(sensor);
 
+                var measurementsInfo = string.Join(" | ", sensor.LatestMeasurementsByType.Values.Select(m =>
+                    $"{m.MeasurementType?.Name}: {m.Value} ({m.Timestamp:t})"));
+
                 var pin = new Pin
                 {
                     Label = sensor.IsThresholdBreached
-                        ? $"⚠️ {sensor.Type} - ALERT"
+                        ? $"!! {sensor.Type} - ALERT"
                         : $"{sensor.Type} - {sensor.Status}",
                     Location = new Location(sensor.Longitude, sensor.Latitude),
                     Type = PinType.Place,
-                    Address = $"Zone: {sensor.Site_zone}\nLatest: {sensor.LatestMeasurement?.Value} @ {sensor.LatestMeasurement?.Timestamp}"
+                    Address = $"{measurementsInfo}"
                 };
 
                 Pins.Add(pin);
+            }
 
-                if (breached.Any())
-                {
-                    ThresholdBreached?.Invoke(breached);
-                }
-            }  
+            if (breached.Any())
+            {
+                ThresholdBreached?.Invoke(breached);
+            }
         });
     }
-    public void StartRealTimeUpdates(int intervalMs = 10000)
+    public void StartRealTimeUpdates(int intervalMs = 30000)
     {
         updateTimer = new Timer(intervalMs);
         updateTimer.Elapsed += async (s, e) => await LoadSensors();
