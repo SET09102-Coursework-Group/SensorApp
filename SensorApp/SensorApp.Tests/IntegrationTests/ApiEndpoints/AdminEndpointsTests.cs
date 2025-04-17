@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using SensorApp.Api;
 using SensorApp.Shared.Dtos;
 using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Enums;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -65,6 +66,69 @@ public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClass
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
+
+    [Fact]
+    public async Task Admin_CreatesNewUser_ReturnsSuccess()
+    {
+        //Arrange
+        var token = await LoginAndGetToken("admin@sensor.com", "MyP@ssword123");
+        var uniqueId = Guid.NewGuid();
+        var email = $"testUser_{uniqueId}@sensor.com";
+
+        var newUser = new CreateUserDto
+        {
+            Username = email,
+            Email = email,
+            Password = "TestP@ssword123",
+            Role = UserRole.OperationsManager.ToString()
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "/admin/users")
+        {
+            Content = JsonContent.Create(newUser)
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        //Act
+        var response = await _client.SendAsync(request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        //Assert
+        var created = await response.Content.ReadFromJsonAsync<UserWithRoleDto>();
+        created.Should().NotBeNull();
+        created!.Email.Should().Be(newUser.Email);
+        created.Role.Should().Be(newUser.Role);
+    }
+
+    [Fact]
+    public async Task Admin_CannotCreateADuplicateUser_ReturnsConflict()
+    {
+        //Arrange
+        var token = await LoginAndGetToken("admin@sensor.com", "MyP@ssword123");
+
+        var duplicateUser = new CreateUserDto
+        {
+            Username = "admin@sensor.com",
+            Email = "admin@sensor.com",
+            Password = "MyP@ssword123",
+            Role = UserRole.Administrator.ToString()
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "/admin/users")
+        {
+            Content = JsonContent.Create(duplicateUser)
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        //Act
+        var response = await _client.SendAsync(request);
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+    }
+
+
 
     private async Task<string> LoginAndGetToken(string username, string password)
     {

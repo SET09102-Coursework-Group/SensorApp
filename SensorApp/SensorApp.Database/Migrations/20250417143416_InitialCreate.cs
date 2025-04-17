@@ -164,8 +164,8 @@ namespace SensorApp.Database.Migrations
                 values: new object[,]
                 {
                     { "3d52c1e5-6aec-45de-91c1-e0ebf20464e3", null, "Administrator", "ADMINISTRATOR" },
-                    { "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c", null, "Operations Manager", "OPERATIONS MANAGER" },
-                    { "9b7f193f-bfc4-4eb7-927f-55960e45a82a", null, "Environmental Scientist", "ENVIRONMENTAL SCIENTIST" }
+                    { "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c", null, "OperationsManager", "OPERATIONSMANAGER" },
+                    { "9b7f193f-bfc4-4eb7-927f-55960e45a82a", null, "EnvironmentalScientist", "ENVIRONMENTALSCIENTIST" }
                 });
 
             migrationBuilder.InsertData(
@@ -173,9 +173,9 @@ namespace SensorApp.Database.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "db3bd552-6112-47f6-8872-6efad06eb18c", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEMWF6Eof6SHzlePtb6IbUm/EL1NgXWMwUqkbWIqr8dJg1sBqhXsVKDGJzjdubDUsNg==", null, false, "3ae8d5a3-478b-430b-b9a9-d54dbe4c6b74", false, "scientist@sensor.com" },
-                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "5b00f504-39e6-4d1e-8e2f-6a9edfebff46", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAED2nWQOVWgVcKPo5c79Jn3RtbM3deAj+FDc9/Txe715xDu3frePfB/FAlmyWtgaN8A==", null, false, "19284033-5c81-417b-b58b-7b630d87b498", false, "ops@sensor.com" },
-                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "37db67b8-4faa-49af-bdf3-4f1f261617cf", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAEGoxx4Sj1qyGk/0260HWndmE0yxg2n+/dRzSsR76mZYNd8yFM5hDzvbnAMZI8xDpsQ==", null, false, "2545e6c4-13aa-42f4-8128-d07376fa6281", false, "admin@sensor.com" }
+                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "56bec43c-aa0e-46a9-8814-536ded153790", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEHmZfWoNLeSTKb5hkn6DC/rK/BWlFyhRznBYjhZlFmkB32YikMewBmf8xYYbgu6JSg==", null, false, "43c53afb-4224-4180-ad30-12d9d13318ac", false, "scientist@sensor.com" },
+                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "f0c49936-c56e-4f29-ac28-00358eb33d5b", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAEFdC4fYJyzLvFICMmbCZQpkelMGZKjwJ0GlNi+uSXfKjptVlfqsCqDttJGaNqeZyFA==", null, false, "ac333377-e8c6-4d79-a5a5-9e0772e4bcb9", false, "ops@sensor.com" },
+                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "c263bf75-6fc9-4d58-b4d3-c54f32f0165c", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAEMi1IDpn/V13ZBj0jwHs1B1HrkBVbCxW7bDJtTmxn2xQl0U4fAb8sVFC/tIfRfvbyQ==", null, false, "ad950312-5803-4302-9617-8b6b99a1ad4f", false, "admin@sensor.com" }
                 });
 
             migrationBuilder.InsertData(

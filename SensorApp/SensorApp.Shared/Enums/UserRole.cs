@@ -3,5 +3,7 @@
 
 public enum UserRole
 {
-    Administrator
+    Administrator,
+    OperationsManager,
+    EnvironmentalScientist
 }
