@@ -60,4 +60,3 @@ public partial class SensorMapPage : ContentPage
         }
     }
 };
-}
