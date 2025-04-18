@@ -9,6 +9,7 @@ using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using Timer = System.Timers.Timer;
 using SensorApp.Maui.Interfaces;
+using System.Diagnostics;
 
 namespace SensorApp.Maui.ViewModels;
 
@@ -31,33 +32,40 @@ public partial class SensorMapViewModel : BaseViewModel
 
     public async Task LoadSensors()
     {
-        var token = await SecureStorage.GetAsync("Token");
-
-        var sensors = await sensorService.GetSensorsAsync(token);
-        var breached = new List<SensorModel>();
-
-        MainThread.BeginInvokeOnMainThread(() =>
+        try
         {
-            Pins.Clear();
-            Sensors.Clear();
+            var token = await SecureStorage.GetAsync("Token");
 
-            foreach (var sensor in sensors)
+            var sensors = await sensorService.GetSensorsAsync(token);
+            var breached = new List<SensorModel>();
+
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                Sensors.Add(sensor);
-                if (sensor.Latitude == 0 && sensor.Longitude == 0)
-                    continue;
+                Pins.Clear();
+                Sensors.Clear();
 
-                if (sensor.IsThresholdBreached)
-                    breached.Add(sensor);
+                foreach (var sensor in sensors)
+                {
+                    Sensors.Add(sensor);
+                    if (sensor.Latitude == 0 && sensor.Longitude == 0)
+                        continue;
 
-                Pins.Add(pinFactory.CreatePin(sensor));
-            }
+                    if (sensor.IsThresholdBreached)
+                        breached.Add(sensor);
 
-            if (breached.Any())
-            {
-                ThresholdBreached?.Invoke(breached);
-            }
-        });
+                    Pins.Add(pinFactory.CreatePin(sensor));
+                }
+
+                if (breached.Any())
+                {
+                    ThresholdBreached?.Invoke(breached);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error loading sensors: {ex.Message}");
+        }
     }
     public void StartRealTimeUpdates(int intervalMs = 30000)
     {
@@ -69,12 +77,9 @@ public partial class SensorMapViewModel : BaseViewModel
 
     public void StopRealTimeUpdates()
     {
-        if (updateTimer != null)
-        {
-            updateTimer?.Stop();
-            updateTimer?.Dispose();
-            updateTimer = null;
-        }
+        updateTimer?.Stop();
+        updateTimer?.Dispose();
+        updateTimer = null;
     }
 
 }
