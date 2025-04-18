@@ -4,6 +4,8 @@ using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
 using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace SensorApp.Maui.ViewModels;
 
@@ -49,6 +51,33 @@ public partial class NewUserViewModel : BaseViewModel
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
                 await Shell.Current.DisplayAlert("Error while submitting form", "All fields are required.", "OK");
+                IsLoading = false;
+                return;
+            }
+
+            try
+            {
+                var emailAddress = new MailAddress(Email);
+                if (emailAddress.Address != Email)
+                {
+                    throw new FormatException();
+                }
+            }
+            catch
+            {
+                await Shell.Current.DisplayAlert("Invalid email format", "Please enter a valid email address.", "OK");
+                IsLoading = false;
+                return;
+            }
+
+            //This is taken from StackOverflow: https://stackoverflow.com/questions/48635152/regex-for-default-asp-net-core-identity-password
+            var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+            if (!Regex.IsMatch(Password, passwordPattern))
+            {
+                await Shell.Current.DisplayAlert(
+                    "Weak Password",
+                    "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
+                    "OK");
                 IsLoading = false;
                 return;
             }
