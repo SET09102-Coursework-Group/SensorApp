@@ -8,18 +8,21 @@ using SensorApp.Shared.Services;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using Timer = System.Timers.Timer;
+using SensorApp.Maui.Interfaces;
 
 namespace SensorApp.Maui.ViewModels;
 
 public partial class SensorMapViewModel : BaseViewModel
 {
     private readonly SensorApiService sensorService;
+    private readonly ISensorPinFactory pinFactory;
     public ObservableCollection<SensorModel> Sensors { get; } = new();
     public ObservableCollection<Pin> Pins { get; } = new();
 
-    public SensorMapViewModel(SensorApiService sensorService)
+    public SensorMapViewModel(SensorApiService sensorService, ISensorPinFactory pinFactory)
     {
         this.sensorService = sensorService;
+        this.pinFactory = pinFactory;
     }
 
     public event Action<IEnumerable<SensorModel>>? ThresholdBreached;
@@ -47,20 +50,7 @@ public partial class SensorMapViewModel : BaseViewModel
                 if (sensor.IsThresholdBreached)
                     breached.Add(sensor);
 
-                var measurementsInfo = string.Join(" | ", sensor.LatestMeasurementsByType.Values.Select(m =>
-                    $"{m.MeasurementType?.Name}: {m.Value} ({m.Timestamp:t})"));
-
-                var pin = new Pin
-                {
-                    Label = sensor.IsThresholdBreached
-                        ? $"!! {sensor.Type} - ALERT"
-                        : $"{sensor.Type} - {sensor.Status}",
-                    Location = new Location(sensor.Longitude, sensor.Latitude),
-                    Type = PinType.Place,
-                    Address = $"{measurementsInfo}"
-                };
-
-                Pins.Add(pin);
+                Pins.Add(pinFactory.CreatePin(sensor));
             }
 
             if (breached.Any())

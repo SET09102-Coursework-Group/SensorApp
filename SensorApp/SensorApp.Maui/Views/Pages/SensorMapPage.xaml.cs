@@ -4,16 +4,17 @@ using SensorApp.Maui.ViewModels;
 using SensorApp.Maui.Models;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
+using SensorApp.Maui.Interfaces;
 
 namespace SensorApp.Maui.Views.Pages;
 
 public partial class SensorMapPage : ContentPage
 {
     private readonly SensorMapViewModel mapViewModel;
-    public SensorMapPage(SensorApiService sensorService)
+    public SensorMapPage(SensorApiService sensorService, ISensorPinFactory pinFactory)
     {
         InitializeComponent();
-        mapViewModel = new SensorMapViewModel(sensorService);
+        mapViewModel = new SensorMapViewModel(sensorService, pinFactory);
         mapViewModel.ThresholdBreached += OnThresholdBreached;
         BindingContext = mapViewModel;
     }
