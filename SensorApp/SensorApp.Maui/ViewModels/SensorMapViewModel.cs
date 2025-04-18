@@ -47,8 +47,6 @@ public partial class SensorMapViewModel : BaseViewModel
                 foreach (var sensor in sensors)
                 {
                     Sensors.Add(sensor);
-                    if (sensor.Latitude == 0 && sensor.Longitude == 0)
-                        continue;
 
                     if (sensor.IsThresholdBreached)
                         breached.Add(sensor);

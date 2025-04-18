@@ -51,11 +51,9 @@ public partial class SensorMapPage : ContentPage
 
     private void CenterMapOnFirstValidSensor(IEnumerable<SensorModel> sensors)
     {
-        var first = sensors.FirstOrDefault(s =>
-            !double.IsNaN(s.Latitude) &&
-            !double.IsNaN(s.Longitude) &&
-            s.Latitude != 0 &&
-            s.Longitude != 0);
+        var first = sensors.FirstOrDefault(sensor =>
+            !float.IsNaN(sensor.Latitude) &&
+            !float.IsNaN(sensor.Longitude));
 
         if (first != null)
         {
@@ -70,16 +68,16 @@ public partial class SensorMapPage : ContentPage
         string message = string.Join("\n\n", breachedSensors.Select(sensor =>
         {
             var breaches = sensor.LatestMeasurementsByType.Values
-                .Where(m =>
-                    m.MeasurementType != null && m.MeasurementType.Min_safe_threshold.HasValue && m.MeasurementType.Max_safe_threshold.HasValue &&
-                    (m.Value < m.MeasurementType.Min_safe_threshold || m.Value > m.MeasurementType.Max_safe_threshold))
-                .Select(m => $"- {m.MeasurementType.Name}: {m.Value} (Safe Range: {m.MeasurementType.Min_safe_threshold}–{m.MeasurementType.Max_safe_threshold}) at {m.Timestamp}");
+                .Where(measurement =>
+                    measurement.MeasurementType != null && measurement.MeasurementType.Min_safe_threshold.HasValue && measurement.MeasurementType.Max_safe_threshold.HasValue &&
+                    (measurement.Value < measurement.MeasurementType.Min_safe_threshold || measurement.Value > measurement.MeasurementType.Max_safe_threshold))
+                .Select(measurement => $"- {measurement.MeasurementType.Name}: {measurement.Value} (Safe Range: {measurement.MeasurementType.Min_safe_threshold}–{measurement.MeasurementType.Max_safe_threshold}) at {measurement.Timestamp}");
 
             string breachesText = string.Join("\n", breaches);
 
-            return $"{sensor.Type} sensor in Zone {sensor.Site_zone} has breached the following thresholds:\n{breachesText}";
+            return $"{sensor.Type} sensor at coordinate location {sensor.Longitude}, {sensor.Latitude} has breached the following thresholds:\n\n{breachesText}";
         }));
 
-        await DisplayAlert("Sensor Alert ⚠️", message, "OK");
+        await DisplayAlert("Sensor Alert!!", message, "OK");
     }
 };

@@ -9,8 +9,8 @@ public class SensorPinFactory : ISensorPinFactory
 {
     public Pin CreatePin(SensorModel sensor)
     {
-        var measurementsInfo = string.Join(" | ", sensor.LatestMeasurementsByType.Values.Select(m =>
-            $"{m.MeasurementType?.Name}: {m.Value} ({m.Timestamp:t})"));
+        var measurementsInfo = string.Join(" | ", sensor.LatestMeasurementsByType.Values.Select(measurement =>
+            $"{measurement.MeasurementType?.Name}: {measurement.Value} ({measurement.Timestamp:t})"));
 
         return new Pin
         {
