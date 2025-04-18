@@ -15,12 +15,14 @@ namespace SensorApp.Tests.IntegrationTests.ApiEndpoints;
 public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client = factory.CreateClient();
+    private const string AdminEmail = "admin@sensor.com";
+    private const string AdminPassword = "MyP@ssword123";
 
     [Fact]
     public async Task HappyPath_GetUsers_ReturnsUserList_ForAdmin()
     {
         // Arrange
-        var token = await LoginAndGetToken("admin@sensor.com", "MyP@ssword123");
+        var token = await LoginAndGetToken(AdminEmail, AdminPassword);
 
         var request = new HttpRequestMessage(HttpMethod.Get, "/admin/users");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -34,7 +36,7 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
         var users = await response.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
         users.Should().NotBeNull();
         users!.Count.Should().BeGreaterThan(0);
-        users!.Any(u => u.Username == "admin@sensor.com").Should().BeTrue();
+        users!.Any(u => u.Username == AdminEmail).Should().BeTrue();
     }
 
     [Fact]
@@ -69,7 +71,7 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
     public async Task Admin_CreatesNewUser_ReturnsSuccess()
     {
         //Arrange
-        var token = await LoginAndGetToken("admin@sensor.com", "MyP@ssword123");
+        var token = await LoginAndGetToken(AdminEmail, AdminPassword);
         var uniqueId = Guid.NewGuid();
         var email = $"testUser_{uniqueId}@sensor.com";
 
@@ -103,13 +105,13 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
     public async Task Admin_CannotCreateADuplicateUser_ReturnsConflict()
     {
         //Arrange
-        var token = await LoginAndGetToken("admin@sensor.com", "MyP@ssword123");
+        var token = await LoginAndGetToken(AdminEmail, AdminPassword);
 
         var duplicateUser = new CreateUserDto
         {
-            Username = "admin@sensor.com",
-            Email = "admin@sensor.com",
-            Password = "MyP@ssword123",
+            Username = AdminEmail,
+            Email = AdminEmail,
+            Password = AdminPassword,
             Role = UserRole.Administrator
         };
 
