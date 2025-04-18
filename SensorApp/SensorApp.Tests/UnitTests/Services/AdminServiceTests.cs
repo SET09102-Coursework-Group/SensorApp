@@ -116,4 +116,28 @@ public class AdminServiceTests
         Assert.False(result);
     }
 
+    [Fact]
+    public async Task AddUser_ReturnsFalse_WhenUnauthorized()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var newUser = new CreateUserDto
+        {
+            Username = "unauthorized",
+            Email = "unauthorized@sensor.com",
+            Password = "InvalidToken123",
+            Role = UserRole.Administrator
+        };
+
+        // Act
+        var result = await service.AddUserAsync("badToken", newUser);
+
+        // Assert
+        Assert.False(result);
+    }
+
+
 }
