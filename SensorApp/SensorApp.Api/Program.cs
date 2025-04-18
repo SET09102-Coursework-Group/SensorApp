@@ -81,7 +81,13 @@ public class Program
 
         var app = builder.Build();
 
-        await MeasurementSeeder.SeedDatabaseAsync(app.Services);
+        using var scope = app.Services.CreateScope();
+        var environment = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+        if (!environment.IsEnvironment("Testing"))
+        {
+            await MeasurementSeeder.SeedDatabaseAsync(scope.ServiceProvider);
+        }
+
 
         app.UseSwagger();
         app.UseSwaggerUI();

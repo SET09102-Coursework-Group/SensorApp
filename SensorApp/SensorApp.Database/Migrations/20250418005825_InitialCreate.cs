@@ -53,6 +53,39 @@ namespace SensorApp.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "measurand",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Unit = table.Column<string>(type: "TEXT", nullable: false),
+                    Min_safe_threshold = table.Column<float>(type: "REAL", nullable: false),
+                    Max_safe_threshold = table.Column<float>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_measurand", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "sensor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
+                    Longitude = table.Column<float>(type: "REAL", nullable: false),
+                    Latitude = table.Column<float>(type: "REAL", nullable: false),
+                    Site_zone = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sensor", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -158,6 +191,34 @@ namespace SensorApp.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "measurement",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Value = table.Column<float>(type: "REAL", nullable: false),
+                    Sensor_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Measurement_type_id = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_measurement", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_measurement_measurand_Measurement_type_id",
+                        column: x => x.Measurement_type_id,
+                        principalTable: "measurand",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_measurement_sensor_Sensor_id",
+                        column: x => x.Sensor_id,
+                        principalTable: "sensor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -173,9 +234,38 @@ namespace SensorApp.Database.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "8cd6ccae-c8a7-4422-b14e-25f27dafecb5", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEFySQz7s0PmJ88O4CtkjPW2zgIo9p/0EnYw/owqvekEfCDtJOdZc3c1YvlTQnJIMNw==", null, false, "2c98969e-043e-456c-8636-988d06c6f0c4", false, "scientist@sensor.com" },
-                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "150d1b15-2710-49a9-926a-ca670d8295b3", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAEDRCKlC8B02dJtLQ7+e1Xd+kDCAmjYbC4dDxbJbkonICS9DcYKuarSpCwV0fRcdRYw==", null, false, "7bd64f1e-4f8b-428e-a883-2879bc3a14bb", false, "ops@sensor.com" },
-                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "20cb9fe5-84a5-4997-85bf-d722b58b88d4", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAENzj0Jr1cWQp91kgItBqLeqSXfRqGXg1r0Wx+PEnVFhQ3o3wQ1fyaX3BqAIpfwYUAQ==", null, false, "a3e0df25-8ec8-40ea-9f31-e954aa230cf5", false, "admin@sensor.com" }
+                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "16c28285-b362-4eda-b6ca-371fde7ffd89", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEH/Jwmgnwd2sbtuC+GPuOnNG80IUBi+iu+z0LQApw/u/jkEkz999ZA1DpBLoJsfjOg==", null, false, "e6ea1d8c-dfce-407e-a09e-59c7437bb8a3", false, "scientist@sensor.com" },
+                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "3619566e-acaa-4c0c-9398-3c0e328730e4", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAEKg65OYW4QuoooXZb5srNKYexN7uGeyZfFheASUih9FyY7fHVKyJwCheQ9/REu59JA==", null, false, "bdea70b8-e616-41b2-868a-519a545a4913", false, "ops@sensor.com" },
+                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "883e0c65-74a5-4845-8d68-867d9ae534e8", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAEEmlnpQ1bv6kx3joCW4FhH0SFSArOgcJ/zHNV63E7hTwcSCspW0pvC4qZ/G2ywmm9w==", null, false, "d395a095-1c24-445e-b5d5-4fb8dcf9b3f9", false, "admin@sensor.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "measurand",
+                columns: new[] { "Id", "Max_safe_threshold", "Min_safe_threshold", "Name", "Unit" },
+                values: new object[,]
+                {
+                    { 1, 50f, 10f, "Nitrogen Dioxide", "ug/m3" },
+                    { 2, 2f, 0.8f, "Sulphur Dioxide", "ug/m3" },
+                    { 3, 20f, 1.5f, "PM2.5 Particulate Matter", "ug/m3" },
+                    { 4, 12f, 2f, "PM10 Particulate Matter", "ug/m3" },
+                    { 5, 25f, 20f, "Nitrate", "mg/l" },
+                    { 6, 1.5f, 1.1f, "Nitrite", "mg/l" },
+                    { 7, 0.07f, 0.02f, "Phosphate", "mg/l" },
+                    { 8, 0.1f, 0f, "Escherichia coli", "cfu/100ml" },
+                    { 9, 40f, -10f, "Temperature", "C" },
+                    { 10, 100f, 80f, "Relative Humidity", "%" },
+                    { 11, 30f, 0f, "Wind Speed", "m/s" },
+                    { 12, 0f, 0f, "Wind Direction", "degree" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "sensor",
+                columns: new[] { "Id", "Latitude", "Longitude", "Site_zone", "Status", "Type" },
+                values: new object[,]
+                {
+                    { 1, -3.183991f, 55.94476f, "Central Scotland", "Active", "Air Quality" },
+                    { 2, -3.253889f, 55.86111f, "Glencorse B", "Active", "Water Quality" },
+                    { 3, -3.5856323f, 55.008785f, null, "Active", "Weather" }
                 });
 
             migrationBuilder.InsertData(
@@ -224,6 +314,16 @@ namespace SensorApp.Database.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_measurement_Measurement_type_id",
+                table: "measurement",
+                column: "Measurement_type_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_measurement_Sensor_id",
+                table: "measurement",
+                column: "Sensor_id");
         }
 
         /// <inheritdoc />
@@ -245,10 +345,19 @@ namespace SensorApp.Database.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "measurement");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "measurand");
+
+            migrationBuilder.DropTable(
+                name: "sensor");
         }
     }
 }

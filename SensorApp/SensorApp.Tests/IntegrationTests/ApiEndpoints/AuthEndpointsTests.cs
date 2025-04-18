@@ -12,7 +12,7 @@ namespace SensorApp.Tests.IntegrationTests.ApiEndpoints;
 /// Integration tests for the /login authentication endpoint.
 /// These tests verify the behavior by making real HTTP requests against the running API in-memory
 /// </summary>
-public class AuthEndpointTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+public class AuthEndpointTests(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client = factory.CreateClient();
 
