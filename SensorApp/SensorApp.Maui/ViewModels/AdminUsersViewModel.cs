@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using SensorApp.Shared.Dtos;
+using SensorApp.Maui.Views.Pages;
+using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
@@ -51,5 +52,11 @@ public partial class AdminUsersViewModel : BaseViewModel
         {
             IsLoading = false;
         }
+    }
+
+    [RelayCommand]
+    public async Task GoToCreateUser()
+    {
+        await Shell.Current.GoToAsync(nameof(NewUserPage));
     }
 }

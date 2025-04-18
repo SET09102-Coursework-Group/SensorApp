@@ -1,8 +1,9 @@
-﻿using SensorApp.Shared.Dtos;
+﻿using Newtonsoft.Json;
+using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Enums;
 using SensorApp.Shared.Services;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 
 namespace SensorApp.Tests.UnitTests.Services;
 
@@ -21,7 +22,7 @@ public class AdminServiceTests
             new() { Id = "2", Username = "ops", Email = "ops@sensor.com", Role = "Operations Manager" }
         };
 
-        var json = JsonSerializer.Serialize(mockUsers);
+        var json = JsonConvert.SerializeObject(mockUsers);
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent(json, Encoding.UTF8, "application/json")
@@ -68,4 +69,75 @@ public class AdminServiceTests
         Assert.NotNull(result);
         Assert.Empty(result);
     }
+
+    [Fact]
+    public async Task AddUser_ReturnsTrue_WhenSuccessful()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Created);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var newUser = new CreateUserDto
+        {
+            Username = "test",
+            Email = "test@sensor.com",
+            Password = "TestP@ssword123",
+            Role = UserRole.Administrator
+        };
+
+        // Act
+        var result = await service.AddUserAsync("goodToken", newUser);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task AddUser_ReturnsFalse_WhenConflict()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Conflict);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var newUser = new CreateUserDto
+        {
+            Username = "existing",
+            Email = "admin@sensor.com",
+            Password = "TestP@ss123",
+            Role = UserRole.Administrator
+        };
+
+        // Act
+        var result = await service.AddUserAsync("goodToken", newUser);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task AddUser_ReturnsFalse_WhenUnauthorized()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var newUser = new CreateUserDto
+        {
+            Username = "unauthorized",
+            Email = "unauthorized@sensor.com",
+            Password = "InvalidToken123",
+            Role = UserRole.Administrator
+        };
+
+        // Act
+        var result = await service.AddUserAsync("badToken", newUser);
+
+        // Assert
+        Assert.False(result);
+    }
+
+
 }

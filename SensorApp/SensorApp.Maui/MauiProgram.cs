@@ -50,6 +50,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<LogoutViewModel>();
         builder.Services.AddTransient<AdminUsersViewModel>();
 
+        builder.Services.AddTransient<NewUserPage>();
+        builder.Services.AddTransient<NewUserViewModel>();
+
         return builder.Build();
     }
 }

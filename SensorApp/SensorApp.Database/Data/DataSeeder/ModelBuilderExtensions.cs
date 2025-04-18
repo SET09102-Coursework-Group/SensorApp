@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SensorApp.Shared.Enums;
 using SensorApp.Database.Models;
 
 namespace SensorApp.Database.Data.DataSeeder;
@@ -12,20 +13,20 @@ public static class ModelBuilderExtensions
             new IdentityRole
             {
                 Id = "3d52c1e5-6aec-45de-91c1-e0ebf20464e3",
-                Name = "Administrator",
-                NormalizedName = "ADMINISTRATOR"
+                Name = UserRole.Administrator.ToString(),
+                NormalizedName = UserRole.Administrator.ToString().ToUpper()
             },
             new IdentityRole
             {
                 Id = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c",
-                Name = "Operations Manager",
-                NormalizedName = "OPERATIONS MANAGER"
+                Name = UserRole.OperationsManager.ToString(),
+                NormalizedName = UserRole.OperationsManager.ToString().ToUpper()
             },
             new IdentityRole
             {
                 Id = "9b7f193f-bfc4-4eb7-927f-55960e45a82a",
-                Name = "Environmental Scientist",
-                NormalizedName = "ENVIRONMENTAL SCIENTIST"
+                Name = UserRole.EnvironmentalScientist.ToString(),
+                NormalizedName = UserRole.EnvironmentalScientist.ToString().ToUpper()
             }
         );
 

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using SensorApp.Api;
 using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Enums;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -12,15 +12,17 @@ namespace SensorApp.Tests.IntegrationTests.ApiEndpoints;
 /// Integration tests for the protected /admin/users endpoint.
 /// These tests verify that role-based authorisation is working as expected using the in-memory API.
 /// </summary>
-public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client = factory.CreateClient();
+    private const string AdminEmail = "admin@sensor.com";
+    private const string AdminPassword = "MyP@ssword123";
 
     [Fact]
     public async Task HappyPath_GetUsers_ReturnsUserList_ForAdmin()
     {
         // Arrange
-        var token = await LoginAndGetToken("admin@sensor.com", "MyP@ssword123");
+        var token = await LoginAndGetToken(AdminEmail, AdminPassword);
 
         var request = new HttpRequestMessage(HttpMethod.Get, "/admin/users");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -34,7 +36,7 @@ public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClass
         var users = await response.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
         users.Should().NotBeNull();
         users!.Count.Should().BeGreaterThan(0);
-        users!.Any(u => u.Username == "admin@sensor.com").Should().BeTrue();
+        users!.Any(u => u.Username == AdminEmail).Should().BeTrue();
     }
 
     [Fact]
@@ -63,6 +65,67 @@ public class AdminEndpointTests(WebApplicationFactory<Program> factory) : IClass
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task Admin_CreatesNewUser_ReturnsSuccess()
+    {
+        //Arrange
+        var token = await LoginAndGetToken(AdminEmail, AdminPassword);
+        var uniqueId = Guid.NewGuid();
+        var email = $"testUser_{uniqueId}@sensor.com";
+
+        var newUser = new CreateUserDto
+        {
+            Username = email,
+            Email = email,
+            Password = "TestP@ssword123",
+            Role = UserRole.OperationsManager
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "/admin/users")
+        {
+            Content = JsonContent.Create(newUser)
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        //Act
+        var response = await _client.SendAsync(request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        //Assert
+        var created = await response.Content.ReadFromJsonAsync<UserWithRoleDto>();
+        created.Should().NotBeNull();
+        created!.Email.Should().Be(newUser.Email);
+        created.Role.Should().Be(newUser.Role.ToString());
+    }
+
+    [Fact]
+    public async Task Admin_CannotCreateADuplicateUser_ReturnsConflict()
+    {
+        //Arrange
+        var token = await LoginAndGetToken(AdminEmail, AdminPassword);
+
+        var duplicateUser = new CreateUserDto
+        {
+            Username = AdminEmail,
+            Email = AdminEmail,
+            Password = AdminPassword,
+            Role = UserRole.Administrator
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "/admin/users")
+        {
+            Content = JsonContent.Create(duplicateUser)
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        //Act
+        var response = await _client.SendAsync(request);
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
 
     private async Task<string> LoginAndGetToken(string username, string password)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
 
 namespace SensorApp.Api.Endpoints;
@@ -13,6 +13,7 @@ public static class AdminEndpoints
 {
     public static void MapAdminEndpoints(this IEndpointRouteBuilder routes)
     {
+        //GET all existing users
         routes.MapGet("/admin/users", async (UserManager<IdentityUser> userManager) =>
         {
             var users = await userManager.Users.ToListAsync();
@@ -32,6 +33,44 @@ public static class AdminEndpoints
             }
 
             return Results.Ok(result);
+        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+
+
+        // POST create new user
+        routes.MapPost("/admin/users", async (CreateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) =>
+        {
+            if (await userManager.FindByEmailAsync(dto.Email) != null)
+            {
+                return Results.Conflict("User already exists");
+            }
+
+            var user = new IdentityUser { UserName = dto.Username, Email = dto.Email };
+            var create = await userManager.CreateAsync(user, dto.Password);
+
+
+            if (!create.Succeeded)
+            {
+                return Results.BadRequest(create.Errors);
+            }
+
+            var roleName = dto.Role.ToString();
+
+            var addRole = await userManager.AddToRoleAsync(user, roleName);
+            if (!addRole.Succeeded)
+            {
+                await userManager.DeleteAsync(user);
+                return Results.BadRequest(addRole.Errors);
+            }
+
+            var resultDto = new UserWithRoleDto
+            {
+                Id = user.Id,
+                Username = user.UserName!,
+                Email = user.Email!,
+                Role = roleName
+            };
+            return Results.Created($"/admin/users/{user.Id}", resultDto);
+
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
     }
 }

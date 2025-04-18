@@ -1,34 +1,22 @@
-﻿using SensorApp.Shared.Dtos;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
+﻿using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Helpers;
+using SensorApp.Shared.Interfaces;
 
 namespace SensorApp.Shared.Services;
 
-public class AdminService(HttpClient httpClient)
+public class AdminService(HttpClient httpClient) : IAdminService
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    /// <summary>
-    /// Fetches a list of all users along with their assigned roles. Intended for administrators only through the jwt token. 
-    /// </summary>
-    /// <param name="token">The JWT token of the currently loggedin user.</param>
-    /// <returns>A list of users with their roles, or an empty list if the request fails.</returns>
     public async Task<List<UserWithRoleDto>> GetAllUsersAsync(string token)
     {
-        try
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var request = HttpRequestHelper.Create(HttpMethod.Get, "/admin/users", token);
+        return await HttpRequestHelper.SendAsync<List<UserWithRoleDto>>(_httpClient, request) ?? [];
+    }
 
-            var result = await _httpClient.GetFromJsonAsync<List<UserWithRoleDto>>("/admin/users");
-            return result ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
-        }
-        catch (Exception)
-        {
-            return [];
-        }
+    public async Task<bool> AddUserAsync(string token, CreateUserDto newUser)
+    {
+        var request = HttpRequestHelper.Create(HttpMethod.Post, "/admin/users", token, newUser);
+        return await HttpRequestHelper.SendAsync(_httpClient, request);
     }
 }

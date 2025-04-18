@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
-             xmlns:models="clr-namespace:SensorApp.Shared.Dtos;assembly=SensorApp.Shared"
+             xmlns:models="clr-namespace:SensorApp.Shared.Dtos.Admin;assembly=SensorApp.Shared"
              x:Class="SensorApp.Maui.Views.Pages.AdminUsersPage"
              x:DataType="viewmodel:AdminUsersViewModel"
              Title="Admin: Manage Users">
@@ -10,6 +10,7 @@
     <VerticalStackLayout Spacing="10" Padding="10">
         <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
 
+        <Button Text="Create New User" BackgroundColor="Green" TextColor="White" Command="{Binding GoToCreateUserCommand}" />
         <CollectionView ItemsSource="{Binding Users}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:UserWithRoleDto">
