@@ -41,7 +41,17 @@ public partial class NewUserViewModel : BaseViewModel
         {
             var token = await SecureStorage.GetAsync("Token");
             if (string.IsNullOrWhiteSpace(token))
+            {
                 throw new Exception("No auth token");
+
+            }
+
+            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            {
+                await Shell.Current.DisplayAlert("Error while submitting form", "All fields are required.", "OK");
+                IsLoading = false;
+                return;
+            }
 
             var dto = new CreateUserDto
             {

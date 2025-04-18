@@ -24,17 +24,10 @@
 
             <!-- Role Picker -->
             <Label Text="Role" />
-            <Picker
-        ItemsSource="{Binding Roles}"
-        SelectedItem="{Binding SelectedRole}"
-        Title="Select role" />
+            <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" Title="Select role" />
 
             <!-- Submit -->
-            <Button
-        Text="Submit"
-        BackgroundColor="Blue"
-        TextColor="White"
-        Command="{Binding CreateUserCommand}" />
+            <Button Text="Submit" BackgroundColor="Blue" TextColor="White" Command="{Binding CreateUserCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>
