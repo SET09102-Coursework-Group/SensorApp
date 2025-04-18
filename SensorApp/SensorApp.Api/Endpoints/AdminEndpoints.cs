@@ -53,7 +53,9 @@ public static class AdminEndpoints
                 return Results.BadRequest(create.Errors);
             }
 
-            var addRole = await userManager.AddToRoleAsync(user, dto.Role.ToString());
+            var roleName = dto.Role.ToString();
+
+            var addRole = await userManager.AddToRoleAsync(user, roleName);
             if (!addRole.Succeeded)
             {
                 await userManager.DeleteAsync(user);
@@ -65,7 +67,7 @@ public static class AdminEndpoints
                 Id = user.Id,
                 Username = user.UserName!,
                 Email = user.Email!,
-                Role = dto.Role.ToString()
+                Role = roleName
             };
             return Results.Created($"/admin/users/{user.Id}", resultDto);
 
