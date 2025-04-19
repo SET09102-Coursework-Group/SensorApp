@@ -20,6 +20,8 @@ public static class MenuFactoryResolver
         return role switch
         {
             UserRole.Administrator => new AdminMenuFactory(),
+            UserRole.EnvironmentalScientist => new EnvironmentalMenuFactory(),
+            UserRole.OperationsManager => new OperationsMenuFactory(),
 
             // TODO: Remaining two roles should be defined here with their factory
 

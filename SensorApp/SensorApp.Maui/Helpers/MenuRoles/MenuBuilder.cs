@@ -26,7 +26,7 @@ public class MenuBuilder(IServiceProvider serviceProvider) : IMenuBuilder
         Shell.Current.Items.Clear();
         Shell.Current.FlyoutHeader = new FlyOutHeader();
 
-        var role = Enum.Parse<UserRole>(userInfo.Role);
+        var role = Enum.Parse<UserRole>(userInfo.Role.Replace(" ", ""));
         var menuItems = MenuFactoryResolver.Resolve(role).CreateMenu();
 
         foreach (var item in menuItems)

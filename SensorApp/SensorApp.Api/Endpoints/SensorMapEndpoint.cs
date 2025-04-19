@@ -43,6 +43,6 @@ public static class SensorMapEndpoint
                 .ToListAsync();
 
             return Results.Ok(sensors);
-        }).RequireAuthorization();
+        });
     }
 }
