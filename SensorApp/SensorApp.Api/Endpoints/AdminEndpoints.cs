@@ -74,8 +74,15 @@ public static class AdminEndpoints
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
 
-        routes.MapDelete("/admin/users/{id}", async (string id, UserManager<IdentityUser> userManager) =>
+        routes.MapDelete("/admin/users/{id}", async (string id, UserManager<IdentityUser> userManager, HttpContext httpContext) =>
         {
+            var currentUserId = userManager.GetUserId(httpContext.User);
+
+            if (id == currentUserId)
+            {
+                return Results.BadRequest("You cannot delete your own account.");
+            }
+
             var user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
@@ -83,7 +90,7 @@ public static class AdminEndpoints
 
             }
 
-            var deleteResult = await userManager.DeleteAsync(user!);
+            var deleteResult = await userManager.DeleteAsync(user);
             if (!deleteResult.Succeeded)
             {
                 return Results.BadRequest(deleteResult.Errors);
@@ -91,5 +98,6 @@ public static class AdminEndpoints
 
             return Results.NoContent();
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+
     }
 }

@@ -180,6 +180,32 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
+    [Fact]
+    public async Task Admin_CannotDeleteOwnAccount_ReturnsBadRequest()
+    {
+        // Arrange
+        var token = await LoginAndGetToken(_adminEmail, _adminPassword);
+
+        // Get the current user's ID
+        var getRequest = new HttpRequestMessage(HttpMethod.Get, "/admin/users");
+        getRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var getResponse = await _client.SendAsync(getRequest);
+        var users = await getResponse.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
+
+        var currentUser = users!.FirstOrDefault(u => u.Email == _adminEmail);
+        currentUser.Should().NotBeNull();
+
+        // Act
+        var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/admin/users/{currentUser!.Id}");
+        deleteRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var deleteResponse = await _client.SendAsync(deleteRequest);
+
+        // Assert
+        deleteResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+
+
     private async Task<string> LoginAndGetToken(string username, string password)
     {
         var loginDto = new LoginDto(username, password);
