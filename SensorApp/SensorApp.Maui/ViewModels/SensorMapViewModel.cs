@@ -8,7 +8,7 @@ using SensorApp.Shared.Services;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using Timer = System.Timers.Timer;
-using SensorApp.Maui.Interfaces;
+using SensorApp.Shared.Interfaces;
 using System.Diagnostics;
 
 namespace SensorApp.Maui.ViewModels;

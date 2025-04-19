@@ -9,7 +9,6 @@ using System.Reflection;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Maps;
 using SensorApp.Maui.Helpers.Map;
-using SensorApp.Maui.Interfaces;
 
 namespace SensorApp.Maui;
 

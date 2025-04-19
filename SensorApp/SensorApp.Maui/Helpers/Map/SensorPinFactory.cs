@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using SensorApp.Shared.Models;
-using SensorApp.Maui.Interfaces;
+using SensorApp.Shared.Interfaces;
 
 namespace SensorApp.Maui.Helpers.Map;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Controls.Maps;
 using SensorApp.Shared.Models;
 
-namespace SensorApp.Maui.Interfaces;
+namespace SensorApp.Shared.Interfaces;
 
 public interface ISensorPinFactory
 {

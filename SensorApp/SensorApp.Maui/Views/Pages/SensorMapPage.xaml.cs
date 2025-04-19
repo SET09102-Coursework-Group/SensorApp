@@ -4,7 +4,7 @@ using SensorApp.Maui.ViewModels;
 using SensorApp.Maui.Models;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
-using SensorApp.Maui.Interfaces;
+using SensorApp.Shared.Interfaces;
 
 namespace SensorApp.Maui.Views.Pages;
 
