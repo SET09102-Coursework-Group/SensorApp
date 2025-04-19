@@ -1,8 +1,6 @@
 ﻿namespace SensorApp.Shared.Models;
-
-public class SensorModel
+public class SensorModel : BaseEntity
 {
-    public int Id { get; set; }
     public string Type { get; set; }
     public float Longitude { get; set; }
     public float Latitude { get; set; }

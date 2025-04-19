@@ -1,10 +1,7 @@
-﻿using SensorApp.Maui.Models;
+﻿namespace SensorApp.Shared.Models;
 
-namespace SensorApp.Shared.Models;
-
-public class MeasurementModel
+public class MeasurementModel : BaseEntity
 {
-    public int Id { get; set; }
     public int Sensor_id { get; set; }
     public SensorModel Sensor { get; set; }
     public float Value { get; set; }
