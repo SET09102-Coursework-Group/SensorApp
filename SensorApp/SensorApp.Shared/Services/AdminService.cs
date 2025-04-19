@@ -19,4 +19,10 @@ public class AdminService(HttpClient httpClient) : IAdminService
         var request = HttpRequestHelper.Create(HttpMethod.Post, "/admin/users", token, newUser);
         return await HttpRequestHelper.SendAsync(_httpClient, request);
     }
+
+    public async Task<bool> DeleteUserAsync(string token, string userId)
+    {
+        var request = HttpRequestHelper.Create(HttpMethod.Delete, $"/admin/users/{userId}", token);
+        return await HttpRequestHelper.SendAsync(_httpClient, request);
+    }
 }
