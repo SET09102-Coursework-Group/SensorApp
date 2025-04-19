@@ -3,16 +3,15 @@ using CommunityToolkit.Mvvm.Input;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
 using SensorApp.Shared.Interfaces;
-using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace SensorApp.Maui.ViewModels;
 
-public partial class NewUserViewModel(AdminService adminService, ITokenProvider tokenProvider) : BaseViewModel
+public partial class NewUserViewModel(IAdminService adminService, ITokenProvider tokenProvider) : BaseViewModel
 {
-    private readonly AdminService _adminService = adminService;
+    private readonly IAdminService _adminService = adminService;
     private readonly ITokenProvider _tokenProvider;
 
     [ObservableProperty]

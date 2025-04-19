@@ -9,9 +9,9 @@ using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
-public partial class AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger, ITokenProvider tokenProvider) : BaseViewModel
+public partial class AdminUsersViewModel(IAdminService adminService, ILogger<AdminUsersViewModel> logger, ITokenProvider tokenProvider) : BaseViewModel
 {
-    private readonly AdminService _adminService = adminService;
+    private readonly IAdminService _adminService = adminService;
     private readonly ILogger<AdminUsersViewModel> _logger = logger;
     private readonly ITokenProvider _tokenProvider = tokenProvider;
 
