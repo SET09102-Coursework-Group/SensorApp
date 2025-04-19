@@ -81,3 +81,9 @@ $RECYCLE.BIN/
 
 # Dev appsettings 
 appsettings.Development.json
+
+#Ignoring migration folder
+**/Migrations/
+
+
+
