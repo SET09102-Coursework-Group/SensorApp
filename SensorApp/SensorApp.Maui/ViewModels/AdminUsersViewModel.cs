@@ -32,6 +32,7 @@ public partial class AdminUsersViewModel(IAdminService adminService, ILogger<Adm
             if (string.IsNullOrEmpty(token))
             {
                 _logger.LogWarning("Token is missing. Cannot load users.");
+                await Shell.Current.DisplayAlert("Error", "You are not logged in or your session has expired. Please log in again.", "OK");
                 return;
             }
 
