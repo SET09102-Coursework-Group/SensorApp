@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SensorApp.Database.Data;
 
@@ -10,9 +11,11 @@ using SensorApp.Database.Data;
 namespace SensorApp.Database.Migrations
 {
     [DbContext(typeof(SensorDbContext))]
-    partial class SensorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250419170217_UpdateSensorLocations")]
+    partial class UpdateSensorLocations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -302,10 +305,10 @@ namespace SensorApp.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Max_safe_threshold")
+                    b.Property<float?>("Max_safe_threshold")
                         .HasColumnType("REAL");
 
-                    b.Property<float>("Min_safe_threshold")
+                    b.Property<float?>("Min_safe_threshold")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
@@ -412,8 +415,6 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = 12,
-                            Max_safe_threshold = 0f,
-                            Min_safe_threshold = 0f,
                             Name = "Wind Direction",
                             Unit = "degree"
                         });

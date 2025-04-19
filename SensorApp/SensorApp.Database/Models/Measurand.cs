@@ -11,7 +11,7 @@ public class Measurand : BaseEntity
     public string Name { get; set; }
     [Required]
     public string Unit { get; set; }
-    public float Min_safe_threshold { get; set; }
-    public float Max_safe_threshold { get; set; }
+    public float? Min_safe_threshold { get; set; }
+    public float? Max_safe_threshold { get; set; }
     public ICollection<Measurement> Measurements { get; set; }
 }

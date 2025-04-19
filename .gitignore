@@ -85,5 +85,5 @@ appsettings.Development.json
 #Ignoring migration folder
 **/Migrations/
 
-
-
+#Google Maps API key storage
+Directory.Build.props
