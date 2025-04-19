@@ -3,15 +3,17 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
-public partial class AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger) : BaseViewModel
+public partial class AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger, ITokenProvider tokenProvider) : BaseViewModel
 {
     private readonly AdminService _adminService = adminService;
     private readonly ILogger<AdminUsersViewModel> _logger = logger;
+    private readonly ITokenProvider _tokenProvider = tokenProvider;
 
     [ObservableProperty]
     private ObservableCollection<UserWithRoleDto> users = new();
@@ -25,7 +27,7 @@ public partial class AdminUsersViewModel(AdminService adminService, ILogger<Admi
 
         try
         {
-            var token = await SecureStorage.GetAsync("Token");
+            var token = await _tokenProvider.GetTokenAsync();
 
             if (string.IsNullOrEmpty(token))
             {
@@ -62,7 +64,7 @@ public partial class AdminUsersViewModel(AdminService adminService, ILogger<Admi
 
         try
         {
-            var token = await SecureStorage.GetAsync("Token");
+            var token = await _tokenProvider.GetTokenAsync();
 
             if (string.IsNullOrEmpty(token))
             {

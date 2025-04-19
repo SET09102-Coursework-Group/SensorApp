@@ -9,10 +9,12 @@ namespace SensorApp.Maui.ViewModels;
 public partial class LoadingPageViewModel : BaseViewModel
 {
     private readonly IMenuBuilder _menuBuilder;
+    private readonly ITokenProvider _tokenProvider;
 
-    public LoadingPageViewModel(IMenuBuilder menuBuilder)
+    public LoadingPageViewModel(IMenuBuilder menuBuilder, ITokenProvider tokenProvider)
     {
         _menuBuilder = menuBuilder;
+        _tokenProvider = tokenProvider;
         _ = InitializeAsync();
     }
 
@@ -22,7 +24,7 @@ public partial class LoadingPageViewModel : BaseViewModel
     }
     private async Task CheckUserLoginDetailsAsync()
     {
-        var token = await SecureStorage.GetAsync("Token");
+        var token = await _tokenProvider.GetTokenAsync();
 
         if (string.IsNullOrEmpty(token))
         {

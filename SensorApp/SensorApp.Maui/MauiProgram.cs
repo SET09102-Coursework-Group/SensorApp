@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
 using SensorApp.Maui.Helpers.MenuRoles;
+using SensorApp.Maui.Services;
 using SensorApp.Maui.ViewModels;
 using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Interfaces;
@@ -37,6 +38,7 @@ public static class MauiProgram
             });
         builder.Services.AddHttpClient<AdminService>().ConfigureApiHttpClient();
 
+        builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
 
         builder.Services.AddSingleton<MainPage>();
