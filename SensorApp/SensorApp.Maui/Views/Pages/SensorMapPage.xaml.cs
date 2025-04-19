@@ -10,38 +10,38 @@ namespace SensorApp.Maui.Views.Pages;
 
 public partial class SensorMapPage : ContentPage
 {
-    private readonly SensorMapViewModel mapViewModel;
-    public SensorMapPage(SensorApiService sensorService, ISensorPinFactory pinFactory)
+    private readonly SensorMapViewModel _mapViewModel;
+    public SensorMapPage(SensorApiService _sensorService, ISensorPinFactory pinFactory)
     {
         InitializeComponent();
-        mapViewModel = new SensorMapViewModel(sensorService, pinFactory);
-        mapViewModel.ThresholdBreached += OnThresholdBreached;
-        BindingContext = mapViewModel;
+        _mapViewModel = new SensorMapViewModel(_sensorService, pinFactory);
+        _mapViewModel.ThresholdBreached += OnThresholdBreached;
+        BindingContext = _mapViewModel;
     }
     protected override async void OnAppearing()
     {
         base.OnAppearing();
 
         await LoadAndDisplaySensorsAsync();
-        mapViewModel.StartRealTimeUpdates();
+        _mapViewModel.StartRealTimeUpdates();
     }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        mapViewModel.StopRealTimeUpdates();
-        mapViewModel.ThresholdBreached -= OnThresholdBreached;
+        _mapViewModel.StopRealTimeUpdates();
+        _mapViewModel.ThresholdBreached -= OnThresholdBreached;
     }
     private async Task LoadAndDisplaySensorsAsync()
     {
-        await mapViewModel.LoadSensors();
-        DisplaySensorPins(mapViewModel.Sensors);
+        await _mapViewModel.LoadSensors();
+        DisplaySensorPins(_mapViewModel.Sensors);
     }
 
     private void DisplaySensorPins(IEnumerable<SensorModel> sensors)
     {
         SensorMap.Pins.Clear();
 
-        foreach (var pin in mapViewModel.Pins)
+        foreach (var pin in _mapViewModel.Pins)
         {
             SensorMap.Pins.Add(pin);
         }

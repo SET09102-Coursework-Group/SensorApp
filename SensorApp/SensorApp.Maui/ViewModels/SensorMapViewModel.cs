@@ -15,14 +15,14 @@ namespace SensorApp.Maui.ViewModels;
 
 public partial class SensorMapViewModel : BaseViewModel
 {
-    private readonly SensorApiService sensorService;
+    private readonly SensorApiService _sensorService;
     private readonly ISensorPinFactory pinFactory;
     public ObservableCollection<SensorModel> Sensors { get; } = new();
     public ObservableCollection<Pin> Pins { get; } = new();
 
-    public SensorMapViewModel(SensorApiService sensorService, ISensorPinFactory pinFactory)
+    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinFactory pinFactory)
     {
-        this.sensorService = sensorService;
+        this._sensorService = _sensorService;
         this.pinFactory = pinFactory;
     }
 
@@ -36,7 +36,7 @@ public partial class SensorMapViewModel : BaseViewModel
         {
             var token = await SecureStorage.GetAsync("Token");
 
-            var sensors = await sensorService.GetSensorsAsync(token);
+            var sensors = await _sensorService.GetSensorsAsync(token);
             var breached = new List<SensorModel>();
 
             MainThread.BeginInvokeOnMainThread(() =>
