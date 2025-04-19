@@ -139,5 +139,48 @@ public class AdminServiceTests
         Assert.False(result);
     }
 
+    [Fact]
+    public async Task DeleteUser_ReturnsTrue_WhenSuccessful()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.NoContent);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
 
+        // Act
+        var result = await service.DeleteUserAsync("goodToken", "randomId");
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task DeleteUser_ReturnsFalse_WhenUserNotFound()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.NotFound);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        // Act
+        var result = await service.DeleteUserAsync("goodToken", "nonExistentUserId");
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task DeleteUser_ReturnsFalse_WhenUnauthorized()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        // Act
+        var result = await service.DeleteUserAsync("badToken", "randomUserId");
+
+        // Assert
+        Assert.False(result);
+    }
 }

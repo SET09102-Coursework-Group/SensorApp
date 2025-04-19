@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
-using SensorApp.Shared.Services;
+using SensorApp.Shared.Interfaces;
 using System.Collections.ObjectModel;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -11,11 +11,13 @@ namespace SensorApp.Maui.ViewModels;
 
 public partial class NewUserViewModel : BaseViewModel
 {
-    private readonly AdminService _adminService;
+    private readonly IAdminService _adminService;
+    private readonly ITokenProvider _tokenProvider;
 
-    public NewUserViewModel(AdminService adminService)
+    public NewUserViewModel(IAdminService adminService, ITokenProvider tokenProvider)
     {
         _adminService = adminService;
+        _tokenProvider = tokenProvider;
         Roles = [.. Enum.GetValues<UserRole>()];
     }
 
@@ -31,7 +33,7 @@ public partial class NewUserViewModel : BaseViewModel
     [ObservableProperty]
     private UserRole selectedRole;
 
-    public ObservableCollection<UserRole> Roles { get; }
+    public ObservableCollection<UserRole> Roles { get; } = [.. Enum.GetValues<UserRole>()];
 
     [RelayCommand]
     public async Task CreateUser()
@@ -41,7 +43,7 @@ public partial class NewUserViewModel : BaseViewModel
 
         try
         {
-            var token = await SecureStorage.GetAsync("Token");
+            var token = await _tokenProvider.GetTokenAsync();
             if (string.IsNullOrWhiteSpace(token))
             {
                 throw new Exception("No auth token");

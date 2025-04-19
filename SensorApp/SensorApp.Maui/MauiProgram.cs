@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
 using SensorApp.Maui.Helpers.MenuRoles;
+using SensorApp.Maui.Services;
 using SensorApp.Maui.ViewModels;
 using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Interfaces;
@@ -34,15 +35,16 @@ public static class MauiProgram
             .UseMauiMaps();
 
 
-        builder.Services.AddHttpClient<AuthService>()
+        builder.Services.AddHttpClient<IAuthService, AuthService>()
             .ConfigureApiHttpClient()
             .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             });
-        builder.Services.AddHttpClient<AdminService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
 
+        builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();
+        builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
         builder.Services.AddSingleton<ISensorAnalysisService, SensorAnalysisService>();
         builder.Services.AddSingleton<ISensorPinFactory, SensorPinFactory>();

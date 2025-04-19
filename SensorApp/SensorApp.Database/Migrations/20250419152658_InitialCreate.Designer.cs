@@ -11,7 +11,7 @@ using SensorApp.Database.Data;
 namespace SensorApp.Database.Migrations
 {
     [DbContext(typeof(SensorDbContext))]
-    [Migration("20250418005825_InitialCreate")]
+    [Migration("20250419152658_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -157,15 +157,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "fab66dad-9f12-45a0-9fd8-6352336a696d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "883e0c65-74a5-4845-8d68-867d9ae534e8",
+                            ConcurrencyStamp = "15981a80-23cd-4753-a50a-eab86efe50da",
                             Email = "admin@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@SENSOR.COM",
                             NormalizedUserName = "ADMIN@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEmlnpQ1bv6kx3joCW4FhH0SFSArOgcJ/zHNV63E7hTwcSCspW0pvC4qZ/G2ywmm9w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHOYByGEL9lcq0I6wAzzFLvp4VIeNMe2YTbp4HWKvlb3NAfX5D/KjdLkLvekRrtCyQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d395a095-1c24-445e-b5d5-4fb8dcf9b3f9",
+                            SecurityStamp = "29d2867c-fa39-4f83-b5d3-11cd87eef188",
                             TwoFactorEnabled = false,
                             UserName = "admin@sensor.com"
                         },
@@ -173,15 +173,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3619566e-acaa-4c0c-9398-3c0e328730e4",
+                            ConcurrencyStamp = "c3e79e40-9fa5-44fe-ba05-585b1b97c815",
                             Email = "ops@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "OPS@SENSOR.COM",
                             NormalizedUserName = "OPS@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKg65OYW4QuoooXZb5srNKYexN7uGeyZfFheASUih9FyY7fHVKyJwCheQ9/REu59JA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK87KLp0OuA3vVuh2jFy6qbO3C+SeW8Sg1zZrP441aIVcQscwjH1MzDTuxDTWDY0sA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bdea70b8-e616-41b2-868a-519a545a4913",
+                            SecurityStamp = "50f9fb4a-065e-4607-8565-05e67c592d1b",
                             TwoFactorEnabled = false,
                             UserName = "ops@sensor.com"
                         },
@@ -189,15 +189,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "16c28285-b362-4eda-b6ca-371fde7ffd89",
+                            ConcurrencyStamp = "36d7a5a3-1325-427a-ad20-92176abb1223",
                             Email = "scientist@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "SCIENTIST@SENSOR.COM",
                             NormalizedUserName = "SCIENTIST@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH/Jwmgnwd2sbtuC+GPuOnNG80IUBi+iu+z0LQApw/u/jkEkz999ZA1DpBLoJsfjOg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFDOJ/6yRwp00tD09KMHXd8P7spUCMDF1Kjk+zVTH3nXWcRL/zxbq9RSicP7Mo120A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e6ea1d8c-dfce-407e-a09e-59c7437bb8a3",
+                            SecurityStamp = "69c996b6-a6a7-4224-8b3e-c3980eebbed9",
                             TwoFactorEnabled = false,
                             UserName = "scientist@sensor.com"
                         });

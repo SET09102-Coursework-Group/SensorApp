@@ -72,5 +72,32 @@ public static class AdminEndpoints
             return Results.Created($"/admin/users/{user.Id}", resultDto);
 
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+
+
+        routes.MapDelete("/admin/users/{id}", async (string id, UserManager<IdentityUser> userManager, HttpContext httpContext) =>
+        {
+            var currentUserId = userManager.GetUserId(httpContext.User);
+
+            if (id == currentUserId)
+            {
+                return Results.BadRequest("You cannot delete your own account.");
+            }
+
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return Results.NotFound();
+
+            }
+
+            var deleteResult = await userManager.DeleteAsync(user);
+            if (!deleteResult.Succeeded)
+            {
+                return Results.BadRequest(deleteResult.Errors);
+            }
+
+            return Results.NoContent();
+        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+
     }
 }

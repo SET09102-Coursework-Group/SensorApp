@@ -3,22 +3,17 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
-
-public partial class AdminUsersViewModel : BaseViewModel
+public partial class AdminUsersViewModel(IAdminService adminService, ILogger<AdminUsersViewModel> logger, ITokenProvider tokenProvider) : BaseViewModel
 {
-    private readonly AdminService _adminService;
-    private readonly ILogger<AdminUsersViewModel> _logger;
-
-    public AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger)
-    {
-        _adminService = adminService;
-        _logger = logger;
-    }
+    private readonly IAdminService _adminService = adminService;
+    private readonly ILogger<AdminUsersViewModel> _logger = logger;
+    private readonly ITokenProvider _tokenProvider = tokenProvider;
 
     [ObservableProperty]
     private ObservableCollection<UserWithRoleDto> users = new();
@@ -32,11 +27,12 @@ public partial class AdminUsersViewModel : BaseViewModel
 
         try
         {
-            var token = await SecureStorage.GetAsync("Token");
+            var token = await _tokenProvider.GetTokenAsync();
 
             if (string.IsNullOrEmpty(token))
             {
                 _logger.LogWarning("Token is missing. Cannot load users.");
+                await Shell.Current.DisplayAlert("Error", "You are not logged in or your session has expired. Please log in again.", "OK");
                 return;
             }
 
@@ -58,5 +54,40 @@ public partial class AdminUsersViewModel : BaseViewModel
     public async Task GoToCreateUser()
     {
         await Shell.Current.GoToAsync(nameof(NewUserPage));
+    }
+
+    [RelayCommand]
+    private async Task DeleteUser(UserWithRoleDto user)
+    {
+        var confirm = await Shell.Current.DisplayAlert("Delete User", $"Are you sure you would like to delete this user '{user.Username}'?", "Yes", "No");
+
+        if (!confirm) return;
+
+        try
+        {
+            var token = await _tokenProvider.GetTokenAsync();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                _logger.LogWarning("Token is missing. Cannot delete user.");
+                return;
+            }
+
+            var success = await _adminService.DeleteUserAsync(token, user.Id);
+
+            if (success)
+            {
+                await LoadUsersAsync();
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error", "Failed to delete user.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting user.");
+            await Shell.Current.DisplayAlert("Error", "An unexpected error occurred.", "OK");
+        }
     }
 }

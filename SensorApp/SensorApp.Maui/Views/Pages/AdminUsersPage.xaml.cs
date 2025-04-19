@@ -9,8 +9,8 @@ public partial class AdminUsersPage : ContentPage
     public AdminUsersPage(AdminUsersViewModel vm)
     {
         InitializeComponent();
-        this.viewModel = vm;
-        BindingContext = vm;
+        viewModel = vm;
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()
