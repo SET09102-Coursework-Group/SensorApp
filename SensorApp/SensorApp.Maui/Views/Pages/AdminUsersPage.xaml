@@ -5,22 +5,33 @@
              xmlns:models="clr-namespace:SensorApp.Shared.Dtos.Admin;assembly=SensorApp.Shared"
              x:Class="SensorApp.Maui.Views.Pages.AdminUsersPage"
              x:DataType="viewmodel:AdminUsersViewModel"
+             x:Name="RootPage"
              Title="Admin: Manage Users">
+
+
 
     <VerticalStackLayout Spacing="10" Padding="10">
         <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
 
         <Button Text="Create New User" BackgroundColor="Green" TextColor="White" Command="{Binding GoToCreateUserCommand}" />
+
+
         <CollectionView ItemsSource="{Binding Users}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:UserWithRoleDto">
-                    <VerticalStackLayout Spacing="5" Padding="5">
-                        <Label Text="{Binding Username}" FontAttributes="Bold" />
-                        <Label Text="{Binding Email}" />
-                        <Label Text="{Binding Role}" FontAttributes="Italic" LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
+                    <Frame Padding="10" Margin="0,5" BorderColor="LightGray" CornerRadius="8">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="{Binding Username}" FontAttributes="Bold" />
+                            <Label Text="{Binding Email}" />
+                            <Label Text="{Binding Role}" FontAttributes="Italic" />
+                            <Button Text="Delete" BackgroundColor="Red" TextColor="White" Command="{Binding BindingContext.DeleteUserCommand, Source={x:Reference RootPage}}" CommandParameter="{Binding .}" />
+
+                        </VerticalStackLayout>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+
     </VerticalStackLayout>
 </ContentPage>

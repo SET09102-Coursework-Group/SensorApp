@@ -8,17 +8,10 @@ using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
-
-public partial class AdminUsersViewModel : BaseViewModel
+public partial class AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger) : BaseViewModel
 {
-    private readonly AdminService _adminService;
-    private readonly ILogger<AdminUsersViewModel> _logger;
-
-    public AdminUsersViewModel(AdminService adminService, ILogger<AdminUsersViewModel> logger)
-    {
-        _adminService = adminService;
-        _logger = logger;
-    }
+    private readonly AdminService _adminService = adminService;
+    private readonly ILogger<AdminUsersViewModel> _logger = logger;
 
     [ObservableProperty]
     private ObservableCollection<UserWithRoleDto> users = new();
@@ -58,5 +51,40 @@ public partial class AdminUsersViewModel : BaseViewModel
     public async Task GoToCreateUser()
     {
         await Shell.Current.GoToAsync(nameof(NewUserPage));
+    }
+
+    [RelayCommand]
+    private async Task DeleteUser(UserWithRoleDto user)
+    {
+        var confirm = await Shell.Current.DisplayAlert("Delete User", $"Are you sure you would like to delete this user '{user.Username}'?", "Yes", "No");
+
+        if (!confirm) return;
+
+        try
+        {
+            var token = await SecureStorage.GetAsync("Token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                _logger.LogWarning("Token is missing. Cannot delete user.");
+                return;
+            }
+
+            var success = await _adminService.DeleteUserAsync(token, user.Id);
+
+            if (success)
+            {
+                await LoadUsersAsync();
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error", "Failed to delete user.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting user.");
+            await Shell.Current.DisplayAlert("Error", "An unexpected error occurred.", "OK");
+        }
     }
 }
