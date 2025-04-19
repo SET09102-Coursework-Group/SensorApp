@@ -161,6 +161,10 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
 
         // Assert
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        // Verify user no longer exists
+        var exists = await UserExistsAsync(createdUser.Id, token);
+        exists.Should().BeFalse();
     }
 
     [Fact]
@@ -169,6 +173,9 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
         // Arrange
         var token = await LoginAndGetToken(_adminEmail, _adminPassword);
         var nonExistentId = Guid.NewGuid().ToString();
+
+        var exists = await UserExistsAsync(nonExistentId, token);
+        exists.Should().BeFalse("The user id doesn't exist");
 
         var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/admin/users/{nonExistentId}");
         deleteRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -215,4 +222,17 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
         var auth = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
         return auth!.Token;
     }
+
+    private async Task<bool> UserExistsAsync(string userId, string token)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "/admin/users");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await _client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var users = await response.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
+        return users!.Any(u => u.Id == userId);
+    }
+
 }
