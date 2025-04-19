@@ -17,7 +17,7 @@ public class SensorPinFactory : ISensorPinFactory
             Label = sensor.IsThresholdBreached
                 ? $"!! {sensor.Type} - ALERT"
                 : $"{sensor.Type} - {sensor.Status}",
-            Location = new Location(sensor.Longitude, sensor.Latitude),
+            Location = new Location(sensor.Latitude, sensor.Longitude),
             Type = PinType.Place,
             Address = measurementsInfo
         };
