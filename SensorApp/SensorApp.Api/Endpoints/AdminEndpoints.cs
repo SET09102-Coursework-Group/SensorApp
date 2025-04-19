@@ -99,5 +99,32 @@ public static class AdminEndpoints
             return Results.NoContent();
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
+
+        routes.MapPut("/admin/users/{id}/role", async (string id, string role, UserManager<IdentityUser> userManager) =>
+        {
+            if (!Enum.TryParse<UserRole>(role, true, out var parsedRole))
+            {
+                return Results.BadRequest($"Invalid role: '{role}'. Choose one of these roles instead: {string.Join(", ", Enum.GetNames(typeof(UserRole)))}");
+            }
+
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return Results.NotFound();
+            }
+
+            var currentRoles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            var result = await userManager.AddToRoleAsync(user, parsedRole.ToString());
+
+            if (!result.Succeeded)
+            {
+                return Results.BadRequest(result.Errors);
+            }
+
+            return Results.Ok();
+        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+
     }
 }
