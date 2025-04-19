@@ -72,5 +72,24 @@ public static class AdminEndpoints
             return Results.Created($"/admin/users/{user.Id}", resultDto);
 
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+
+
+        routes.MapDelete("/admin/users/{id}", async (string id, UserManager<IdentityUser> userManager) =>
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return Results.NotFound();
+
+            }
+
+            var deleteResult = await userManager.DeleteAsync(user!);
+            if (!deleteResult.Succeeded)
+            {
+                return Results.BadRequest(deleteResult.Errors);
+            }
+
+            return Results.NoContent();
+        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
     }
 }
