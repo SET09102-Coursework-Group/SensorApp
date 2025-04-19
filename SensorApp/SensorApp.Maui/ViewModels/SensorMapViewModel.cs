@@ -17,18 +17,19 @@ public partial class SensorMapViewModel : BaseViewModel
 {
     private readonly SensorApiService _sensorService;
     private readonly ISensorPinFactory pinFactory;
+    private readonly ISensorAnalysisService _sensorAnalysisService;
     public ObservableCollection<SensorModel> Sensors { get; } = new();
     public ObservableCollection<Pin> Pins { get; } = new();
-
-    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinFactory pinFactory)
-    {
-        this._sensorService = _sensorService;
-        this.pinFactory = pinFactory;
-    }
-
     public event Action<IEnumerable<SensorModel>>? ThresholdBreached;
 
     private System.Timers.Timer? updateTimer;
+
+    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinFactory pinFactory, ISensorAnalysisService _sensorAnalysisService)
+    {
+        this._sensorService = _sensorService;
+        this.pinFactory = pinFactory;
+        this._sensorAnalysisService = _sensorAnalysisService;
+    }
 
     public async Task LoadSensors()
     {
@@ -48,7 +49,7 @@ public partial class SensorMapViewModel : BaseViewModel
                 {
                     Sensors.Add(sensor);
 
-                    if (sensor.IsThresholdBreached)
+                    if (_sensorAnalysisService.IsThresholdBreached(sensor))
                         breached.Add(sensor);
 
                     Pins.Add(pinFactory.CreatePin(sensor));

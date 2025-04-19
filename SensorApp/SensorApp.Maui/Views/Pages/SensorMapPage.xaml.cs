@@ -1,7 +1,6 @@
 ﻿using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using SensorApp.Maui.ViewModels;
-using SensorApp.Maui.Models;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
 using SensorApp.Shared.Interfaces;
@@ -11,10 +10,12 @@ namespace SensorApp.Maui.Views.Pages;
 public partial class SensorMapPage : ContentPage
 {
     private readonly SensorMapViewModel _mapViewModel;
-    public SensorMapPage(SensorApiService _sensorService, ISensorPinFactory pinFactory)
+    private readonly ISensorAnalysisService _sensorAnalysisService;
+    public SensorMapPage(SensorApiService _sensorService, ISensorPinFactory pinFactory, ISensorAnalysisService _sensorAnalysisService)
     {
         InitializeComponent();
-        _mapViewModel = new SensorMapViewModel(_sensorService, pinFactory);
+        this._sensorAnalysisService = _sensorAnalysisService;
+        _mapViewModel = new SensorMapViewModel(_sensorService, pinFactory, _sensorAnalysisService);
         _mapViewModel.ThresholdBreached += OnThresholdBreached;
         BindingContext = _mapViewModel;
     }
@@ -67,7 +68,7 @@ public partial class SensorMapPage : ContentPage
     {
         string message = string.Join("\n\n", breachedSensors.Select(sensor =>
         {
-            var breaches = sensor.LatestMeasurementsByType.Values
+            var breaches = _sensorAnalysisService.GetLatestMeasurementsByType(sensor).Values
                 .Where(measurement =>
                     measurement.MeasurementType != null && measurement.MeasurementType.Min_safe_threshold.HasValue && measurement.MeasurementType.Max_safe_threshold.HasValue &&
                     (measurement.Value < measurement.MeasurementType.Min_safe_threshold || measurement.Value > measurement.MeasurementType.Max_safe_threshold))
