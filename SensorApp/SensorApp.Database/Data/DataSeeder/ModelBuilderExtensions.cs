@@ -181,7 +181,9 @@ public static class ModelBuilderExtensions
             {
                 Id = 12,
                 Name = "Wind Direction",
-                Unit = "degree"
+                Unit = "degree",
+                Min_safe_threshold = null,
+                Max_safe_threshold = null
             }
         );
     }
@@ -193,8 +195,8 @@ public static class ModelBuilderExtensions
             {
                 Id = 1,
                 Type = "Air Quality",
-                Longitude = 55.94476f,
-                Latitude = -3.183991f,
+                Longitude = -3.183991f,
+                Latitude = 55.94476f,
                 Site_zone = "Central Scotland",
                 Status = "Active",
             },
@@ -202,8 +204,8 @@ public static class ModelBuilderExtensions
                 {
                     Id = 2,
                     Type = "Water Quality",
-                    Longitude = 55.861111f,
-                    Latitude = -3.253889f,
+                    Longitude = -3.253889f,
+                    Latitude = 55.861111f,
                     Site_zone = "Glencorse B",
                     Status = "Active",
                 },
@@ -211,8 +213,8 @@ public static class ModelBuilderExtensions
                 {
                     Id = 3,
                     Type = "Weather",
-                    Longitude = 55.008785f,
-                    Latitude = -3.5856323f,
+                    Longitude = -3.5856323f,
+                    Latitude = 55.008785f,
                     Status = "Active",
                 }
             );

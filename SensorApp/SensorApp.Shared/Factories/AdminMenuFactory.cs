@@ -18,6 +18,11 @@ public class AdminMenuFactory : IMenuFactory
             {
                 Title = "Admin - Manage Users",
                 Route = "AdminUsersPage"
+            },
+            new AppMenuItem
+            {
+                Title = "Sensor Map",
+                Route = "SensorMapPage"
             }
         ];
     }

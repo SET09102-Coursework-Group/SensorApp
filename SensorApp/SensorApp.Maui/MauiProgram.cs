@@ -6,6 +6,9 @@ using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Services;
 using System.Reflection;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls.Maps;
+using SensorApp.Maui.Helpers.Map;
 
 namespace SensorApp.Maui;
 
@@ -27,7 +30,9 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+            })
+            .UseMauiMaps();
+
 
         builder.Services.AddHttpClient<AuthService>()
             .ConfigureApiHttpClient()
@@ -36,14 +41,18 @@ public static class MauiProgram
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             });
         builder.Services.AddHttpClient<AdminService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
 
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
+        builder.Services.AddSingleton<ISensorAnalysisService, SensorAnalysisService>();
+        builder.Services.AddSingleton<ISensorPinFactory, SensorPinFactory>();
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<LogoutPage>();
         builder.Services.AddTransient<AdminUsersPage>();
         builder.Services.AddSingleton<LoadingPage>();
+        builder.Services.AddTransient<SensorMapPage>();
 
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();

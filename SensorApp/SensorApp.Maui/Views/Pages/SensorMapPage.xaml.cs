@@ -1,0 +1,84 @@
+﻿using Microsoft.Maui.Controls.Maps;
+using Microsoft.Maui.Maps;
+using SensorApp.Maui.ViewModels;
+using SensorApp.Shared.Models;
+using SensorApp.Shared.Services;
+using SensorApp.Shared.Interfaces;
+
+namespace SensorApp.Maui.Views.Pages;
+
+public partial class SensorMapPage : ContentPage
+{
+    private readonly SensorMapViewModel _mapViewModel;
+    private readonly ISensorAnalysisService _sensorAnalysisService;
+    public SensorMapPage(SensorApiService _sensorService, ISensorPinFactory pinFactory, ISensorAnalysisService _sensorAnalysisService)
+    {
+        InitializeComponent();
+        this._sensorAnalysisService = _sensorAnalysisService;
+        _mapViewModel = new SensorMapViewModel(_sensorService, pinFactory, _sensorAnalysisService);
+        _mapViewModel.ThresholdBreached += OnThresholdBreached;
+        BindingContext = _mapViewModel;
+    }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        await LoadAndDisplaySensorsAsync();
+        _mapViewModel.StartRealTimeUpdates();
+    }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _mapViewModel.StopRealTimeUpdates();
+        _mapViewModel.ThresholdBreached -= OnThresholdBreached;
+    }
+    private async Task LoadAndDisplaySensorsAsync()
+    {
+        await _mapViewModel.LoadSensors();
+        DisplaySensorPins(_mapViewModel.Sensors);
+    }
+
+    private void DisplaySensorPins(IEnumerable<SensorModel> sensors)
+    {
+        SensorMap.Pins.Clear();
+
+        foreach (var pin in _mapViewModel.Pins)
+        {
+            SensorMap.Pins.Add(pin);
+        }
+
+        CenterMapOnFirstValidSensor(sensors);
+    }
+
+    private void CenterMapOnFirstValidSensor(IEnumerable<SensorModel> sensors)
+    {
+        var first = sensors.FirstOrDefault(sensor =>
+            !float.IsNaN(sensor.Latitude) &&
+            !float.IsNaN(sensor.Longitude));
+
+        if (first != null)
+        {
+            var location = new Location(first.Latitude, first.Longitude);
+            var mapSpan = MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(5));
+            SensorMap.MoveToRegion(mapSpan);
+        }
+    }
+
+    private async void OnThresholdBreached(IEnumerable<SensorModel> breachedSensors)
+    {
+        string message = string.Join("\n\n", breachedSensors.Select(sensor =>
+        {
+            var breaches = _sensorAnalysisService.GetLatestMeasurementsByType(sensor).Values
+                .Where(measurement =>
+                    measurement.MeasurementType != null && measurement.MeasurementType.Min_safe_threshold.HasValue && measurement.MeasurementType.Max_safe_threshold.HasValue &&
+                    (measurement.Value < measurement.MeasurementType.Min_safe_threshold || measurement.Value > measurement.MeasurementType.Max_safe_threshold))
+                .Select(measurement => $"- {measurement.MeasurementType.Name}: {measurement.Value} (Safe Range: {measurement.MeasurementType.Min_safe_threshold}–{measurement.MeasurementType.Max_safe_threshold}) at {measurement.Timestamp}");
+
+            string breachesText = string.Join("\n", breaches);
+
+            return $"{sensor.Type} sensor at coordinate location {sensor.Longitude}, {sensor.Latitude} has breached the following thresholds:\n\n{breachesText}";
+        }));
+
+        await DisplayAlert("Sensor Alert!!", message, "OK");
+    }
+};

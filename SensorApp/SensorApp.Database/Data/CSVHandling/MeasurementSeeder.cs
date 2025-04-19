@@ -133,7 +133,7 @@ public class MeasurementSeeder
                 {
                     Timestamp = r.Timestamp,
                     Value = r.Temperature.Value,
-                    Sensor_id = 2,
+                    Sensor_id = 3,
                     Measurement_type_id = 9
                 });
 
@@ -145,7 +145,7 @@ public class MeasurementSeeder
                 {
                     Timestamp = r.Timestamp,
                     Value = r.RelativeHumidity.Value,
-                    Sensor_id = 2,
+                    Sensor_id = 3,
                     Measurement_type_id = 10
                 });
 
@@ -157,7 +157,7 @@ public class MeasurementSeeder
                 {
                     Timestamp = r.Timestamp,
                     Value = r.WindSpeed.Value,
-                    Sensor_id = 2,
+                    Sensor_id = 3,
                     Measurement_type_id = 11
                 });
 
@@ -169,7 +169,7 @@ public class MeasurementSeeder
                 {
                     Timestamp = r.Timestamp,
                     Value = r.WindDirection.Value,
-                    Sensor_id = 2,
+                    Sensor_id = 3,
                     Measurement_type_id = 12
                 });
         }

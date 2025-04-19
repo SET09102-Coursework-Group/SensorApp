@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SensorApp.Database.Data;
 
@@ -10,9 +11,11 @@ using SensorApp.Database.Data;
 namespace SensorApp.Database.Migrations
 {
     [DbContext(typeof(SensorDbContext))]
-    partial class SensorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417204857_UpdateMeasurandWindDirection")]
+    partial class UpdateMeasurandWindDirection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -154,15 +157,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "fab66dad-9f12-45a0-9fd8-6352336a696d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d9eaf8e4-18d2-432d-88d9-ddb82023fd4e",
+                            ConcurrencyStamp = "c51a027f-0fa6-4a17-ae48-ca5ee78f245e",
                             Email = "admin@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@SENSOR.COM",
                             NormalizedUserName = "ADMIN@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMEkbjzrT7Lp8A6YEFZvwyd+jjMKQGEMZiQ5J6ypk33FWhPa2FwgUeAUpSekA05WLQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPKmWqpAIHdZPEQfggxYSJegbqfE22O9TDANMFD1IDud2UFriMVzyYhr64+DVFrIQA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "78671824-9b5d-4194-9292-0f02b5edbdc0",
+                            SecurityStamp = "1c33bfef-8459-4389-91de-00dc66ba6d18",
                             TwoFactorEnabled = false,
                             UserName = "admin@sensor.com"
                         },
@@ -170,15 +173,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a15c16a0-5881-440d-9ddc-3fb21d1d5685",
+                            ConcurrencyStamp = "e7207acf-ac3f-4499-ab92-4a5f58203cc6",
                             Email = "ops@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "OPS@SENSOR.COM",
                             NormalizedUserName = "OPS@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEK8UA0x16WCUc32tqv+Wy25guN6PlTAyV8MgOrqFdVkbtcAYr/cts6uuG+Nqa5BcFQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDFsFHSg1k66m7Hb5Bp+4Pbzj2VEOGZ8QqParu0zfh/4UDqwfCae9lkDrbTGtTkB3g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "52d35023-32fc-4ad6-a102-19aa70375f32",
+                            SecurityStamp = "217cd567-a6f2-40dc-8fb7-74aedd7ab418",
                             TwoFactorEnabled = false,
                             UserName = "ops@sensor.com"
                         },
@@ -186,15 +189,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9f919890-fdd6-4d93-b3c9-090af55ba9fe",
+                            ConcurrencyStamp = "8566ac49-19e8-474a-9a27-b9c572589975",
                             Email = "scientist@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "SCIENTIST@SENSOR.COM",
                             NormalizedUserName = "SCIENTIST@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJMKp5/DAxTWAEe9wTFSu8YQPR37GzyW3O2Qti2uMSteTDEgH6L3kOiZI28s4wWW2w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN3DtfxFQoWGNA1VZERRgVO3NeOrcDZXpit9RVqckFowh21ZJoNAPkTJCo3nUJMRUg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f965b445-c33c-4a72-93ba-79c3598bb5ce",
+                            SecurityStamp = "25812c88-f1e1-4e5c-b6dd-989fb144f8ed",
                             TwoFactorEnabled = false,
                             UserName = "scientist@sensor.com"
                         });
@@ -302,10 +305,10 @@ namespace SensorApp.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Max_safe_threshold")
+                    b.Property<float?>("Max_safe_threshold")
                         .HasColumnType("REAL");
 
-                    b.Property<float>("Min_safe_threshold")
+                    b.Property<float?>("Min_safe_threshold")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
@@ -412,8 +415,6 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = 12,
-                            Max_safe_threshold = 0f,
-                            Min_safe_threshold = 0f,
                             Name = "Wind Direction",
                             Unit = "degree"
                         });
@@ -477,8 +478,8 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = 1,
-                            Latitude = 55.94476f,
-                            Longitude = -3.183991f,
+                            Latitude = -3.183991f,
+                            Longitude = 55.94476f,
                             Site_zone = "Central Scotland",
                             Status = "Active",
                             Type = "Air Quality"
@@ -486,8 +487,8 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = 2,
-                            Latitude = 55.86111f,
-                            Longitude = -3.253889f,
+                            Latitude = -3.253889f,
+                            Longitude = 55.86111f,
                             Site_zone = "Glencorse B",
                             Status = "Active",
                             Type = "Water Quality"
@@ -495,8 +496,8 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = 3,
-                            Latitude = 55.008785f,
-                            Longitude = -3.5856323f,
+                            Latitude = -3.5856323f,
+                            Longitude = 55.008785f,
                             Status = "Active",
                             Type = "Weather"
                         });
