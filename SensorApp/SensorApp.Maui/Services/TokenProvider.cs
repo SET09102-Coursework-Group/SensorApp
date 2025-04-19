@@ -4,8 +4,10 @@ namespace SensorApp.Maui.Services;
 
 public class TokenProvider : ITokenProvider
 {
-    public Task<string?> GetTokenAsync()
+    public async Task<string?> GetTokenAsync()
     {
-        return SecureStorage.GetAsync("Token");
+        var token = await SecureStorage.GetAsync("Token");
+        return token;
     }
+
 }

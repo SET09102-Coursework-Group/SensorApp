@@ -9,16 +9,11 @@ using System.Security.Claims;
 
 namespace SensorApp.Maui.ViewModels;
 
-public partial class LoginViewModel : BaseViewModel
+public partial class LoginViewModel(IAuthService authService, IMenuBuilder menuBuilder) : BaseViewModel
 {
-    private readonly AuthService _authService;
-    private readonly IMenuBuilder _menuBuilder;
+    private readonly IAuthService _authService = authService;
+    private readonly IMenuBuilder _menuBuilder = menuBuilder;
 
-    public LoginViewModel(AuthService authService, IMenuBuilder menuBuilder)
-    {
-        _authService = authService;
-        _menuBuilder = menuBuilder;
-    }
 
     [ObservableProperty]
     string username;

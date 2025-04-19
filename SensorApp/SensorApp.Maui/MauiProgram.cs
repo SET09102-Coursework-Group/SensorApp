@@ -30,12 +30,13 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddHttpClient<AuthService>()
+        builder.Services.AddHttpClient<IAuthService, AuthService>()
             .ConfigureApiHttpClient()
             .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             });
+
         builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();
         builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
