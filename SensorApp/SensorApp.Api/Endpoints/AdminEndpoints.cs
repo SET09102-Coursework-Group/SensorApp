@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
@@ -100,7 +101,7 @@ public static class AdminEndpoints
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
 
-        routes.MapPut("/admin/users/{id}/role", async (string id, string role, UserManager<IdentityUser> userManager) =>
+        routes.MapPut("/admin/users/{id}/role", async (string id, string role, UserManager<IdentityUser> userManager, HttpContext httpContext) =>
         {
             if (!Enum.TryParse<UserRole>(role, true, out var parsedRole))
             {
@@ -111,6 +112,12 @@ public static class AdminEndpoints
             if (user == null)
             {
                 return Results.NotFound();
+            }
+
+            var currentUserId = userManager.GetUserId(httpContext.User);
+            if (user.Id == currentUserId)
+            {
+                return Results.BadRequest("You cannot change your own role.");
             }
 
             var currentRoles = await userManager.GetRolesAsync(user);
