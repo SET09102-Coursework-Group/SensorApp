@@ -9,10 +9,17 @@ using System.Text.RegularExpressions;
 
 namespace SensorApp.Maui.ViewModels;
 
-public partial class NewUserViewModel(IAdminService adminService, ITokenProvider tokenProvider) : BaseViewModel
+public partial class NewUserViewModel : BaseViewModel
 {
-    private readonly IAdminService _adminService = adminService;
+    private readonly IAdminService _adminService;
     private readonly ITokenProvider _tokenProvider;
+
+    public NewUserViewModel(IAdminService adminService, ITokenProvider tokenProvider)
+    {
+        _adminService = adminService;
+        _tokenProvider = tokenProvider;
+        Roles = [.. Enum.GetValues<UserRole>()];
+    }
 
     [ObservableProperty]
     private string username;
