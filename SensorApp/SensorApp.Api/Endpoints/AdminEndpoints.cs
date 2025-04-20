@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
@@ -29,13 +28,32 @@ public static class AdminEndpoints
                     Id = user.Id,
                     Username = user.UserName!,
                     Email = user.Email!,
-                    Role = role?.Humanize(LetterCasing.Title) ?? "Unknown"
+                    Role = role!
                 });
             }
 
             return Results.Ok(result);
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
+        //GET user by id
+        routes.MapGet("/admin/users/{id}", async (string id, UserManager<IdentityUser> userManager) =>
+        {
+            var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return Results.NotFound();
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+            var dto = new UserWithRoleDto
+            {
+                Id = user.Id,
+                Username = user.UserName!,
+                Email = user.Email!,
+                Role = roles.FirstOrDefault()!
+            };
+            return Results.Ok(dto);
+        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
         // POST create new user
         routes.MapPost("/admin/users", async (CreateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) =>
@@ -74,7 +92,7 @@ public static class AdminEndpoints
 
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
-
+        //DELETE user by Id
         routes.MapDelete("/admin/users/{id}", async (string id, UserManager<IdentityUser> userManager, HttpContext httpContext) =>
         {
             var currentUserId = userManager.GetUserId(httpContext.User);
@@ -100,38 +118,38 @@ public static class AdminEndpoints
             return Results.NoContent();
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
+        
+        //routes.MapPut("/admin/users/{id}/role", async (string id, string role, UserManager<IdentityUser> userManager, HttpContext httpContext) =>
+        //{
+        //    if (!Enum.TryParse<UserRole>(role, true, out var parsedRole))
+        //    {
+        //        return Results.BadRequest($"Invalid role: '{role}'. Choose one of these roles instead: {string.Join(", ", Enum.GetNames(typeof(UserRole)))}");
+        //    }
 
-        routes.MapPut("/admin/users/{id}/role", async (string id, string role, UserManager<IdentityUser> userManager, HttpContext httpContext) =>
-        {
-            if (!Enum.TryParse<UserRole>(role, true, out var parsedRole))
-            {
-                return Results.BadRequest($"Invalid role: '{role}'. Choose one of these roles instead: {string.Join(", ", Enum.GetNames(typeof(UserRole)))}");
-            }
+        //    var user = await userManager.FindByIdAsync(id);
+        //    if (user == null)
+        //    {
+        //        return Results.NotFound();
+        //    }
 
-            var user = await userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return Results.NotFound();
-            }
+        //    var currentUserId = userManager.GetUserId(httpContext.User);
+        //    if (user.Id == currentUserId)
+        //    {
+        //        return Results.BadRequest("You cannot change your own role.");
+        //    }
 
-            var currentUserId = userManager.GetUserId(httpContext.User);
-            if (user.Id == currentUserId)
-            {
-                return Results.BadRequest("You cannot change your own role.");
-            }
+        //    var currentRoles = await userManager.GetRolesAsync(user);
+        //    await userManager.RemoveFromRolesAsync(user, currentRoles);
 
-            var currentRoles = await userManager.GetRolesAsync(user);
-            await userManager.RemoveFromRolesAsync(user, currentRoles);
+        //    var result = await userManager.AddToRoleAsync(user, parsedRole.ToString());
 
-            var result = await userManager.AddToRoleAsync(user, parsedRole.ToString());
+        //    if (!result.Succeeded)
+        //    {
+        //        return Results.BadRequest(result.Errors);
+        //    }
 
-            if (!result.Succeeded)
-            {
-                return Results.BadRequest(result.Errors);
-            }
-
-            return Results.Ok();
-        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+        //    return Results.Ok();
+        //}).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
     }
 }
