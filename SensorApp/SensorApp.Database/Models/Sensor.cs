@@ -4,6 +4,10 @@ using System.Diagnostics.Metrics;
 
 namespace SensorApp.Database.Models;
 
+/// <summary>
+/// Represents a sensor in the system, including its type, location (longitude and latitude), 
+/// status, and associated measurements. Each sensor can have multiple measurements recorded.
+/// </summary>
 [Table("sensor")]
 public class Sensor : BaseEntity
 {

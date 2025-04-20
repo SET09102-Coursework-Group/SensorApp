@@ -8,8 +8,17 @@ using SensorApp.Database.Data.CSVHandling.Helpers;
 
 namespace SensorApp.Database.Data.CSVHandling;
 
+/// <summary>
+/// Responsible for seeding the database with measurement data from CSV files at runtime.
+/// Reads data from the appropriate CSV files for air quality, water quality, and weather measurements and inserts these records into the database.
+/// </summary>
 public class MeasurementSeeder
 {
+    /// <summary>
+    /// Asynchronously seeds the database with measurement data from CSV files.
+    /// It checks if the database already contains any measurements before inserting new records.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider used to resolve the database context.</param>
     public static async Task SeedDatabaseAsync(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();

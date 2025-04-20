@@ -5,8 +5,14 @@ using SensorApp.Database.Models;
 
 namespace SensorApp.Database.Data.DataSeeder;
 
+/// <summary>
+/// Extension methods for seeding data into the database using ModelBuilder.
+/// </summary>
 public static class ModelBuilderExtensions
 {
+    /// <summary>
+    /// Seeds the Identity roles into the database. These roles are used for user authentication and authorization.
+    /// </summary>
     public static void SeedIdentity(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<IdentityRole>().HasData(
@@ -86,6 +92,9 @@ public static class ModelBuilderExtensions
         );
     }
 
+    /// <summary>
+    /// Seeds predefined measurands (such as pollutants, temperature, etc.) into the database.
+    /// </summary>
     public static void SeedMeasurands(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Measurand>().HasData(
@@ -188,6 +197,9 @@ public static class ModelBuilderExtensions
         );
     }
 
+    /// <summary>
+    /// Seeds predefined sensor data into the database. These sensors are used to collect measurement data of each measurand.
+    /// </summary>
     public static void SeedSensors(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Sensor>().HasData(

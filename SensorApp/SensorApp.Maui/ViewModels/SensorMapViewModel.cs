@@ -9,19 +9,37 @@ using SensorApp.Maui.Interfaces;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for managing the interactive sensor map, handling sensor data, map pin creation, and providing real-time updates.
+/// </summary>
 public partial class SensorMapViewModel : BaseViewModel
 {
     private readonly SensorApiService _sensorService;
     private readonly ISensorPinInfoFactory pinInfoFactory;
     private readonly ISensorAnalysisService _sensorAnalysisService;
 
+    /// <summary>
+    /// A collection of sensors to be displayed on the map.
+    /// </summary>
     public ObservableCollection<SensorModel> Sensors { get; } = new();
+    /// <summary>
+    /// A collection of sensor pin info for map pins.
+    /// </summary>
     public ObservableCollection<SensorPinInfo> Pins { get; } = new();
 
+    /// <summary>
+    /// Event triggered when at least one sensor measurement exceeds its threshold value.
+    /// </summary>
     public event Action<IEnumerable<SensorModel>>? ThresholdBreached;
 
     private System.Timers.Timer? updateTimer;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SensorMapViewModel"/> class with the required services.
+    /// </summary>
+    /// <param name="sensorService">The service for retrieving sensor data.</param>
+    /// <param name="pinInfoFactory">Factory for creating sensor pin information.</param>
+    /// <param name="sensorAnalysisService">Service for analyzing sensor data.</param>
     public SensorMapViewModel(SensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
     {
         this._sensorService = _sensorService;
@@ -29,6 +47,10 @@ public partial class SensorMapViewModel : BaseViewModel
         this._sensorAnalysisService = _sensorAnalysisService;
     }
 
+    /// <summary>
+    /// Loads the list of sensors from the API and updates the sensor collection and map pins.
+    /// Triggers the ThresholdBreached event if any sensor exceeds its threshold.
+    /// </summary>
     public async Task LoadSensors()
     {
         try
@@ -65,6 +87,10 @@ public partial class SensorMapViewModel : BaseViewModel
         }
     }
 
+    /// <summary>
+    /// Starts real-time updates of sensor data at specified intervals.
+    /// </summary>
+    /// <param name="intervalMs">The interval in milliseconds for real-time updates.</param>
     public void StartRealTimeUpdates(int intervalMs = 30000)
     {
         updateTimer = new Timer(intervalMs);
@@ -73,6 +99,9 @@ public partial class SensorMapViewModel : BaseViewModel
         updateTimer.Enabled = true;
     }
 
+    /// <summary>
+    /// Stops real-time updates of sensor data.
+    /// </summary>
     public void StopRealTimeUpdates()
     {
         updateTimer?.Stop();

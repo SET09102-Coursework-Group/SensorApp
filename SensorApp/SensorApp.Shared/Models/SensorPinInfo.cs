@@ -1,5 +1,8 @@
 ﻿namespace SensorApp.Shared.Models;
 
+/// <summary>
+/// Represents the information associated with a pin used for displaying sensors on a map.
+/// </summary>
 public class SensorPinInfo
 {
     public string Label { get; set; }
