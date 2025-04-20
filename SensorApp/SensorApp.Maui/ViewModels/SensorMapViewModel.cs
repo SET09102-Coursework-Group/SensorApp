@@ -12,18 +12,20 @@ namespace SensorApp.Maui.ViewModels;
 public partial class SensorMapViewModel : BaseViewModel
 {
     private readonly SensorApiService _sensorService;
-    private readonly ISensorPinFactory pinFactory;
+    private readonly ISensorPinInfoFactory pinInfoFactory;
     private readonly ISensorAnalysisService _sensorAnalysisService;
+
     public ObservableCollection<SensorModel> Sensors { get; } = new();
-    public ObservableCollection<Pin> Pins { get; } = new();
+    public ObservableCollection<SensorPinInfo> Pins { get; } = new();
+
     public event Action<IEnumerable<SensorModel>>? ThresholdBreached;
 
     private System.Timers.Timer? updateTimer;
 
-    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinFactory pinFactory, ISensorAnalysisService _sensorAnalysisService)
+    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
     {
         this._sensorService = _sensorService;
-        this.pinFactory = pinFactory;
+        this.pinInfoFactory = pinInfoFactory;
         this._sensorAnalysisService = _sensorAnalysisService;
     }
 
@@ -48,7 +50,7 @@ public partial class SensorMapViewModel : BaseViewModel
                     if (_sensorAnalysisService.IsThresholdBreached(sensor))
                         breached.Add(sensor);
 
-                    Pins.Add(pinFactory.CreatePin(sensor));
+                    Pins.Add(pinInfoFactory.CreatePinInfo(sensor));
                 }
 
                 if (breached.Any())
@@ -62,6 +64,7 @@ public partial class SensorMapViewModel : BaseViewModel
             Debug.WriteLine($"Error loading sensors: {ex.Message}");
         }
     }
+
     public void StartRealTimeUpdates(int intervalMs = 30000)
     {
         updateTimer = new Timer(intervalMs);

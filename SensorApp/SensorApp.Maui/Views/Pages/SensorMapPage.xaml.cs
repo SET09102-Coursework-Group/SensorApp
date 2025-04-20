@@ -4,7 +4,6 @@ using SensorApp.Maui.ViewModels;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
 using SensorApp.Shared.Interfaces;
-using SensorApp.Maui.Interfaces;
 
 namespace SensorApp.Maui.Views.Pages;
 
@@ -12,11 +11,11 @@ public partial class SensorMapPage : ContentPage
 {
     private readonly SensorMapViewModel _mapViewModel;
     private readonly ISensorAnalysisService _sensorAnalysisService;
-    public SensorMapPage(SensorApiService _sensorService, ISensorPinFactory pinFactory, ISensorAnalysisService _sensorAnalysisService)
+    public SensorMapPage(SensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
     {
         InitializeComponent();
         this._sensorAnalysisService = _sensorAnalysisService;
-        _mapViewModel = new SensorMapViewModel(_sensorService, pinFactory, _sensorAnalysisService);
+        _mapViewModel = new SensorMapViewModel(_sensorService, pinInfoFactory, _sensorAnalysisService);
         _mapViewModel.ThresholdBreached += OnThresholdBreached;
         BindingContext = _mapViewModel;
     }
@@ -43,9 +42,9 @@ public partial class SensorMapPage : ContentPage
     {
         SensorMap.Pins.Clear();
 
-        foreach (var pin in _mapViewModel.Pins)
+        foreach (var pinInfo in _mapViewModel.Pins)
         {
-            SensorMap.Pins.Add(pin);
+            SensorMap.Pins.Add(ToMapPin(pinInfo));
         }
 
         CenterMapOnFirstValidSensor(sensors);
@@ -63,6 +62,17 @@ public partial class SensorMapPage : ContentPage
             var mapSpan = MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(5));
             SensorMap.MoveToRegion(mapSpan);
         }
+    }
+
+    private Pin ToMapPin(SensorPinInfo pinInfo)
+    {
+        return new Pin
+        {
+            Label = pinInfo.Label,
+            Address = pinInfo.Address,
+            Location = new Location(pinInfo.Latitude, pinInfo.Longitude),
+            Type = PinType.Place
+        };
     }
 
     private async void OnThresholdBreached(IEnumerable<SensorModel> breachedSensors)
