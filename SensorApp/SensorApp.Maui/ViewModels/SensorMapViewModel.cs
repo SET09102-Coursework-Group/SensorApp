@@ -1,15 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using SensorApp.Maui.Helpers.MenuRoles;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
 using Microsoft.Maui.Controls.Maps;
-using Microsoft.Maui.Maps;
 using Timer = System.Timers.Timer;
 using SensorApp.Shared.Interfaces;
 using System.Diagnostics;
+using SensorApp.Maui.Interfaces;
 
 namespace SensorApp.Maui.ViewModels;
 
