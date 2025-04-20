@@ -183,4 +183,43 @@ public class AdminServiceTests
         // Assert
         Assert.False(result);
     }
+
+    [Fact]
+    public async Task UpdateUserRole_ReturnsTrue_WhenSuccessful()
+    {
+        var response = new HttpResponseMessage(HttpStatusCode.OK);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var result = await service.UpdateUserRoleAsync("goodToken", "userId", UserRole.Administrator.ToString());
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task UpdateUserRole_ReturnsFalse_WhenUnauthorized()
+    {
+        var response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var result = await service.UpdateUserRoleAsync("badToken", "userId", UserRole.OperationsManager.ToString());
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task UpdateUserRole_ReturnsFalse_WhenBadRequest()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        // Act
+        var result = await service.UpdateUserRoleAsync("goodToken", "userId", "notValidRoleChange");
+
+        // Assert
+        Assert.False(result);
+    }
 }
