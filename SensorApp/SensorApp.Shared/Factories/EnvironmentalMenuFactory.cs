@@ -6,7 +6,7 @@ namespace SensorApp.Shared.Factories;
 public class EnvironmentalMenuFactory : IMenuFactory
 {
     /// <summary>
-    /// Creates a collection of menu items specific to Environmental Scientist users that will appear on the apps side menu
+    /// Creates a collection of menu items specific to Environmental Scientist users that will appear on the app's side menu
     /// </summary>
     /// <returns>A list of <see cref="AppMenuItem"/> representing Environmental Scientist navigation options.</returns>
     public IEnumerable<AppMenuItem> CreateMenu()
