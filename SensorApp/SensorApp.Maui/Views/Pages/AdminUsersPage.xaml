@@ -24,6 +24,7 @@
                             <Label Text="{Binding Username}" FontAttributes="Bold" />
                             <Label Text="{Binding Email}" />
                             <Label Text="{Binding Role}" FontAttributes="Italic" />
+                            <Button Text="Update Role" BackgroundColor="Purple" TextColor="White" Command="{Binding BindingContext.UpdateUserRoleCommand, Source={x:Reference RootPage}}" CommandParameter="{Binding .}" />
                             <Button Text="Delete" BackgroundColor="Red" TextColor="White" Command="{Binding BindingContext.DeleteUserCommand, Source={x:Reference RootPage}}" CommandParameter="{Binding .}" />
 
                         </VerticalStackLayout>
