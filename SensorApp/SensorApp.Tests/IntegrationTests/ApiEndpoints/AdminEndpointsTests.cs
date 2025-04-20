@@ -5,6 +5,7 @@ using SensorApp.Shared.Enums;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints;
 
@@ -211,6 +212,67 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
+    [Fact]
+    public async Task Admin_UpdatesUserRole_Successfully()
+    {
+        // Arrange
+        var token = await LoginAndGetToken(_adminEmail, _adminPassword);
+        var uniqueId = Guid.NewGuid();
+        var email = $"rolechange_{uniqueId}@sensor.com";
+
+        var newUser = new CreateUserDto
+        {
+            Username = email,
+            Email = email,
+            Password = "RoleChanged123!",
+            Role = UserRole.OperationsManager
+        };
+
+        var createRequest = new HttpRequestMessage(HttpMethod.Post, "/admin/users")
+        {
+            Content = JsonContent.Create(newUser)
+        };
+        createRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var createResponse = await _client.SendAsync(createRequest);
+        var createdUser = await createResponse.Content.ReadFromJsonAsync<UserWithRoleDto>();
+
+        // Act 
+        var changeRoleRequest = new HttpRequestMessage(HttpMethod.Put, $"/admin/users/{createdUser!.Id}/role?role={UserRole.Administrator}");
+        changeRoleRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var changeResponse = await _client.SendAsync(changeRoleRequest);
+
+        // Assert
+        changeResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var updatedUser = await GetUserByIdAsync(createdUser.Id, token);
+        updatedUser.Should().NotBeNull();
+        updatedUser!.Role.Should().Be(UserRole.Administrator.ToString());
+
+    }
+
+    [Fact]
+    public async Task Admin_CannotChangeOwnRole_ReturnsBadRequest()
+    {
+        var token = await LoginAndGetToken(_adminEmail, _adminPassword);
+
+        var getRequest = new HttpRequestMessage(HttpMethod.Get, "/admin/users");
+        getRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var getResponse = await _client.SendAsync(getRequest);
+        var users = await getResponse.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
+
+        var currentUser = users!.First(u => u.Email == _adminEmail);
+        var originalRole = currentUser.Role;
+
+        var updateRequest = new HttpRequestMessage(HttpMethod.Put, $"/admin/users/{currentUser.Id}/role?role={UserRole.OperationsManager}");
+        updateRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var updateResponse = await _client.SendAsync(updateRequest);
+
+        updateResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var updatedUser = await GetUserByIdAsync(currentUser.Id, token);
+        updatedUser.Should().NotBeNull();
+        updatedUser!.Role.Should().Be(originalRole, "person signed in cannot did not change its role");
+    }
 
 
     private async Task<string> LoginAndGetToken(string username, string password)
@@ -223,7 +285,7 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
         return auth!.Token;
     }
 
-    private async Task<bool> UserExistsAsync(string userId, string token)
+    private async Task<UserWithRoleDto?> GetUserByIdAsync(string userId, string token)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/admin/users");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -232,7 +294,12 @@ public class AdminEndpointTests(WebApplicationFactoryForTests factory) : IClassF
         response.EnsureSuccessStatusCode();
 
         var users = await response.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
-        return users!.Any(u => u.Id == userId);
+        return users!.FirstOrDefault(u => u.Id == userId);
     }
 
+    private async Task<bool> UserExistsAsync(string userId, string token)
+    {
+        var user = await GetUserByIdAsync(userId, token);
+        return user is not null;
+    }
 }
