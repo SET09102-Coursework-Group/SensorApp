@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SensorApp.Shared.Dtos.Admin;
@@ -29,7 +29,7 @@ public static class AdminEndpoints
                     Id = user.Id,
                     Username = user.UserName!,
                     Email = user.Email!,
-                    Role = role!
+                    Role = role?.Humanize(LetterCasing.Title) ?? "Unknown"
                 });
             }
 
