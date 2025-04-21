@@ -10,6 +10,8 @@ using System.Reflection;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Maps;
 using SensorApp.Maui.Helpers.Map;
+using SensorApp.Maui.Interfaces;
+using SensorApp.Shared.Factories;
 
 namespace SensorApp.Maui;
 
@@ -48,6 +50,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
         builder.Services.AddSingleton<ISensorAnalysisService, SensorAnalysisService>();
         builder.Services.AddSingleton<ISensorPinFactory, SensorPinFactory>();
+        builder.Services.AddSingleton<ISensorPinInfoFactory, SensorPinInfoFactory>();
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<LoginPage>();

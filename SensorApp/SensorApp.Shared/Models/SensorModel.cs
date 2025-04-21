@@ -1,4 +1,8 @@
 ﻿namespace SensorApp.Shared.Models;
+
+/// <summary>
+/// Represents a sensor object with its details, including type, location, status, and associated measurements.
+/// </summary>
 public class SensorModel : BaseEntity
 {
     public string Type { get; set; }
