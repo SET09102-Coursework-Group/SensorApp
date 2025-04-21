@@ -151,7 +151,7 @@ public partial class EditUserViewModel : BaseViewModel
         }
         catch (HttpRequestException httpEx) when (httpEx.StatusCode == HttpStatusCode.BadRequest)
         {
-            await Shell.Current.DisplayAlert("Invalid request", "You cannot update your own account", "OK");
+            await Shell.Current.DisplayAlert("Invalid request", "Something went wrong while updating the user. Please review the fields and try again.", "OK");
         }
         finally
         {

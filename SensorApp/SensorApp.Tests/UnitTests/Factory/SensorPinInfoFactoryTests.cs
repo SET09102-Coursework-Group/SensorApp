@@ -4,6 +4,7 @@ using SensorApp.Shared.Models;
 using SensorApp.Shared.Factories;
 using SensorApp.Tests.TestHelpersForMap;
 
+namespace SensorApp.Tests.UnitTests.Factory;
 public class SensorPinInfoFactoryTests
 {
     private readonly Mock<ISensorAnalysisService> _mockAnalysisService = new();

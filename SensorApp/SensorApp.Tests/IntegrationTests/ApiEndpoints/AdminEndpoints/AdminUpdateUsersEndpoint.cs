@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SensorApp.Shared.Dtos;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
 using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
@@ -26,14 +27,17 @@ public class AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory)
         var allUsers = await listResponse.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
         var target = allUsers!.First(u => u.Email != _adminEmail);
 
-        var newUsername = target.Username + "updatedTest";
+        var newUsername = target.Username + "_updated";
+        var newEmail = "updated_" + target.Email;
+        var newPassword = "Updated@ssword456!";
+        var newRole = UserRole.OperationsManager;
 
         var updateDto = new UpdateUserDto
         {
             Username = newUsername,
-            Email = target.Email,
-            Role = target.Role,
-            Password = null                  
+            Email = newEmail,
+            Role = newRole,
+            Password = newPassword
         };
 
         var updateRequest = TestHelpers.CreateAuthorizedRequest($"/admin/users/{target.Id}", token, HttpMethod.Put, updateDto
@@ -49,10 +53,20 @@ public class AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory)
         var getUpdatedUserResponse = await _client.SendAsync(getUpdatedUserRequest);
         getUpdatedUserResponse.EnsureSuccessStatusCode();
 
+
         var updatedUser = await getUpdatedUserResponse.Content.ReadFromJsonAsync<UserWithRoleDto>();
         updatedUser.Should().NotBeNull();
         updatedUser!.Username.Should().Be(newUsername);
-        updatedUser.Email.Should().Be(target.Email);
+        updatedUser.Email.Should().Be(newEmail);
+        updatedUser.Role.Should().Be(newRole);
+
+        var loginDto = new LoginDto(newUsername, newPassword);
+        var loginResponse = await _client.PostAsJsonAsync("/login", loginDto);
+        loginResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var auth = await loginResponse.Content.ReadFromJsonAsync<AuthResponseDto>();
+        auth.Should().NotBeNull();
+        auth!.Username.Should().Be(newUsername);
     }
 
 
