@@ -309,5 +309,49 @@ public class AdminServiceTests
         Assert.False(result);
     }
 
+    [Fact]
+    public async Task UpdateUser_ReturnsFalse_WhenUnauthorized()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var updatedUser = new UpdateUserDto
+        {
+            Username = "unauthorizedUser",
+            Email = "unauth@sensor.com",
+            Role = UserRole.EnvironmentalScientist
+        };
+
+        // Act
+        var result = await service.UpdateUserAsync("nonAdminToken", "123", updatedUser);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task UpdateUser_ReturnsFalse_WhenForbidden()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+        var httpClient = HttpClientTestFactory.Create(response);
+        var service = new AdminService(httpClient);
+
+        var updatedUser = new UpdateUserDto
+        {
+            Username = "forbiddenUser",
+            Email = "forbidden@sensor.com",
+            Role = UserRole.OperationsManager
+        };
+
+        // Act
+        var result = await service.UpdateUserAsync("opsToken", "123", updatedUser);
+
+        // Assert
+        Assert.False(result);
+    }
+
 
 }
