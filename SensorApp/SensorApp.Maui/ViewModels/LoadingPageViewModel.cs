@@ -1,4 +1,5 @@
 ﻿using SensorApp.Maui.Views.Pages;
+using SensorApp.Shared.Enums;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -47,7 +48,8 @@ public partial class LoadingPageViewModel : BaseViewModel
     private static UserInfo ParseUserInfo(JwtSecurityToken token) => new()
     {
         Username = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-        Role = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value
+        Role = Enum.Parse<UserRole>(
+            token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value?.Replace(" ", ""))
     };
 
     private async Task GoToLoginPage()

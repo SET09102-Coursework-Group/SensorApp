@@ -66,6 +66,8 @@ public static class MauiProgram
 
         builder.Services.AddTransient<NewUserPage>();
         builder.Services.AddTransient<NewUserViewModel>();
+        builder.Services.AddTransient<EditUserPage>();
+        builder.Services.AddTransient<EditUserViewModel>();
 
         return builder.Build();
     }

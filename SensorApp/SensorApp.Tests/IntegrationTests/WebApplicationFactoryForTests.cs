@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,40 +14,50 @@ namespace SensorApp.Tests.IntegrationTests;
 /// A custom WebApplicationFactory that configures the API for integration testing.
 /// It sets up an in-memory database and dummy JWT settings to isolate tests from the production environment.
 /// </summary>
-public sealed class WebApplicationFactoryForTests : WebApplicationFactory<Program>
+public sealed class WebApplicationFactoryForTests : WebApplicationFactory<Program>, IDisposable
 {
+    private readonly SqliteConnection _sqliteConnection;
+    public WebApplicationFactoryForTests()
+    {
+        _sqliteConnection = new SqliteConnection("Data Source=:memory:");
+        _sqliteConnection.Open();
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        //Point the content-root to the API project
-        var currentDirectory = Directory.GetCurrentDirectory();
-        var solutionRoot = Directory.GetParent(currentDirectory)!.Parent!.Parent!.Parent!.FullName;        
+        builder
+          .UseEnvironment("Testing")
+          .ConfigureAppConfiguration((ctx, cb) => {
+              cb.AddInMemoryCollection(new Dictionary<string, string?>
+              {
+                  ["JwtSettings:Issuer"] = "SensorApiTest",
+                  ["JwtSettings:Audience"] = "SensorAppTests",
+                  ["JwtSettings:Key"] = Guid.NewGuid().ToString(),
+                  ["JwtSettings:DurationInMinutes"] = "60"
+              });
+          })
+          .ConfigureServices(services =>
+          {
+              var descriptor = services.Single(d => d.ServiceType == typeof(DbContextOptions<SensorDbContext>));
+              services.Remove(descriptor);
 
-        var apiProjectPath = Path.Combine(solutionRoot, "SensorApp.Api");
+              services.AddDbContext<SensorDbContext>(options => options.UseSqlite(_sqliteConnection)
+              );
 
-        builder.UseEnvironment("Testing").UseContentRoot(apiProjectPath)
-            .ConfigureAppConfiguration((hostingContext, configBuilder) =>
-            {
-                if (hostingContext.HostingEnvironment.IsEnvironment("Testing"))
-                {
-                    configBuilder.AddInMemoryCollection(new Dictionary<string, string?>
-                    {
-                        ["JwtSettings:Issuer"] = "SensorApiTest",
-                        ["JwtSettings:Audience"] = "SensorAppTests",
-                        ["JwtSettings:Key"] = Guid.NewGuid().ToString(),
-                        ["JwtSettings:DurationInMinutes"] = "60"
-                    });
-                }
-            })
-            .ConfigureServices(services =>
-            {
-                var descriptor = services.Single(d => d.ServiceType == typeof(DbContextOptions<SensorDbContext>));
-                services.Remove(descriptor);
+              var sp = services.BuildServiceProvider();
+              using var scope = sp.CreateScope();
+              var db = scope.ServiceProvider.GetRequiredService<SensorDbContext>();
+              db.Database.Migrate();
+          });
+    }
 
-                services.AddDbContext<SensorDbContext>(o => o.UseInMemoryDatabase("SensorAppTests"));
-
-                using var scope = services.BuildServiceProvider().CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<SensorDbContext>();
-                db.Database.EnsureCreated();
-            });
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            _sqliteConnection.Close();
+            _sqliteConnection.Dispose();
+        }
     }
 }

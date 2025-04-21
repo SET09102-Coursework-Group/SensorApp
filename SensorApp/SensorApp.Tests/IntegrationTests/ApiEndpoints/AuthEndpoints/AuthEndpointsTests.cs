@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using SensorApp.Api;
 using SensorApp.Shared.Dtos;
+using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
 using System.Net;
 using System.Net.Http.Json;
 
-namespace SensorApp.Tests.IntegrationTests.ApiEndpoints;
+namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.AuthEndpoints;
 
 
 /// <summary>
@@ -19,38 +18,38 @@ public class AuthEndpointTests(WebApplicationFactoryForTests factory) : IClassFi
     [Fact]
     public async Task HappyPath_UserLogin_WithValidCredentials_SystemReturnsToken()
     {
-        // Arrange
-        var loginDto = new LoginDto("admin@sensor.com", "MyP@ssword123");
-
-        // Act
-        var response = await _client.PostAsJsonAsync("/login", loginDto);
+        // Arrange & Act
+        var auth = await new TestUserBuilder(_client).WithCredentials(TestUsers.AdminEmail, TestUsers.AdminPassword).BuildAsync();
 
         // Assert
-        response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
-
-        result.Should().NotBeNull();
-        result!.Token.Should().NotBeNullOrEmpty();
-        result.Username.Should().Be("admin@sensor.com");
+        auth.Should().NotBeNull();
+        auth.Token.Should().NotBeNullOrEmpty();
+        auth.Username.Should().Be(TestUsers.AdminEmail);
     }
 
     [Fact]
     public async Task UserLogin_WithInvalidCredentials_ReturnsUnauthorized()
     {
-        var loginDto = new LoginDto("admin@sensor.com", "RandomWrongPassword123");
+        // Arrange
+        var loginDto = new LoginDto(TestUsers.AdminEmail, "RandomWrongPassword123");
 
+        // Act
         var response = await _client.PostAsJsonAsync("/login", loginDto);
 
+        // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
     public async Task Login_WithNonExistentUser_ReturnsUnauthorized()
     {
-        var loginDto = new LoginDto("administrator@sensor.com", "MyP@ssword123");
+        // Arrange
+        var loginDto = new LoginDto("nonexistent@sensor.com", TestUsers.AdminPassword);
 
+        // Act
         var response = await _client.PostAsJsonAsync("/login", loginDto);
 
+        // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 }

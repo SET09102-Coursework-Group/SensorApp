@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Enums;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
@@ -44,11 +45,14 @@ public partial class LoginViewModel(IAuthService authService, IMenuBuilder menuB
             var role = jsonToken?.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Role)?.Value;
             var email = jsonToken?.Claims.FirstOrDefault(q => q.Type == ClaimTypes.Email)?.Value;
 
+            var parsedRole = Enum.Parse<UserRole>(role!.Replace(" ", ""));
+
             App.UserInfo = new UserInfo
             {
                 Username = email ?? Username,
-                Role = role
+                Role = parsedRole
             };
+
 
             _menuBuilder.BuildMenu(App.UserInfo);
             await Shell.Current.GoToAsync($"{nameof(MainPage)}");

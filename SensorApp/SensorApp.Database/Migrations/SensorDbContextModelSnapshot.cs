@@ -52,14 +52,14 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c",
-                            Name = "Operations Manager",
-                            NormalizedName = "OPERATIONS MANAGER"
+                            Name = "OperationsManager",
+                            NormalizedName = "OPERATIONSMANAGER"
                         },
                         new
                         {
                             Id = "9b7f193f-bfc4-4eb7-927f-55960e45a82a",
-                            Name = "Environmental Scientist",
-                            NormalizedName = "ENVIRONMENTAL SCIENTIST"
+                            Name = "EnvironmentalScientist",
+                            NormalizedName = "ENVIRONMENTALSCIENTIST"
                         });
                 });
 
@@ -154,15 +154,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "fab66dad-9f12-45a0-9fd8-6352336a696d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d9eaf8e4-18d2-432d-88d9-ddb82023fd4e",
+                            ConcurrencyStamp = "58946db3-90b2-466a-a2fb-7a0eb830ef61",
                             Email = "admin@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@SENSOR.COM",
                             NormalizedUserName = "ADMIN@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMEkbjzrT7Lp8A6YEFZvwyd+jjMKQGEMZiQ5J6ypk33FWhPa2FwgUeAUpSekA05WLQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHCuUc9neWYj7FH+Co/dfyOm6L3MdOlqSM88MUowO1GH2lEzTtnTzMoLeuIwYVm6Sw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "78671824-9b5d-4194-9292-0f02b5edbdc0",
+                            SecurityStamp = "be3b4a89-31af-4172-9ce6-b482c3b78e0a",
                             TwoFactorEnabled = false,
                             UserName = "admin@sensor.com"
                         },
@@ -170,15 +170,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a15c16a0-5881-440d-9ddc-3fb21d1d5685",
+                            ConcurrencyStamp = "613f3bd3-9e1d-4c33-8497-26e780d0fe09",
                             Email = "ops@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "OPS@SENSOR.COM",
                             NormalizedUserName = "OPS@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEK8UA0x16WCUc32tqv+Wy25guN6PlTAyV8MgOrqFdVkbtcAYr/cts6uuG+Nqa5BcFQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJEXca0Y887vkdoUIRz0V6hcAySrKHMsu2yhGD3NDeZOlmDoj7UTEGJwT52s6es88Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "52d35023-32fc-4ad6-a102-19aa70375f32",
+                            SecurityStamp = "1465193a-204c-4fd7-81b6-20ed06d4a119",
                             TwoFactorEnabled = false,
                             UserName = "ops@sensor.com"
                         },
@@ -186,15 +186,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9f919890-fdd6-4d93-b3c9-090af55ba9fe",
+                            ConcurrencyStamp = "370696ac-cfcf-46d3-83d3-a9fba30a3365",
                             Email = "scientist@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "SCIENTIST@SENSOR.COM",
                             NormalizedUserName = "SCIENTIST@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJMKp5/DAxTWAEe9wTFSu8YQPR37GzyW3O2Qti2uMSteTDEgH6L3kOiZI28s4wWW2w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEM0P+vIk2VtdmciJPdbcMUuzqtU2fKfpzUMoSNLAdpXpNBi8A4iY4cUBTqTugQz2jw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f965b445-c33c-4a72-93ba-79c3598bb5ce",
+                            SecurityStamp = "b46f7e31-fd90-438e-9b53-1a04aa23b484",
                             TwoFactorEnabled = false,
                             UserName = "scientist@sensor.com"
                         });
@@ -302,10 +302,10 @@ namespace SensorApp.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Max_safe_threshold")
+                    b.Property<float?>("Max_safe_threshold")
                         .HasColumnType("REAL");
 
-                    b.Property<float>("Min_safe_threshold")
+                    b.Property<float?>("Min_safe_threshold")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
@@ -412,8 +412,6 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = 12,
-                            Max_safe_threshold = 0f,
-                            Min_safe_threshold = 0f,
                             Name = "Wind Direction",
                             Unit = "degree"
                         });

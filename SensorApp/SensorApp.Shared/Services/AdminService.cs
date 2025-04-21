@@ -8,6 +8,11 @@ public class AdminService(HttpClient httpClient) : IAdminService
 {
     private readonly HttpClient _httpClient = httpClient;
 
+    public async Task<UserWithRoleDto?> GetUserByIdAsync(string token, string userId)
+    {
+        var req = HttpRequestHelper.Create(HttpMethod.Get, $"/admin/users/{userId}", token);
+        return await HttpRequestHelper.SendAsync<UserWithRoleDto>(_httpClient, req);
+    }
     public async Task<List<UserWithRoleDto>> GetAllUsersAsync(string token)
     {
         var request = HttpRequestHelper.Create(HttpMethod.Get, "/admin/users", token);
@@ -24,5 +29,11 @@ public class AdminService(HttpClient httpClient) : IAdminService
     {
         var request = HttpRequestHelper.Create(HttpMethod.Delete, $"/admin/users/{userId}", token);
         return await HttpRequestHelper.SendAsync(_httpClient, request);
+    }
+
+    public async Task<bool> UpdateUserAsync(string token, string userId, UpdateUserDto updatedUser)
+    {
+        var req = HttpRequestHelper.Create(HttpMethod.Put, $"/admin/users/{userId}", token, updatedUser);
+        return await HttpRequestHelper.SendAsync(_httpClient, req);
     }
 }

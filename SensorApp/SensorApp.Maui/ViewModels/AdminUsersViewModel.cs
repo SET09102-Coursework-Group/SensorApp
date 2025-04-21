@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Interfaces;
-using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
@@ -70,6 +69,7 @@ public partial class AdminUsersViewModel(IAdminService adminService, ILogger<Adm
             if (string.IsNullOrEmpty(token))
             {
                 _logger.LogWarning("Token is missing. Cannot delete user.");
+                await Shell.Current.DisplayAlert("Error", "You are not logged in or your session has expired. Please log in again.", "OK");
                 return;
             }
 
@@ -90,4 +90,11 @@ public partial class AdminUsersViewModel(IAdminService adminService, ILogger<Adm
             await Shell.Current.DisplayAlert("Error", "An unexpected error occurred.", "OK");
         }
     }
+
+    [RelayCommand]
+    public async Task EditUser(UserWithRoleDto user)
+    {
+        await Shell.Current.GoToAsync($"{nameof(EditUserPage)}?UserId={user.Id}");
+    }
+
 }

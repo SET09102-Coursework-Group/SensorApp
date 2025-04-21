@@ -8,30 +8,62 @@
              x:Name="RootPage"
              Title="Admin: Manage Users">
 
+    <Grid RowDefinitions="Auto,*" Padding="10">
 
+        <!-- Header section: stays fixed but for the users list we need to scroll down - or add pagination - potencial TODO -->
+        <VerticalStackLayout Spacing="10" Grid.Row="0">
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            <Button Text="Create New User" BackgroundColor="Green" TextColor="White" Command="{Binding GoToCreateUserCommand}" />
+        </VerticalStackLayout>
 
-    <VerticalStackLayout Spacing="10" Padding="10">
-        <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
-
-        <Button Text="Create New User" BackgroundColor="Green" TextColor="White" Command="{Binding GoToCreateUserCommand}" />
-
-
-        <CollectionView ItemsSource="{Binding Users}">
+        <!-- Scrollable user list -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Users}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:UserWithRoleDto">
-                    <Frame Padding="10" Margin="0,5" BorderColor="LightGray" CornerRadius="8">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="{Binding Username}" FontAttributes="Bold" />
-                            <Label Text="{Binding Email}" />
-                            <Label Text="{Binding Role}" FontAttributes="Italic" />
-                            <Button Text="Delete" BackgroundColor="Red" TextColor="White" Command="{Binding BindingContext.DeleteUserCommand, Source={x:Reference RootPage}}" CommandParameter="{Binding .}" />
+                    <Frame Padding="12" Margin="0,6" BorderColor="LightGray" CornerRadius="8" HasShadow="False">
 
-                        </VerticalStackLayout>
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
+
+                                <Label Text="{Binding Username}" FontAttributes="Bold" FontSize="16" />
+
+                                <Label Text="{Binding Email}" FontSize="14" />
+
+                                <Label Text="{Binding Role, Converter={StaticResource EnumDisplayName}}" FontAttributes="Italic" FontSize="14" />
+                            </VerticalStackLayout>
+
+                            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+
+                                <Button
+                                    Text="Update"
+                                    WidthRequest="80"
+                                    HeightRequest="36"
+                                    FontSize="12"
+                                    CornerRadius="4"
+                                    BackgroundColor="Purple"
+                                    TextColor="White"
+                                    Command="{Binding BindingContext.EditUserCommand, Source={x:Reference RootPage}}"
+                                    CommandParameter="{Binding .}" />
+
+                                <Button
+                                    Text="Delete"
+                                    WidthRequest="80"
+                                    HeightRequest="36"
+                                    FontSize="12"
+                                    CornerRadius="4"
+                                    BackgroundColor="Red"
+                                    TextColor="White"
+                                    Command="{Binding BindingContext.DeleteUserCommand, Source={x:Reference RootPage}}"
+                                    CommandParameter="{Binding .}" />
+
+                            </HorizontalStackLayout>
+
+                        </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+    </Grid>
 
-
-    </VerticalStackLayout>
 </ContentPage>
