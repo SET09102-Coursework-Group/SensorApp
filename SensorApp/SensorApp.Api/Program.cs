@@ -10,12 +10,13 @@ using SensorApp.Database.Data;
 using SensorApp.Shared.Models;
 using Serilog;
 using System.Text;
+using SensorApp.Database.Data.CSVHandling;
 
 namespace SensorApp.Api;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -26,13 +27,25 @@ public class Program
             options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
         });
 
-        var jwtSection = builder.Configuration.GetSection("JwtSettings");
-        builder.Services.Configure<JwtSettings>(jwtSection);
+        builder.Services.Configure<JwtSettings>(
+        builder.Configuration.GetSection("JwtSettings"));
         builder.Services.AddOptions<JwtSettings>().ValidateDataAnnotations().ValidateOnStart();
-        var jwtSettings = jwtSection.Get<JwtSettings>();
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddDbContext<SensorDbContext>(options => options.UseSqlite(connectionString));
+
+        var isTestEnviroment = builder.Environment.IsEnvironment("Testing");
+        builder.Services.AddDbContext<SensorDbContext>(options =>
+        {
+            if (isTestEnviroment)
+            {
+                options.UseInMemoryDatabase("SensorAppTests");
+            }
+            else
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlite(connectionString);
+            }
+        });
 
         builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<SensorDbContext>().AddDefaultTokenProviders();
 
@@ -43,19 +56,18 @@ public class Program
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(options =>
         {
+            var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = jwtSettings!.Issuer,
+                ValidIssuer = jwt.Issuer,
                 ValidateAudience = true,
-                ValidAudience = jwtSettings.Audience,
+                ValidAudience = jwt.Audience,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
             };
         });
-
-
 
         builder.Services.AddAuthorization(options =>
         {
@@ -69,6 +81,14 @@ public class Program
 
         var app = builder.Build();
 
+        using var scope = app.Services.CreateScope();
+        var environment = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+        if (!environment.IsEnvironment("Testing"))
+        {
+            await MeasurementSeeder.SeedDatabaseAsync(scope.ServiceProvider);
+        }
+
+
         app.UseSwagger();
         app.UseSwaggerUI();
 
@@ -79,6 +99,7 @@ public class Program
 
         app.MapAuthEndpoints();
         app.MapAdminEndpoints();
+        app.MapSensorEndpoints();
 
         app.Run();
     }

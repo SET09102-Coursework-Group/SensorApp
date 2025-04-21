@@ -3,6 +3,9 @@
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<ManifestPlaceholders>GoogleMapsApiKey=$(GoogleMapsApiKey)</ManifestPlaceholders>
+  		<AndroidManifestPlaceholders>GoogleMapsApiKey=$(GoogleMapsApiKey)</AndroidManifestPlaceholders>
+		
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -57,12 +60,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="appsettings.Development.json" />
 	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="appsettings.Development.json" />
-  </ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="appsettings.Development.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
 
   <ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
@@ -70,6 +76,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="8.0.3" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
@@ -86,19 +93,28 @@
 	  <Compile Update="Views\Pages\AdminUsersPage.xaml.cs">
 	    <DependentUpon>AdminUsersPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Pages\SensorMapPage.xaml.cs">
+	    <DependentUpon>SensorMapPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\Controls\FlyOutHeader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\AdminUsersPage.xaml">
+	  <MauiXaml Update="Views\Pages\EditUserPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\LoadingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\NewUserPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\SensorMapPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

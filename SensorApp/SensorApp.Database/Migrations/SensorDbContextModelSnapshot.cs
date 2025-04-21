@@ -52,14 +52,14 @@ namespace SensorApp.Database.Migrations
                         new
                         {
                             Id = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c",
-                            Name = "Operations Manager",
-                            NormalizedName = "OPERATIONS MANAGER"
+                            Name = "OperationsManager",
+                            NormalizedName = "OPERATIONSMANAGER"
                         },
                         new
                         {
                             Id = "9b7f193f-bfc4-4eb7-927f-55960e45a82a",
-                            Name = "Environmental Scientist",
-                            NormalizedName = "ENVIRONMENTAL SCIENTIST"
+                            Name = "EnvironmentalScientist",
+                            NormalizedName = "ENVIRONMENTALSCIENTIST"
                         });
                 });
 
@@ -154,15 +154,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "fab66dad-9f12-45a0-9fd8-6352336a696d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "37db67b8-4faa-49af-bdf3-4f1f261617cf",
+                            ConcurrencyStamp = "58946db3-90b2-466a-a2fb-7a0eb830ef61",
                             Email = "admin@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@SENSOR.COM",
                             NormalizedUserName = "ADMIN@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGoxx4Sj1qyGk/0260HWndmE0yxg2n+/dRzSsR76mZYNd8yFM5hDzvbnAMZI8xDpsQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHCuUc9neWYj7FH+Co/dfyOm6L3MdOlqSM88MUowO1GH2lEzTtnTzMoLeuIwYVm6Sw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2545e6c4-13aa-42f4-8128-d07376fa6281",
+                            SecurityStamp = "be3b4a89-31af-4172-9ce6-b482c3b78e0a",
                             TwoFactorEnabled = false,
                             UserName = "admin@sensor.com"
                         },
@@ -170,15 +170,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5b00f504-39e6-4d1e-8e2f-6a9edfebff46",
+                            ConcurrencyStamp = "613f3bd3-9e1d-4c33-8497-26e780d0fe09",
                             Email = "ops@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "OPS@SENSOR.COM",
                             NormalizedUserName = "OPS@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAED2nWQOVWgVcKPo5c79Jn3RtbM3deAj+FDc9/Txe715xDu3frePfB/FAlmyWtgaN8A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJEXca0Y887vkdoUIRz0V6hcAySrKHMsu2yhGD3NDeZOlmDoj7UTEGJwT52s6es88Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "19284033-5c81-417b-b58b-7b630d87b498",
+                            SecurityStamp = "1465193a-204c-4fd7-81b6-20ed06d4a119",
                             TwoFactorEnabled = false,
                             UserName = "ops@sensor.com"
                         },
@@ -186,15 +186,15 @@ namespace SensorApp.Database.Migrations
                         {
                             Id = "1243c642-7fdf-4224-9404-02dd6ac95bc5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "db3bd552-6112-47f6-8872-6efad06eb18c",
+                            ConcurrencyStamp = "370696ac-cfcf-46d3-83d3-a9fba30a3365",
                             Email = "scientist@sensor.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "SCIENTIST@SENSOR.COM",
                             NormalizedUserName = "SCIENTIST@SENSOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMWF6Eof6SHzlePtb6IbUm/EL1NgXWMwUqkbWIqr8dJg1sBqhXsVKDGJzjdubDUsNg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEM0P+vIk2VtdmciJPdbcMUuzqtU2fKfpzUMoSNLAdpXpNBi8A4iY4cUBTqTugQz2jw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3ae8d5a3-478b-430b-b9a9-d54dbe4c6b74",
+                            SecurityStamp = "b46f7e31-fd90-438e-9b53-1a04aa23b484",
                             TwoFactorEnabled = false,
                             UserName = "scientist@sensor.com"
                         });
@@ -296,6 +296,210 @@ namespace SensorApp.Database.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SensorApp.Database.Models.Measurand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float?>("Max_safe_threshold")
+                        .HasColumnType("REAL");
+
+                    b.Property<float?>("Min_safe_threshold")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("measurand");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Max_safe_threshold = 50f,
+                            Min_safe_threshold = 10f,
+                            Name = "Nitrogen Dioxide",
+                            Unit = "ug/m3"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Max_safe_threshold = 2f,
+                            Min_safe_threshold = 0.8f,
+                            Name = "Sulphur Dioxide",
+                            Unit = "ug/m3"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Max_safe_threshold = 20f,
+                            Min_safe_threshold = 1.5f,
+                            Name = "PM2.5 Particulate Matter",
+                            Unit = "ug/m3"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Max_safe_threshold = 12f,
+                            Min_safe_threshold = 2f,
+                            Name = "PM10 Particulate Matter",
+                            Unit = "ug/m3"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Max_safe_threshold = 25f,
+                            Min_safe_threshold = 20f,
+                            Name = "Nitrate",
+                            Unit = "mg/l"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Max_safe_threshold = 1.5f,
+                            Min_safe_threshold = 1.1f,
+                            Name = "Nitrite",
+                            Unit = "mg/l"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Max_safe_threshold = 0.07f,
+                            Min_safe_threshold = 0.02f,
+                            Name = "Phosphate",
+                            Unit = "mg/l"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Max_safe_threshold = 0.1f,
+                            Min_safe_threshold = 0f,
+                            Name = "Escherichia coli",
+                            Unit = "cfu/100ml"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Max_safe_threshold = 40f,
+                            Min_safe_threshold = -10f,
+                            Name = "Temperature",
+                            Unit = "C"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Max_safe_threshold = 100f,
+                            Min_safe_threshold = 80f,
+                            Name = "Relative Humidity",
+                            Unit = "%"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Max_safe_threshold = 30f,
+                            Min_safe_threshold = 0f,
+                            Name = "Wind Speed",
+                            Unit = "m/s"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Wind Direction",
+                            Unit = "degree"
+                        });
+                });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Measurement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Measurement_type_id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Sensor_id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Measurement_type_id");
+
+                    b.HasIndex("Sensor_id");
+
+                    b.ToTable("measurement");
+                });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Sensor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("Latitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Longitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Site_zone")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("sensor");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Latitude = 55.94476f,
+                            Longitude = -3.183991f,
+                            Site_zone = "Central Scotland",
+                            Status = "Active",
+                            Type = "Air Quality"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Latitude = 55.86111f,
+                            Longitude = -3.253889f,
+                            Site_zone = "Glencorse B",
+                            Status = "Active",
+                            Type = "Water Quality"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Latitude = 55.008785f,
+                            Longitude = -3.5856323f,
+                            Status = "Active",
+                            Type = "Weather"
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -345,6 +549,35 @@ namespace SensorApp.Database.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Measurement", b =>
+                {
+                    b.HasOne("SensorApp.Database.Models.Measurand", "Measurement_type")
+                        .WithMany("Measurements")
+                        .HasForeignKey("Measurement_type_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SensorApp.Database.Models.Sensor", "Sensor")
+                        .WithMany("Measurements")
+                        .HasForeignKey("Sensor_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Measurement_type");
+
+                    b.Navigation("Sensor");
+                });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Measurand", b =>
+                {
+                    b.Navigation("Measurements");
+                });
+
+            modelBuilder.Entity("SensorApp.Database.Models.Sensor", b =>
+                {
+                    b.Navigation("Measurements");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,19 +1,16 @@
 ﻿using Newtonsoft.Json;
 using SensorApp.Shared.Dtos;
+using SensorApp.Shared.Interfaces;
 using System.Net.Http.Json;
 
 namespace SensorApp.Shared.Services;
 
-public class AuthService
+public class AuthService(HttpClient httpClient) : IAuthService
 {
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = httpClient;
 
     public string StatusMessage { get; private set; } = string.Empty;
 
-    public AuthService(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
 
     /// <summary>
     /// Sends the user's login credentials to the backend and processes the response

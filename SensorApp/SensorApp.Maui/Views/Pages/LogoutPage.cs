@@ -2,19 +2,23 @@
 
 namespace SensorApp.Maui.Views.Pages;
 
-public class LogoutPage : ContentPage
+public partial class LogoutPage : ContentPage
 {
+    private readonly LogoutViewModel _logoutViewModel;
+
     public LogoutPage(LogoutViewModel logoutViewModel)
     {
-        Content = new VerticalStackLayout
-        {
-            Children = {
-                new Label { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, Text = "Logging Out"
-                }
-            }
-        };
+
+
+        _logoutViewModel = logoutViewModel;
 
         BindingContext = logoutViewModel;
 
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _logoutViewModel.LogoutAsync();
     }
 }
