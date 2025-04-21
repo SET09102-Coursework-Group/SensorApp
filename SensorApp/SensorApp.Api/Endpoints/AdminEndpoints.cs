@@ -119,9 +119,29 @@ public static class AdminEndpoints
             return Results.NoContent();
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
-        // PUT
-        routes.MapPut("/admin/users/{id}", async (string id, UpdateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) =>
+        // PUT update user by ID
+        routes.MapPut("/admin/users/{id}", async (string id, UpdateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, HttpContext httpContext) =>
         {
+            var currentUserId = userManager.GetUserId(httpContext.User);
+            if (currentUserId == id)
+            {
+                return Results.BadRequest("You cannot update your own account.");
+            }
+
+            //We need to make sure that the username and email are unique in the database
+            var duplicateUsername = await userManager.Users.AnyAsync(u => u.Id != id && u.NormalizedUserName == dto.Username.ToUpper());
+            var duplicateEmail = await userManager.Users.AnyAsync(u => u.Id != id && u.NormalizedEmail == dto.Email.ToUpper());
+
+            if (duplicateUsername)
+            {
+                return Results.Conflict("Username is already in use.");
+            }
+
+            if (duplicateEmail)
+            {
+                return Results.Conflict("Email is already in use.");
+            }
+
             var user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
