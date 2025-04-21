@@ -8,6 +8,11 @@ public class AdminService(HttpClient httpClient) : IAdminService
 {
     private readonly HttpClient _httpClient = httpClient;
 
+    public async Task<UserWithRoleDto?> GetUserByIdAsync(string token, string userId)
+    {
+        var req = HttpRequestHelper.Create(HttpMethod.Get, $"/admin/users/{userId}", token);
+        return await HttpRequestHelper.SendAsync<UserWithRoleDto>(_httpClient, req);
+    }
     public async Task<List<UserWithRoleDto>> GetAllUsersAsync(string token)
     {
         var request = HttpRequestHelper.Create(HttpMethod.Get, "/admin/users", token);
@@ -26,10 +31,9 @@ public class AdminService(HttpClient httpClient) : IAdminService
         return await HttpRequestHelper.SendAsync(_httpClient, request);
     }
 
-    public async Task<bool> UpdateUserRoleAsync(string token, string userId, string newRole)
+    public async Task<bool> UpdateUserAsync(string token, string userId, UpdateUserDto updatedUser)
     {
-        var request = HttpRequestHelper.Create(HttpMethod.Put, $"/admin/users/{userId}/role?role={newRole}", token);
-        return await HttpRequestHelper.SendAsync(_httpClient, request);
+        var req = HttpRequestHelper.Create(HttpMethod.Put, $"/admin/users/{userId}", token, updatedUser);
+        return await HttpRequestHelper.SendAsync(_httpClient, req);
     }
-
 }
