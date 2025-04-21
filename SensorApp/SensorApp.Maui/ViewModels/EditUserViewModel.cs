@@ -50,13 +50,8 @@ public partial class EditUserViewModel : BaseViewModel
 
         try
         {
-            var token = await _tokenProvider.GetTokenAsync();
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                await Shell.Current.DisplayAlert("Error", "You are not logged in or your session has expired. Please log in again.", "OK");
-                IsLoading = false;
-                return;
-            }
+            var token = await CheckValidTokenAsync();
+            if (token == null) return;
 
             var userList = await _adminService.GetAllUsersAsync(token);
             var jwtUser = userList.FirstOrDefault(u => token.Contains(u.Id));
@@ -74,19 +69,16 @@ public partial class EditUserViewModel : BaseViewModel
             {
                 Username = dto.Username;
                 Email = dto.Email;
-                SelectedRole = dto.Role;  
+                SelectedRole = dto.Role;
             }
             else
             {
                 await Shell.Current.DisplayAlert("Error", "There was a problem processing your request", "OK");
                 await Shell.Current.GoToAsync("..");
             }
-
-            IsLoading = false;
         }
         catch (Exception ex)
         {
-
             await Shell.Current.DisplayAlert("Error", $"Unexpected error: {ex.Message}", "OK");
         }
         finally
@@ -94,7 +86,6 @@ public partial class EditUserViewModel : BaseViewModel
             IsLoading = false;
         }
     }
-
 
     [RelayCommand]
     private async Task SaveChanges()
@@ -104,18 +95,12 @@ public partial class EditUserViewModel : BaseViewModel
 
         try
         {
-            var token = await _tokenProvider.GetTokenAsync();
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                await Shell.Current.DisplayAlert("Error", "You are not logged in or your session has expired. Please log in again.", "OK");
-                IsLoading = false;
-                return;
-            }
+            var token = await CheckValidTokenAsync();
+            if (token == null) return;
 
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Email))
             {
                 await Shell.Current.DisplayAlert("Error", "Username and Email fields must be populated.", "OK");
-                IsLoading = false;
                 return;
             }
 
@@ -144,10 +129,10 @@ public partial class EditUserViewModel : BaseViewModel
 
             var updateDto = new UpdateUserDto
             {
-                Username = Username,
-                Email = Email,
+                Username = Username?.Trim(),
+                Email = Email?.Trim(),
                 Role = SelectedRole,
-                Password = string.IsNullOrWhiteSpace(Password) ? null : Password
+                Password = string.IsNullOrWhiteSpace(Password) ? null : Password?.Trim()
             };
 
             var success = await _adminService.UpdateUserAsync(token!, UserId, updateDto);
@@ -167,11 +152,22 @@ public partial class EditUserViewModel : BaseViewModel
         catch (HttpRequestException httpEx) when (httpEx.StatusCode == HttpStatusCode.BadRequest)
         {
             await Shell.Current.DisplayAlert("Invalid request", "You cannot update your own account", "OK");
-
         }
         finally
         {
-           IsLoading = false;
+            IsLoading = false;
         }
+    }
+
+    private async Task<string?> CheckValidTokenAsync()
+    {
+        var token = await _tokenProvider.GetTokenAsync();
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            await Shell.Current.DisplayAlert("Error", "You are not logged in or your session has expired. Please log in again.", "OK");
+            return null;
+        }
+
+        return token;
     }
 }
