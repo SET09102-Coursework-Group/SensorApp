@@ -20,6 +20,26 @@ public class MenuFactoryResolverTests
     }
 
     [Fact]
+    public void Resolve_ShouldReturn_EnvironmentalMenuFactory_WhenRoleIsEnvironmentalScientist()
+    {
+        // Act
+        var factory = MenuFactoryResolver.Resolve(UserRole.EnvironmentalScientist);
+
+        // Assert
+        factory.Should().BeOfType<EnvironmentalMenuFactory>();
+    }
+
+    [Fact]
+    public void Resolve_ShouldReturn_OperationsMenuFactory_WhenRoleIsOperationsManager()
+    {
+        // Act
+        var factory = MenuFactoryResolver.Resolve(UserRole.OperationsManager);
+
+        // Assert
+        factory.Should().BeOfType<OperationsMenuFactory>();
+    }
+
+    [Fact]
     public void Resolve_ShouldThrowException_WhenRoleIsNotSupported()
     {
         // Arrange

@@ -1,5 +1,9 @@
 ﻿namespace SensorApp.Shared.Dtos;
 
+/// <summary>
+/// Data Transfer Object (DTO) for representing a sensore.
+/// Used for transferring sensore data between layers or systems.
+/// </summary>
 public class SensorDto
 {
     public int Id { get; set; }

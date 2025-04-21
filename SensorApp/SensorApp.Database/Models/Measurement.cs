@@ -4,6 +4,10 @@ using System.Diagnostics.Metrics;
 
 namespace SensorApp.Database.Models;
 
+/// <summary>
+/// Represents a recorded measurement taken by a sensor at a specific point in time.
+/// Each measurement is linked to a specific sensor and measurement type (measurand), alongside its value and timestamp.
+/// </summary>
 [Table("measurement")]
 public class Measurement : BaseEntity
 {

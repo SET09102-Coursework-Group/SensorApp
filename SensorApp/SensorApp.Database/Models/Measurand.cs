@@ -4,6 +4,11 @@ using System.Diagnostics.Metrics;
 
 namespace SensorApp.Database.Models;
 
+/// <summary>
+/// Represents a type of measurement that can be recorded by a sensor. 
+/// The <see cref="Measurand"/> model includes metadata about the measurement, such as its name, unit of measurement, 
+/// and acceptable threshold ranges for safety.
+/// </summary>
 [Table("measurand")]
 public class Measurand : BaseEntity
 {

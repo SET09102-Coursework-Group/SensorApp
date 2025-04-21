@@ -1,36 +1,56 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using SensorApp.Maui.Helpers.MenuRoles;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
 using Microsoft.Maui.Controls.Maps;
-using Microsoft.Maui.Maps;
 using Timer = System.Timers.Timer;
 using SensorApp.Shared.Interfaces;
 using System.Diagnostics;
+using SensorApp.Maui.Interfaces;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for managing the interactive sensor map, handling sensor data, map pin creation, and providing real-time updates.
+/// </summary>
 public partial class SensorMapViewModel : BaseViewModel
 {
     private readonly SensorApiService _sensorService;
-    private readonly ISensorPinFactory pinFactory;
+    private readonly ISensorPinInfoFactory pinInfoFactory;
     private readonly ISensorAnalysisService _sensorAnalysisService;
+
+    /// <summary>
+    /// A collection of sensors to be displayed on the map.
+    /// </summary>
     public ObservableCollection<SensorModel> Sensors { get; } = new();
-    public ObservableCollection<Pin> Pins { get; } = new();
+    /// <summary>
+    /// A collection of sensor pin info for map pins.
+    /// </summary>
+    public ObservableCollection<SensorPinInfo> Pins { get; } = new();
+
+    /// <summary>
+    /// Event triggered when at least one sensor measurement exceeds its threshold value.
+    /// </summary>
     public event Action<IEnumerable<SensorModel>>? ThresholdBreached;
 
     private System.Timers.Timer? updateTimer;
 
-    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinFactory pinFactory, ISensorAnalysisService _sensorAnalysisService)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SensorMapViewModel"/> class with the required services.
+    /// </summary>
+    /// <param name="sensorService">The service for retrieving sensor data.</param>
+    /// <param name="pinInfoFactory">Factory for creating sensor pin information.</param>
+    /// <param name="sensorAnalysisService">Service for analyzing sensor data.</param>
+    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
     {
         this._sensorService = _sensorService;
-        this.pinFactory = pinFactory;
+        this.pinInfoFactory = pinInfoFactory;
         this._sensorAnalysisService = _sensorAnalysisService;
     }
 
+    /// <summary>
+    /// Loads the list of sensors from the API and updates the sensor collection and map pins.
+    /// Triggers the ThresholdBreached event if any sensor exceeds its threshold.
+    /// </summary>
     public async Task LoadSensors()
     {
         try
@@ -52,7 +72,7 @@ public partial class SensorMapViewModel : BaseViewModel
                     if (_sensorAnalysisService.IsThresholdBreached(sensor))
                         breached.Add(sensor);
 
-                    Pins.Add(pinFactory.CreatePin(sensor));
+                    Pins.Add(pinInfoFactory.CreatePinInfo(sensor));
                 }
 
                 if (breached.Any())
@@ -66,6 +86,11 @@ public partial class SensorMapViewModel : BaseViewModel
             Debug.WriteLine($"Error loading sensors: {ex.Message}");
         }
     }
+
+    /// <summary>
+    /// Starts real-time updates of sensor data at specified intervals.
+    /// </summary>
+    /// <param name="intervalMs">The interval in milliseconds for real-time updates.</param>
     public void StartRealTimeUpdates(int intervalMs = 30000)
     {
         updateTimer = new Timer(intervalMs);
@@ -74,6 +99,9 @@ public partial class SensorMapViewModel : BaseViewModel
         updateTimer.Enabled = true;
     }
 
+    /// <summary>
+    /// Stops real-time updates of sensor data.
+    /// </summary>
     public void StopRealTimeUpdates()
     {
         updateTimer?.Stop();
