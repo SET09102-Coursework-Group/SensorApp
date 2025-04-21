@@ -18,8 +18,8 @@ public class AdminServiceTests
         // Arrange
         var mockUsers = new List<UserWithRoleDto>
         {
-            new() { Id = "1", Username = "admin", Email = "admin@sensor.com", Role = "Administrator" },
-            new() { Id = "2", Username = "ops", Email = "ops@sensor.com", Role = "Operations Manager" }
+            new() { Id = "1", Username = "admin", Email = "admin@sensor.com",    Role = UserRole.Administrator },
+            new() { Id = "2", Username = "ops",   Email = "ops@sensor.com",      Role = UserRole.OperationsManager }
         };
 
         var json = JsonConvert.SerializeObject(mockUsers);
@@ -193,7 +193,7 @@ public class AdminServiceTests
             Id = "123",
             Username = "testuser",
             Email = "test@sensor.com",
-            Role = "Administrator"
+            Role = UserRole.Administrator
         };
 
         var json = JsonConvert.SerializeObject(user);

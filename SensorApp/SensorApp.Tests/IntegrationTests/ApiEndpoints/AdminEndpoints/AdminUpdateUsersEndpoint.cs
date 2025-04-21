@@ -31,8 +31,8 @@ public class AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory)
         var updateDto = new UpdateUserDto
         {
             Username = newUsername,
-            Email = target.Email,             
-            Role = Enum.Parse<UserRole>(target.Role), 
+            Email = target.Email,
+            Role = target.Role,
             Password = null                  
         };
 
@@ -72,7 +72,7 @@ public class AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory)
         {
             Username = adminUser.Username,
             Email = adminUser.Email,
-            Role = Enum.Parse<UserRole>(adminUser.Role)
+            Role = adminUser.Role
         };
 
         var request = TestHelpers.CreateAuthorizedRequest($"/admin/users/{adminUser.Id}", token, HttpMethod.Put, dto);
@@ -104,7 +104,7 @@ public class AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory)
         {
             Username = conflictUser.Username, 
             Email = "something_new@test.com",
-            Role = Enum.Parse<UserRole>(target.Role)
+            Role = target.Role
         };
 
         var request = TestHelpers.CreateAuthorizedRequest($"/admin/users/{target.Id}", token, HttpMethod.Put, dto);

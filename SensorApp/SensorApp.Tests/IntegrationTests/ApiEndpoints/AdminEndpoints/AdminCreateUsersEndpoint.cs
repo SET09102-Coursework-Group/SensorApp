@@ -45,7 +45,7 @@ public class AdminCreateUsersEndpoint : IClassFixture<WebApplicationFactoryForTe
         var created = await response.Content.ReadFromJsonAsync<UserWithRoleDto>();
         created.Should().NotBeNull();
         created!.Email.Should().Be(newUser.Email);
-        created.Role.Should().Be(newUser.Role.ToString());
+        created.Role.Should().Be(newUser.Role);
     }
 
     [Fact]
