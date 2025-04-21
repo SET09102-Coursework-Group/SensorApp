@@ -1,4 +1,6 @@
-﻿namespace SensorApp.Shared.Dtos.Admin;
+﻿using SensorApp.Shared.Enums;
+
+namespace SensorApp.Shared.Dtos.Admin;
 
 /// <summary>
 /// Data Transfer Object representing a user and their associated role.
@@ -9,5 +11,5 @@ public class UserWithRoleDto
     public string Id { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string Role { get; set; } = string.Empty;
+    public UserRole Role { get; set; }
 }
