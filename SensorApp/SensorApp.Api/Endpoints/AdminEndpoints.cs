@@ -22,13 +22,19 @@ public static class AdminEndpoints
             foreach (var user in users)
             {
                 var roles = await userManager.GetRolesAsync(user);
-                var role = roles.FirstOrDefault();
+                var roleName = roles.FirstOrDefault() ?? throw new Exception("User has no role");
+
+                if (!Enum.TryParse<UserRole>(roleName, out var roleEnum))
+                {
+                    throw new Exception($"Invalid role name: {roleName}");
+                }
+
                 result.Add(new UserWithRoleDto
                 {
                     Id = user.Id,
                     Username = user.UserName!,
                     Email = user.Email!,
-                    Role = role!
+                    Role = roleEnum
                 });
             }
 
@@ -45,13 +51,18 @@ public static class AdminEndpoints
             }
 
             var roles = await userManager.GetRolesAsync(user);
+            var roleName = roles.FirstOrDefault() ?? throw new Exception("User has no role");
+            if (!Enum.TryParse<UserRole>(roleName, out var roleEnum))
+            {
+                throw new Exception($"Invalid role name: {roleName}");
+            }
 
             return Results.Ok(new UserWithRoleDto
             {
                 Id = user.Id,
                 Username = user.UserName!,
                 Email = user.Email!,
-                Role = roles.FirstOrDefault()!
+                Role = roleEnum
             });
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
@@ -73,7 +84,10 @@ public static class AdminEndpoints
             }
 
             var roleName = dto.Role.ToString();
-
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
             var addRole = await userManager.AddToRoleAsync(user, roleName);
             if (!addRole.Succeeded)
             {
@@ -86,7 +100,7 @@ public static class AdminEndpoints
                 Id = user.Id,
                 Username = user.UserName!,
                 Email = user.Email!,
-                Role = roleName
+                Role = dto.Role
             };
             return Results.Created($"/admin/users/{user.Id}", resultDto);
 
