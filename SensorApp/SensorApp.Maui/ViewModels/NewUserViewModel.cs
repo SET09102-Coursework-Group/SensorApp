@@ -59,11 +59,7 @@ public partial class NewUserViewModel : BaseViewModel
 
             try
             {
-                var emailAddress = new MailAddress(Email);
-                if (emailAddress.Address != Email)
-                {
-                    throw new FormatException();
-                }
+                _ = new MailAddress(Email);
             }
             catch
             {
