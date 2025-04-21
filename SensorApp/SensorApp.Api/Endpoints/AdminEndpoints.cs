@@ -21,24 +21,11 @@ public static class AdminEndpoints
 
             foreach (var user in users)
             {
-                var roles = await userManager.GetRolesAsync(user);
-                var roleName = roles.FirstOrDefault() ?? throw new Exception("User has no role");
-
-                if (!Enum.TryParse<UserRole>(roleName, out var roleEnum))
-                {
-                    throw new Exception($"Invalid role name: {roleName}");
-                }
-
-                result.Add(new UserWithRoleDto
-                {
-                    Id = user.Id,
-                    Username = user.UserName!,
-                    Email = user.Email!,
-                    Role = roleEnum
-                });
+                var dto = await ToUserWithRoleDtoAsync(user, userManager);
+                result.Add(dto);
             }
-
             return Results.Ok(result);
+
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
         // GET user by Id
@@ -50,20 +37,9 @@ public static class AdminEndpoints
                 return Results.NotFound();
             }
 
-            var roles = await userManager.GetRolesAsync(user);
-            var roleName = roles.FirstOrDefault() ?? throw new Exception("User has no role");
-            if (!Enum.TryParse<UserRole>(roleName, out var roleEnum))
-            {
-                throw new Exception($"Invalid role name: {roleName}");
-            }
+            var dto = await ToUserWithRoleDtoAsync(user, userManager);
+            return Results.Ok(dto);
 
-            return Results.Ok(new UserWithRoleDto
-            {
-                Id = user.Id,
-                Username = user.UserName!,
-                Email = user.Email!,
-                Role = roleEnum
-            });
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
         // POST create new user
@@ -203,5 +179,25 @@ public static class AdminEndpoints
 
             return Results.NoContent();
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+    }
+
+
+    public static async Task<UserWithRoleDto> ToUserWithRoleDtoAsync(IdentityUser user, UserManager<IdentityUser> userManager)
+    {
+        var roles = await userManager.GetRolesAsync(user);
+        var roleName = roles.FirstOrDefault() ?? throw new Exception("User has no role");
+
+        if (!Enum.TryParse<UserRole>(roleName, out var roleEnum))
+        {
+            throw new Exception($"Invalid role name: {roleName}");
+        }
+
+        return new UserWithRoleDto
+        {
+            Id = user.Id,
+            Username = user.UserName!,
+            Email = user.Email!,
+            Role = roleEnum
+        };
     }
 }
