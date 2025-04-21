@@ -1,98 +1,139 @@
 ﻿using FluentAssertions;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
-using SensorApp.Tests.IntegrationTests.ApiEndpoints.AuthEndpoints;
 using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
 using System.Net;
 using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.AdminEndpoints;
 
-public class AdminUpdateUsersEndpoint(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
+public class AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client = factory.CreateClient();
+    private readonly TokenProvider _tokenProvider = new(factory.CreateClient());
+    private string _adminEmail = "admin@sensor.com";
 
-    //[Fact]
-    //public async Task Admin_UpdatesUserRole_Successfully()
-    //{
-    //    // Arrange
-    //    var token = await new TestUserBuilder(_client)
-    //        .WithCredentials(TestUsers.AdminEmail, TestUsers.AdminPassword)
-    //        .BuildTokenAsync();
+    [Fact]
+    public async Task Admin_Can_Update_Another_User()
+    {
+        // Arrange
+        var token = await _tokenProvider.GetAdminTokenAsync();
 
-    //    var email = $"rolechange_{Guid.NewGuid()}@sensor.com";
+        var userListRequest = TestHelpers.CreateAuthorizedRequest("/admin/users", token, HttpMethod.Get);
+        var listResponse = await _client.SendAsync(userListRequest);
+        listResponse.EnsureSuccessStatusCode();
 
-    //    var newUser = new CreateUserDto
-    //    {
-    //        Username = email,
-    //        Email = email,
-    //        Password = "RoleChanged123!",
-    //        Role = UserRole.OperationsManager
-    //    };
+        var allUsers = await listResponse.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
+        var target = allUsers!.First(u => u.Email != _adminEmail);
 
-    //    var createRequest = TestHelpers.CreateAuthorizedRequest("/admin/users", token, HttpMethod.Post, newUser);
-    //    var createResponse = await _client.SendAsync(createRequest);
-    //    createResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+        var newUsername = target.Username + "updatedTest";
 
-    //    var createdUser = await createResponse.Content.ReadFromJsonAsync<UserWithRoleDto>();
-    //    createdUser.Should().NotBeNull();
+        var updateDto = new UpdateUserDto
+        {
+            Username = newUsername,
+            Email = target.Email,             
+            Role = Enum.Parse<UserRole>(target.Role), 
+            Password = null                  
+        };
 
-    //    // Act 
-    //    var changeRoleRequest = TestHelpers.CreateAuthorizedRequest(
-    //        $"/admin/users/{createdUser!.Id}/role?role={UserRole.Administrator}",
-    //        token,
-    //        HttpMethod.Put
-    //    );
+        var updateRequest = TestHelpers.CreateAuthorizedRequest($"/admin/users/{target.Id}", token, HttpMethod.Put, updateDto
+        );
 
-    //    var changeResponse = await _client.SendAsync(changeRoleRequest);
+        // Act
+        var updateResponse = await _client.SendAsync(updateRequest);
 
-    //    // Assert
-    //    changeResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        // Assert 
+        updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-    //    var updatedUser = await GetUserByIdAsync(createdUser.Id, token);
-    //    updatedUser.Should().NotBeNull();
-    //    updatedUser!.Role.Should().Be(UserRole.Administrator.ToString());
-    //}
+        var getUpdatedUserRequest = TestHelpers.CreateAuthorizedRequest($"/admin/users/{target.Id}", token, HttpMethod.Get);
+        var getUpdatedUserResponse = await _client.SendAsync(getUpdatedUserRequest);
+        getUpdatedUserResponse.EnsureSuccessStatusCode();
 
-    //[Fact]
-    //public async Task Admin_CannotChangeOwnRole_ReturnsBadRequest()
-    //{
-    //    // Arrange
-    //    var token = await new TestUserBuilder(_client)
-    //        .WithCredentials(TestUsers.AdminEmail, TestUsers.AdminPassword)
-    //        .BuildTokenAsync();
+        var updatedUser = await getUpdatedUserResponse.Content.ReadFromJsonAsync<UserWithRoleDto>();
+        updatedUser.Should().NotBeNull();
+        updatedUser!.Username.Should().Be(newUsername);
+        updatedUser.Email.Should().Be(target.Email);
+    }
 
-    //    var getRequest = TestHelpers.CreateAuthorizedRequest("/admin/users", token, HttpMethod.Get);
-    //    var getResponse = await _client.SendAsync(getRequest);
-    //    var users = await getResponse.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
 
-    //    var currentUser = users!.First(u => u.Email == TestUsers.AdminEmail);
-    //    var originalRole = currentUser.Role;
+    [Fact]
+    public async Task Admin_Cannot_Update_Their_Own_Account()
+    {
+        var token = await _tokenProvider.GetAdminTokenAsync();
 
-    //    // Act
-    //    var updateRequest = TestHelpers.CreateAuthorizedRequest(
-    //        $"/admin/users/{currentUser.Id}/role?role={UserRole.OperationsManager}",
-    //        token,
-    //        HttpMethod.Put
-    //    );
+        var userListRequest = TestHelpers.CreateAuthorizedRequest("/admin/users", token, HttpMethod.Get);
+        var listResponse = await _client.SendAsync(userListRequest);
+        listResponse.EnsureSuccessStatusCode();
 
-    //    var updateResponse = await _client.SendAsync(updateRequest);
+        var allUsers = await listResponse.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
+        var adminUser = allUsers!.First(u => u.Email == _adminEmail);
 
-    //    // Assert
-    //    updateResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var dto = new UpdateUserDto
+        {
+            Username = adminUser.Username,
+            Email = adminUser.Email,
+            Role = Enum.Parse<UserRole>(adminUser.Role)
+        };
 
-    //    var updatedUser = await GetUserByIdAsync(currentUser.Id, token);
-    //    updatedUser.Should().NotBeNull();
-    //    updatedUser!.Role.Should().Be(originalRole, "User should not be able to change their own role");
-    //}
+        var request = TestHelpers.CreateAuthorizedRequest($"/admin/users/{adminUser.Id}", token, HttpMethod.Put, dto);
 
-    //private async Task<UserWithRoleDto?> GetUserByIdAsync(string userId, string token)
-    //{
-    //    var request = TestHelpers.CreateAuthorizedRequest("/admin/users", token, HttpMethod.Get);
-    //    var response = await _client.SendAsync(request);
-    //    response.EnsureSuccessStatusCode();
+        var response = await _client.SendAsync(request);
 
-    //    var users = await response.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
-    //    return users!.FirstOrDefault(u => u.Id == userId);
-    //}
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var body = await response.Content.ReadAsStringAsync();
+        body.Should().Contain("cannot update your own account");
+    }
+
+
+    [Fact]
+    public async Task Cannot_Update_If_Username_Already_Exists()
+    {
+        var token = await _tokenProvider.GetAdminTokenAsync();
+
+        var userListRequest = TestHelpers.CreateAuthorizedRequest("/admin/users", token, HttpMethod.Get);
+        var listResponse = await _client.SendAsync(userListRequest);
+        listResponse.EnsureSuccessStatusCode();
+
+        var allUsers = await listResponse.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
+
+        var target = allUsers!.First(u => u.Email != _adminEmail);
+        var conflictUser = allUsers.First(u => u.Id != target.Id && u.Email != _adminEmail);
+
+        var dto = new UpdateUserDto
+        {
+            Username = conflictUser.Username, 
+            Email = "something_new@test.com",
+            Role = Enum.Parse<UserRole>(target.Role)
+        };
+
+        var request = TestHelpers.CreateAuthorizedRequest($"/admin/users/{target.Id}", token, HttpMethod.Put, dto);
+
+        var response = await _client.SendAsync(request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+
+        var body = await response.Content.ReadAsStringAsync();
+        body.Should().Contain("Username is already in use");
+    }
+
+
+    [Fact]
+    public async Task UnauthenticatedUser_IsUnauthorized()
+    {
+        var dto = new UpdateUserDto
+        {
+            Username = "newName",
+            Email = "new@email.com",
+            Role = UserRole.EnvironmentalScientist
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/admin/users/{Guid.NewGuid()}")
+        {
+            Content = JsonContent.Create(dto)
+        };
+
+        var response = await _client.SendAsync(request);
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
 }
