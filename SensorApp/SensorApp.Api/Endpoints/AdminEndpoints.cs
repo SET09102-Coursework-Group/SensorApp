@@ -35,25 +35,26 @@ public static class AdminEndpoints
             return Results.Ok(result);
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
-        //GET user by id
+        // GET user by Id
         routes.MapGet("/admin/users/{id}", async (string id, UserManager<IdentityUser> userManager) =>
         {
-            var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return Results.NotFound();
             }
 
             var roles = await userManager.GetRolesAsync(user);
-            var dto = new UserWithRoleDto
+
+            return Results.Ok(new UserWithRoleDto
             {
                 Id = user.Id,
                 Username = user.UserName!,
                 Email = user.Email!,
                 Role = roles.FirstOrDefault()!
-            };
-            return Results.Ok(dto);
-        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+            });
+        })
+        .RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
         // POST create new user
         routes.MapPost("/admin/users", async (CreateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) =>
@@ -118,38 +119,56 @@ public static class AdminEndpoints
             return Results.NoContent();
         }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
-        
-        //routes.MapPut("/admin/users/{id}/role", async (string id, string role, UserManager<IdentityUser> userManager, HttpContext httpContext) =>
-        //{
-        //    if (!Enum.TryParse<UserRole>(role, true, out var parsedRole))
-        //    {
-        //        return Results.BadRequest($"Invalid role: '{role}'. Choose one of these roles instead: {string.Join(", ", Enum.GetNames(typeof(UserRole)))}");
-        //    }
+        // PUT
+        routes.MapPut("/admin/users/{id}", async (string id, UpdateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) =>
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return Results.NotFound();
+            }
 
-        //    var user = await userManager.FindByIdAsync(id);
-        //    if (user == null)
-        //    {
-        //        return Results.NotFound();
-        //    }
+            if (user.UserName != dto.Username || user.Email != dto.Email)   //change email or username if they change from what we have in the db
+            {
+                user.UserName = dto.Username;
+                user.Email = dto.Email;
+                var updateResult = await userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    return Results.BadRequest(updateResult.Errors);
+                }
+            }
 
-        //    var currentUserId = userManager.GetUserId(httpContext.User);
-        //    if (user.Id == currentUserId)
-        //    {
-        //        return Results.BadRequest("You cannot change your own role.");
-        //    }
+            var currentRoles = await userManager.GetRolesAsync(user);      //update roles if different from db
+            var newRole = dto.Role.ToString();
 
-        //    var currentRoles = await userManager.GetRolesAsync(user);
-        //    await userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!currentRoles.Contains(newRole))
+            {
+                var removeResult = await userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removeResult.Succeeded)
+                {
+                    return Results.BadRequest(removeResult.Errors);
+                }
 
-        //    var result = await userManager.AddToRoleAsync(user, parsedRole.ToString());
+                var addResult = await userManager.AddToRoleAsync(user, newRole);
+                if (!addResult.Succeeded)
+                {
+                    return Results.BadRequest(addResult.Errors);
+                }
+            }
 
-        //    if (!result.Succeeded)
-        //    {
-        //        return Results.BadRequest(result.Errors);
-        //    }
 
-        //    return Results.Ok();
-        //}).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+            if (!string.IsNullOrWhiteSpace(dto.Password))             //we update the password if provided only
+            {
+                var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                var passwordResult = await userManager.ResetPasswordAsync(user, resetToken, dto.Password);
+                if (!passwordResult.Succeeded)
+                {
+                    return Results.BadRequest(passwordResult.Errors);
+                }
+            }
 
+            return Results.NoContent();
+        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
     }
 }
