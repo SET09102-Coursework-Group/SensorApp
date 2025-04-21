@@ -3,9 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Dtos.Admin;
-using SensorApp.Shared.Enums;
 using SensorApp.Shared.Interfaces;
-using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
@@ -92,49 +90,11 @@ public partial class AdminUsersViewModel(IAdminService adminService, ILogger<Adm
             await Shell.Current.DisplayAlert("Error", "An unexpected error occurred.", "OK");
         }
     }
+
     [RelayCommand]
-    public async Task UpdateUserRole(UserWithRoleDto user)
+    public async Task EditUser(UserWithRoleDto user)
     {
-        var roleOptions = Enum.GetNames<UserRole>();
-        var choice = await Shell.Current.DisplayActionSheet("Select new role", "Cancel", null, roleOptions);
-
-        if (choice == "Cancel" || string.IsNullOrEmpty(choice) || choice == user.Role)
-        {
-            return;
-        }
-
-        IsLoading = true;
-        try
-        {
-            var token = await _tokenProvider.GetTokenAsync();
-            if (string.IsNullOrEmpty(token))
-            {
-                await Shell.Current.DisplayAlert("Error", "You are not logged in or your session has expired. Please log in again.", "OK");
-                return;
-            }
-
-            var success = await _adminService.UpdateUserRoleAsync(token, user.Id, choice);
-
-            if (!success)
-            {
-                await Shell.Current.DisplayAlert("Error", "Failed to update role.", "OK");
-                return;
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error updating user role.");
-            await Shell.Current.DisplayAlert("Error", "An unexpected error occurred.", "OK");
-            return;
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-
-        await LoadUsersAsync();
-
-        await Shell.Current.DisplayAlert("Success", $"Role updated to {choice}.", "OK");
+        await Shell.Current.GoToAsync($"{nameof(EditUserPage)}?UserId={user.Id}");
     }
 
 }

@@ -43,7 +43,7 @@
                                     CornerRadius="4"
                                     BackgroundColor="Purple"
                                     TextColor="White"
-                                    Command="{Binding BindingContext.UpdateUserRoleCommand, Source={x:Reference RootPage}}"
+                                    Command="{Binding BindingContext.EditUserCommand, Source={x:Reference RootPage}}"
                                     CommandParameter="{Binding .}" />
 
                                 <Button
