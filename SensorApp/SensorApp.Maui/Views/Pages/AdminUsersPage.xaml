@@ -30,7 +30,7 @@
 
                                 <Label Text="{Binding Email}" FontSize="14" />
 
-                                <Label Text="{Binding Role}" FontAttributes="Italic" FontSize="14" />
+                                <Label Text="{Binding Role, Converter={StaticResource EnumDisplayName}}" FontAttributes="Italic" FontSize="14" />
                             </VerticalStackLayout>
 
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">

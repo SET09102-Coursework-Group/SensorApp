@@ -18,11 +18,15 @@
             <Label Text="Email" />
             <Entry Text="{Binding Email}" Placeholder="Enter email" Keyboard="Email" />
             
-            <Label Text="Fill this field to reset the users password" />
-            <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Enter a new password—or leave empty" />
+            <Label Text="Password" />
+            <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Reset user password here" />
 
-            <Label Text="Role" />
-            <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" Title="Select role" />
+            <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" Title="Select role">
+                <Picker.ItemDisplayBinding>
+                    <Binding Path="." Converter="{StaticResource EnumDisplayName}" />
+                </Picker.ItemDisplayBinding>
+            </Picker>
+
 
             <Button Text="Save" BackgroundColor="Blue" TextColor="White" Command="{Binding SaveChangesCommand}" />
         </VerticalStackLayout>

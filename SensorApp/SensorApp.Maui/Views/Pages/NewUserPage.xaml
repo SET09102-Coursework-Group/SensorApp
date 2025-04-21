@@ -23,8 +23,13 @@
             <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Enter password" />
 
             <!-- Role Picker -->
-            <Label Text="Role" />
-            <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" Title="Select role" />
+            <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" Title="Select role">
+                <Picker.ItemDisplayBinding>
+                    <Binding Path="." Converter="{StaticResource EnumDisplayName}" />
+                </Picker.ItemDisplayBinding>
+            </Picker>
+
+
 
             <!-- Submit -->
             <Button Text="Submit" BackgroundColor="Blue" TextColor="White" Command="{Binding CreateUserCommand}" />

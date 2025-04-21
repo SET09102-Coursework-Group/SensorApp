@@ -20,6 +20,7 @@ public partial class EditUserViewModel : BaseViewModel
     {
         _adminService = adminService;
         _tokenProvider = tokenProvider;
+        Roles = [.. Enum.GetValues<UserRole>()];
     }
 
     [ObservableProperty]
@@ -73,7 +74,7 @@ public partial class EditUserViewModel : BaseViewModel
             {
                 Username = dto.Username;
                 Email = dto.Email;
-                SelectedRole = Enum.Parse<UserRole>(dto.Role);
+                SelectedRole = dto.Role;  
             }
             else
             {
