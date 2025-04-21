@@ -53,8 +53,7 @@ public static class AdminEndpoints
                 Email = user.Email!,
                 Role = roles.FirstOrDefault()!
             });
-        })
-        .RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
+        }).RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
 
         // POST create new user
         routes.MapPost("/admin/users", async (CreateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) =>

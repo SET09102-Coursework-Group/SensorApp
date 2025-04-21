@@ -55,12 +55,3 @@ public class AuthEndpointTests(WebApplicationFactoryForTests factory) : IClassFi
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 }
-
-public static class TestUsers
-{
-    public const string AdminEmail = "admin@sensor.com";
-    public const string AdminPassword = "MyP@ssword123";
-
-    public const string OpsEmail = "ops@sensor.com";
-    public const string OpsPassword = "MyP@ssword123";
-}

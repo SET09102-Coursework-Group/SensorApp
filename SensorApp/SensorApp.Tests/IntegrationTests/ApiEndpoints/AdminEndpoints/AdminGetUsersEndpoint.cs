@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using SensorApp.Shared.Dtos.Admin;
-using SensorApp.Tests.IntegrationTests.ApiEndpoints.AuthEndpoints;
 using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
 using System.Net;
 using System.Net.Http.Json;
@@ -35,7 +34,7 @@ public class AdminGetUsersEndpoint(WebApplicationFactoryForTests factory) : ICla
         users!.Any(u => u.Username == _adminEmail).Should().BeTrue();
     }
 
-    [Fact]
+                                                                                                                                                                                                                                                                                                                                                                                [Fact]
     public async Task NonAdmin_IsForbidden_FromSeeingUsers_When_LoggedIn()
     {
         // Arrange
