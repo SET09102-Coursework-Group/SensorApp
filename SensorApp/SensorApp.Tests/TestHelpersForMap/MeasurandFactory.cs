@@ -1,6 +1,6 @@
 ﻿using SensorApp.Shared.Models;
 
-namespace SensorApp.Tests.TestHelpers;
+namespace SensorApp.Tests.TestHelpersForMap;
 
 public class MeasurandFactory()
 {

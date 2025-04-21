@@ -1,7 +1,6 @@
 ﻿using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
-using SensorApp.Tests.TestHelpers;
-using SensorApp.Tests.UnitTests.Factory;
+using SensorApp.Tests.TestHelpersForMap;
 
 namespace SensorApp.Tests.UnitTests.Services;
 

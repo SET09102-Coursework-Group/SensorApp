@@ -2,7 +2,7 @@
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Factories;
-using SensorApp.Tests.TestHelpers;
+using SensorApp.Tests.TestHelpersForMap;
 
 public class SensorPinInfoFactoryTests
 {

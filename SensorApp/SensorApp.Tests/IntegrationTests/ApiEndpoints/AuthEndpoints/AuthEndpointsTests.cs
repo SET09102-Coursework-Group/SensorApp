@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using SensorApp.Api;
 using SensorApp.Shared.Dtos;
 using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
 using System.Net;
