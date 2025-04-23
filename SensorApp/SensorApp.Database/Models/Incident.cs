@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity;
 namespace SensorApp.Database.Models;
 
 /// <summary>
-/// Represents an incident or anomaly that can occur at a sensor. 
-/// The <see cref="Incident"/> model includes metadata about the incident itself, its related sensor and individuals related to it.
+/// Represents an incident or anomaly that can occur in relation to a sensor. 
+/// The <see cref="Incident"/> model includes metadata about the incident itself, its related sensor and users related to it.
 /// </summary>
 [Table("incident")]
 public class Incident : BaseEntity
@@ -17,15 +17,17 @@ public class Incident : BaseEntity
     [Required]
     public string Status { get; set; }
     [Required]
+    [ForeignKey("Sensor_id")]
     public Sensor Sensor { get; set; }
     [Required]
     public int Sensor_id { get; set; }
     [Required]
-    public DateTime Date { get; set; }
+    public DateTime Creation_date { get; set; }
     [Required]
     public string Priority { get; set; }
     public DateTime? Resolution_date { get; set; }
+    [ForeignKey("Responder_id")]
     public IdentityUser Responder { get; set; }
-    public int Responder_id { get; set; }
+    public string Responder_id { get; set; }
     public string? Comments { get; set; }
 }

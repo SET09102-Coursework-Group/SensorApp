@@ -21,5 +21,6 @@ public class SensorDbContext(DbContextOptions<SensorDbContext> options) : Identi
         builder.SeedIdentity();
         builder.SeedMeasurands();
         builder.SeedSensors();
+        builder.SeedIncidents();
     }
 }
