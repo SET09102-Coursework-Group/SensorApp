@@ -46,6 +46,8 @@ public static class MauiProgram
         builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
 
         builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<IMeasurementService, MeasurementService>().ConfigureApiHttpClient();
+
         builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
         builder.Services.AddSingleton<ISensorAnalysisService, SensorAnalysisService>();
