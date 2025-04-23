@@ -26,13 +26,18 @@ public static class HttpRequestHelper
         {
             var response = await httpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error response: {error}");
                 return default;
+            }
 
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(json);
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"Exception: {ex}");
             return default;
         }
     }
