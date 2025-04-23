@@ -71,6 +71,10 @@ public static class MauiProgram
         builder.Services.AddTransient<EditUserPage>();
         builder.Services.AddTransient<EditUserViewModel>();
 
+        builder.Services.AddTransient<HistoricalDataViewModel>();
+        builder.Services.AddTransient<HistoricalDataPage>();
+        builder.Services.AddSingleton<Utils.NullableIntConverter>();
+
         return builder.Build();
     }
 }
