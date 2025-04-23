@@ -14,7 +14,6 @@
             </ResourceDictionary.MergedDictionaries>
 
             <utils:EnumDisplayNameConverter x:Key="EnumDisplayName" />
-            <utils:NullableIntConverter x:Key="NullableIntConverter" />
 
         </ResourceDictionary>
     </Application.Resources>
