@@ -1,11 +1,16 @@
-﻿using Newtonsoft.Json;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 
 namespace SensorApp.Shared.Helpers;
 
 public static class HttpRequestHelper
 {
+    private static readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     public static HttpRequestMessage Create(HttpMethod method, string url, string token, object? content = null)
     {
         var request = new HttpRequestMessage(method, url);
@@ -13,7 +18,7 @@ public static class HttpRequestHelper
 
         if (content is not null)
         {
-            var json = JsonConvert.SerializeObject(content);
+            var json = JsonSerializer.Serialize(content, _jsonOptions);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
         }
 
@@ -25,6 +30,7 @@ public static class HttpRequestHelper
         try
         {
             var response = await httpClient.SendAsync(request);
+
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadAsStringAsync();
@@ -33,7 +39,7 @@ public static class HttpRequestHelper
             }
 
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(json);
+            return JsonSerializer.Deserialize<T>(json, _jsonOptions);
         }
         catch (Exception ex)
         {
@@ -49,8 +55,9 @@ public static class HttpRequestHelper
             var response = await httpClient.SendAsync(request);
             return response.IsSuccessStatusCode;
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"Exception: {ex}");
             return false;
         }
     }
