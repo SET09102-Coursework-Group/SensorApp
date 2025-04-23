@@ -1,18 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microcharts;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
+using SkiaSharp;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
 public partial class HistoricalDataViewModel : BaseViewModel
 {
-    private readonly IMeasurementService _measurementService;
-    private readonly ITokenProvider _tokenProvider;
-    private readonly IMeasurandService _measurandService;
-    private readonly SensorApiService _sensorService;
+    readonly IMeasurementService _measurementService;
+    readonly ITokenProvider _tokenProvider;
+    readonly IMeasurandService _measurandService;
+    readonly SensorApiService _sensorService;
 
     public HistoricalDataViewModel(IMeasurementService measurementService, ITokenProvider tokenProvider, SensorApiService sensorService, IMeasurandService measurandService)
     {
@@ -25,32 +27,43 @@ public partial class HistoricalDataViewModel : BaseViewModel
         To = DateTime.Today;
     }
 
-    [ObservableProperty] 
+    [ObservableProperty]
     DateTime? from;
 
     [ObservableProperty] 
     DateTime? to;
 
-    [ObservableProperty]
+    [ObservableProperty] 
     SensorModel? selectedSensor;
 
-    [ObservableProperty]
+    [ObservableProperty] 
     MeasurandModel? selectedMeasurand;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     bool isLoading;
 
     public ObservableCollection<MeasurementModel> MeasurementValues { get; } = [];
     public ObservableCollection<SensorModel> SensorOptions { get; } = [];
     public ObservableCollection<MeasurandModel> MeasurandOptions { get; } = [];
 
+    [ObservableProperty] 
+    float? minValue;
 
-    partial void OnSelectedSensorChanged(SensorModel? value)
-    {
-        _ = ReloadMeasurandsAsync(value);
-    }
+    [ObservableProperty] 
+    float? maxValue;
 
-    private async Task ReloadMeasurandsAsync(SensorModel? sensor)
+    [ObservableProperty] 
+    float? averageValue;
+
+    [ObservableProperty] 
+    int count;
+
+    [ObservableProperty] 
+    Chart? measurementChart;
+
+    partial void OnSelectedSensorChanged(SensorModel? value)  => _ = ReloadMeasurandsAsync(value);
+
+    async Task ReloadMeasurandsAsync(SensorModel? sensor)
     {
         MeasurandOptions.Clear();
         SelectedMeasurand = null;
@@ -60,14 +73,12 @@ public partial class HistoricalDataViewModel : BaseViewModel
         }
 
         var token = await _tokenProvider.GetTokenAsync();
-        var mesurandList = await _measurandService.GetMeasurandsAsync(token!, sensor.Id);
-
-        foreach (var mesurand in mesurandList)
+        var measurandsList = await _measurandService.GetMeasurandsAsync(token!, sensor.Id);
+        foreach (var measurands in measurandsList)
         {
-            MeasurandOptions.Add(mesurand);
+            MeasurandOptions.Add(measurands);
         }
     }
-
 
     [RelayCommand]
     public async Task LoadAsync()
@@ -84,21 +95,52 @@ public partial class HistoricalDataViewModel : BaseViewModel
                 return;
             }
 
-            MeasurementValues.Clear();
             var measurements = await _measurementService.GetMeasurementsAsync(sensorId: SelectedSensor?.Id, measurandId: SelectedMeasurand?.Id, from: From, to: To, token: token);
 
+            MeasurementValues.Clear();
+
             foreach (var measurement in measurements)
-            {
                 MeasurementValues.Add(measurement);
+
+            if (measurements.Any())
+            {
+                MinValue = measurements.Min(m => m.Value);
+                MaxValue = measurements.Max(m => m.Value);
+                AverageValue = (float)measurements.Average(m => m.Value);
+                Count = measurements.Count;
+
+                var entries = measurements.Select(m => new ChartEntry(m.Value)
+                {
+                    Label = m.Timestamp.ToString("dd/MM HH:mm"),
+                    ValueLabel = m.Value.ToString("0.##"),
+                    Color = SKColors.DeepSkyBlue
+                }).ToList();
+
+                MeasurementChart = new LineChart
+                {
+                    Entries = entries,
+                    LineMode = LineMode.Straight,
+                    PointMode = PointMode.Circle,
+                    LineSize = 4,
+                    PointSize = 8
+                };
+            }
+            else
+            {
+                MinValue = null;
+                MaxValue = null;
+                AverageValue = null;
+                Count = 0;
+                MeasurementChart = null;
             }
         }
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlert("Error", $"Could not load data: {ex.Message}", "OK");
         }
-        finally 
-        { 
-            IsLoading = false; 
+        finally
+        {
+            IsLoading = false;
         }
     }
 
