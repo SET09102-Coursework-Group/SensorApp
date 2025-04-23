@@ -9,5 +9,7 @@
         public string Unit { get; set; }
         public float? Min_safe_threshold { get; set; }
         public float? Max_safe_threshold { get; set; }
+
+        public string DisplayName => string.IsNullOrWhiteSpace(Unit) ? Name : $"{Name} ({Unit})";
     }
 }

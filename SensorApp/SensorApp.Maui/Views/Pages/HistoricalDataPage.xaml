@@ -23,8 +23,7 @@
             <DatePicker Date="{Binding To}"   Format="dd/MM/yyyy"/>
         </HorizontalStackLayout>
 
-        <Grid
-        Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
             <Picker Title="Select Sensor" ItemsSource="{Binding SensorOptions}"
                                           SelectedItem="{Binding SelectedSensor}"
                                           ItemDisplayBinding="{Binding Type}"
@@ -32,7 +31,8 @@
 
             <Picker Grid.Column="1" Title="Select Measurand" ItemsSource="{Binding MeasurandOptions}"
                                     SelectedItem="{Binding SelectedMeasurand}"
-                                    ItemDisplayBinding="{Binding Name}">
+                                    ItemDisplayBinding="{Binding DisplayName}">
+
                 <Picker.Triggers>
                     <DataTrigger TargetType="Picker" Binding="{Binding SelectedSensor}" Value="{x:Null}">
                         <Setter Property="IsEnabled" Value="False"/>
