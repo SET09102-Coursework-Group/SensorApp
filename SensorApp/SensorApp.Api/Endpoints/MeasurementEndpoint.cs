@@ -12,6 +12,29 @@ public static class MeasurementEndpoint
     {
         routes.MapGet("/measurements", async (SensorDbContext db, int? sensorId, int? measurementTypeId, DateTime? from, DateTime? to) =>
         {
+            if (sensorId != null)
+            {
+                int sid = sensorId.Value;
+
+                bool sensorExists = await db.Sensors.AnyAsync(s => s.Id == sid);
+                if (!sensorExists)
+                {
+                    return Results.NotFound($"Sensor with ID {sid} was not found.");
+                }
+            }
+
+
+            if (measurementTypeId != null)
+            {
+                int mtid = measurementTypeId.Value;
+
+                bool measurementTypeExists = await db.Measurand.AnyAsync(mt => mt.Id == mtid);
+                if (!measurementTypeExists)
+                {
+                    return Results.NotFound($"Measurement type with ID {mtid} was not found.");
+                }
+            }
+
             var entities = await db.Measurement.Include(m => m.Measurement_type)
                                                .Include(m => m.Sensor).ApplyFilters(sensorId, measurementTypeId, from, to).OrderBy(m => m.Timestamp).ToListAsync();
 
