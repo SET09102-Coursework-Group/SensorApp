@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microcharts.Maui;
+using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
 using SensorApp.Maui.Helpers.Map;
 using SensorApp.Maui.Helpers.MenuRoles;
@@ -32,7 +33,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             })
-            .UseMauiMaps();
+            .UseMauiMaps().UseMicrocharts();
 
 
         builder.Services.AddHttpClient<IAuthService, AuthService>()

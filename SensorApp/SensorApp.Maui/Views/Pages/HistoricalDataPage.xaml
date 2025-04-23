@@ -4,57 +4,79 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:SensorApp.Maui.ViewModels"
     xmlns:models="clr-namespace:SensorApp.Shared.Models;assembly=SensorApp.Shared"
+    xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
     Title="Historical Data"
     x:DataType="vm:HistoricalDataViewModel">
 
-    <Grid Padding="20" RowSpacing="15" RowDefinitions="Auto,Auto,Auto,*,Auto">
+    <Grid Padding="20" RowSpacing="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
         <HorizontalStackLayout Grid.Row="0" Spacing="10">
-            <DatePicker Date="{Binding From}" Format="dd/MM/yyyy" />
-            <DatePicker Date="{Binding To}" Format="dd/MM/yyyy" />
+            <DatePicker Date="{Binding From}" Format="dd/MM/yyyy"/>
+            <DatePicker Date="{Binding To}"   Format="dd/MM/yyyy"/>
         </HorizontalStackLayout>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
-            <Picker
-                Title="Select Sensor"
-                ItemsSource="{Binding SensorOptions}"
-                SelectedItem="{Binding SelectedSensor}"
-                ItemDisplayBinding="{Binding Type}"
-                IsEnabled="{Binding IsNotLoading}"
-                Grid.Column="0" />
+        <Grid
+        Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
+            <Picker Title="Select Sensor" ItemsSource="{Binding SensorOptions}"
+                                          SelectedItem="{Binding SelectedSensor}"
+                                          ItemDisplayBinding="{Binding Type}"
+                                          IsEnabled="{Binding IsNotLoading}"/>
 
-            <Picker
-                Title="Select Measurand"
-                ItemsSource="{Binding MeasurandOptions}"
-                SelectedItem="{Binding SelectedMeasurand}"
-                ItemDisplayBinding="{Binding Name}"
-                Grid.Column="1">
+            <Picker Grid.Column="1" Title="Select Measurand" ItemsSource="{Binding MeasurandOptions}"
+                                    SelectedItem="{Binding SelectedMeasurand}"
+                                    ItemDisplayBinding="{Binding Name}">
                 <Picker.Triggers>
-                    <DataTrigger TargetType="Picker"
-                                 Binding="{Binding SelectedSensor}"
-                                 Value="{x:Null}">
+                    <DataTrigger TargetType="Picker" Binding="{Binding SelectedSensor}" Value="{x:Null}">
                         <Setter Property="IsEnabled" Value="False"/>
                     </DataTrigger>
                 </Picker.Triggers>
             </Picker>
         </Grid>
 
-        <Button Grid.Row="2"
-                Text="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsNotLoading}" />
+        <Button Grid.Row="2" Text="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsNotLoading}"/>
 
-        <CollectionView Grid.Row="3"
-                        ItemsSource="{Binding MeasurementValues}">
+        <Grid Grid.Row="3" RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="20" RowSpacing="5" Margin="0,10,0,0">
+
+            <Label Grid.Row="0" Grid.Column="0" Text="Min:" FontAttributes="Bold"/>
+
+            <Label Grid.Row="0" Grid.Column="1" Text="{Binding MinValue, StringFormat='{0:N2}'}"/>
+
+            <Label Grid.Row="0" Grid.Column="2" Text="Max:" FontAttributes="Bold"/>
+
+            <Label Grid.Row="0" Grid.Column="3" Text="{Binding MaxValue, StringFormat='{0:N2}'}"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Text="Avg:" FontAttributes="Bold"/>
+
+            <Label Grid.Row="1" Grid.Column="1" Text="{Binding AverageValue, StringFormat='{0:N2}'}"/>
+
+            <Label Grid.Row="1" Grid.Column="2" Text="Count:" FontAttributes="Bold"/>
+
+            <Label Grid.Row="1" Grid.Column="3" Text="{Binding Count}"/>
+        </Grid>
+
+        <charts:ChartView Grid.Row="4" Chart="{Binding MeasurementChart}" HeightRequest="250" Margin="0,10"/>
+
+        <CollectionView Grid.Row="5" ItemsSource="{Binding MeasurementValues}">
             <CollectionView.Header>
                 <Grid ColumnDefinitions="2*,*">
-                    <Label Text="Timestamp" FontAttributes="Bold" />
-                    <Label Text="Value" Grid.Column="1" FontAttributes="Bold" />
+                    <Label Text="Timestamp" FontAttributes="Bold"/>
+                    <Label Text="Value"     FontAttributes="Bold" Grid.Column="1"/>
                 </Grid>
             </CollectionView.Header>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:MeasurementModel">
                     <Grid ColumnDefinitions="2*,*">
-                        <Label Text="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
-                        <Label Text="{Binding Value}" Grid.Column="1" />
+                        <Label Text="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}"/>
+                        <Label Text="{Binding Value}" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
