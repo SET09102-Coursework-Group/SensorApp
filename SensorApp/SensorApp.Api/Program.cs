@@ -100,6 +100,7 @@ public class Program
         app.MapAuthEndpoints();
         app.MapAdminEndpoints();
         app.MapSensorEndpoints();
+        app.MapMeasurementEndpoints();
 
         app.Run();
     }
