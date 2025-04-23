@@ -1,39 +1,55 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-  x:Class="SensorApp.Maui.Views.Pages.HistoricalDataPage"
-  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-  xmlns:vm="clr-namespace:SensorApp.Maui.ViewModels"
-  xmlns:models="clr-namespace:SensorApp.Shared.Models;assembly=SensorApp.Shared"
-  Title="Historical Data"
-  x:DataType="vm:HistoricalDataViewModel">
+    x:Class="SensorApp.Maui.Views.Pages.HistoricalDataPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SensorApp.Maui.ViewModels"
+    xmlns:models="clr-namespace:SensorApp.Shared.Models;assembly=SensorApp.Shared"
+    Title="Historical Data"
+    x:DataType="vm:HistoricalDataViewModel">
 
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <Grid Padding="20" RowSpacing="15" RowDefinitions="Auto,Auto,Auto,*,Auto">
 
-        <HorizontalStackLayout Spacing="10">
-            <DatePicker Date="{Binding From, Mode=TwoWay}" Format="dd/MM/yyyy" />
-            <DatePicker Date="{Binding To, Mode=TwoWay}" Format="dd/MM/yyyy" />
+        <HorizontalStackLayout Grid.Row="0" Spacing="10">
+            <DatePicker Date="{Binding From}" Format="dd/MM/yyyy" />
+            <DatePicker Date="{Binding To}" Format="dd/MM/yyyy" />
         </HorizontalStackLayout>
 
-        <Entry Placeholder="Sensor Id" Keyboard="Numeric"
-               Text="{Binding SelectedSensorId, Mode=TwoWay,
-                      Converter={StaticResource NullableIntConverter}}" />
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
+            <Picker
+                Title="Select Sensor"
+                ItemsSource="{Binding SensorOptions}"
+                SelectedItem="{Binding SelectedSensor}"
+                ItemDisplayBinding="{Binding Type}"
+                IsEnabled="{Binding IsNotLoading}"
+                Grid.Column="0" />
 
-        <Entry Placeholder="Measurand Id" Keyboard="Numeric"
-               Text="{Binding SelectedMeasurandId, Mode=TwoWay,
-                      Converter={StaticResource NullableIntConverter}}" />
+            <Picker
+                Title="Select Measurand"
+                ItemsSource="{Binding MeasurandOptions}"
+                SelectedItem="{Binding SelectedMeasurand}"
+                ItemDisplayBinding="{Binding Name}"
+                Grid.Column="1">
+                <Picker.Triggers>
+                    <DataTrigger TargetType="Picker"
+                                 Binding="{Binding SelectedSensor}"
+                                 Value="{x:Null}">
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </DataTrigger>
+                </Picker.Triggers>
+            </Picker>
+        </Grid>
 
-        <Button Text="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsNotLoading}" />
+        <Button Grid.Row="2"
+                Text="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsNotLoading}" />
 
-        <CollectionView ItemsSource="{Binding Points}" HeightRequest="250">
-
+        <CollectionView Grid.Row="3"
+                        ItemsSource="{Binding MeasurementValues}">
             <CollectionView.Header>
                 <Grid ColumnDefinitions="2*,*">
                     <Label Text="Timestamp" FontAttributes="Bold" />
                     <Label Text="Value" Grid.Column="1" FontAttributes="Bold" />
                 </Grid>
             </CollectionView.Header>
-
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:MeasurementModel">
                     <Grid ColumnDefinitions="2*,*">
@@ -42,8 +58,6 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-
         </CollectionView>
-
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>

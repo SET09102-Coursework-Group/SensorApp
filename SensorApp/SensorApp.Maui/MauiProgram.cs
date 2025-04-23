@@ -1,17 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
+using SensorApp.Maui.Helpers.Map;
 using SensorApp.Maui.Helpers.MenuRoles;
+using SensorApp.Maui.Interfaces;
 using SensorApp.Maui.Services;
 using SensorApp.Maui.ViewModels;
 using SensorApp.Maui.Views.Pages;
+using SensorApp.Shared.Factories;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Services;
 using System.Reflection;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Controls.Maps;
-using SensorApp.Maui.Helpers.Map;
-using SensorApp.Maui.Interfaces;
-using SensorApp.Shared.Factories;
 
 namespace SensorApp.Maui;
 
@@ -43,9 +41,10 @@ public static class MauiProgram
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             });
-        builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
 
+        builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<IMeasurandService, MeasurandService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IMeasurementService, MeasurementService>().ConfigureApiHttpClient();
 
         builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
@@ -60,19 +59,18 @@ public static class MauiProgram
         builder.Services.AddTransient<AdminUsersPage>();
         builder.Services.AddSingleton<LoadingPage>();
         builder.Services.AddTransient<SensorMapPage>();
+        builder.Services.AddTransient<NewUserPage>();
+        builder.Services.AddTransient<EditUserPage>();
+        builder.Services.AddTransient<HistoricalDataPage>();
+
 
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<LogoutViewModel>();
         builder.Services.AddTransient<AdminUsersViewModel>();
-
-        builder.Services.AddTransient<NewUserPage>();
         builder.Services.AddTransient<NewUserViewModel>();
-        builder.Services.AddTransient<EditUserPage>();
         builder.Services.AddTransient<EditUserViewModel>();
-
         builder.Services.AddTransient<HistoricalDataViewModel>();
-        builder.Services.AddTransient<HistoricalDataPage>();
         builder.Services.AddSingleton<Utils.NullableIntConverter>();
 
         return builder.Build();
