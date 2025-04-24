@@ -17,5 +17,5 @@ public partial class IncidentList : ContentPage
     {
         base.OnAppearing();
         await _viewModel.LoadIncidentsAsync();
-    }
+    }   
 }

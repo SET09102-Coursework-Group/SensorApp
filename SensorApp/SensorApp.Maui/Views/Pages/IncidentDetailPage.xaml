@@ -3,30 +3,76 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
     x:Class="SensorApp.Maui.Views.Pages.IncidentDetailPage"
+    
     x:DataType="viewmodel:IncidentDetailViewModel"
     Title="Incident Details">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="Incident Type:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Type}" />
-            <Label Text="Status:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Status}" />
-            <Label Text="Date created:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Creation_date}" />
-            <Label Text="Sensor type:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Sensor.Type}" />
-            <Label Text="Location:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Sensor.Site_zone}" />
-            <Label Text="Priority:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Priority}" />
-            <Label Text="Incident reported by:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Responder_id}" />
-            <Label Text="Comments:" FontSize="Medium" FontAttributes="Bold" />
-            <Label Text="{Binding Incident.Comments}" />
+            <VerticalStackLayout>
+                <Label Text="Incident Type:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Type}" />
+            </VerticalStackLayout>
 
-            <Label Text="Resolution Comments" />
-            <Editor Text="{Binding Incident.Resolution_comments}" AutoSize="TextChanges" />
+            <VerticalStackLayout>
+                <Label Text="Status:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Status}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Date created:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Creation_date}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Sensor type:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Sensor.Type}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Location:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Sensor.Site_zone}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Priority:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Priority}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Incident reported by:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Responder.Username}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Comments:" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="{Binding Incident.Comments, Converter={StaticResource NullToPlaceholderConverter}}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Resolution Comments" FontSize="Medium" FontAttributes="Bold" />
+
+                <Editor Text="{Binding ResolutionComments}" AutoSize="TextChanges">
+                    <Editor.Triggers>
+                        <DataTrigger TargetType="Editor"
+                         Binding="{Binding IsOpen}"
+                         Value="False">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                    </Editor.Triggers>
+                </Editor>
+
+                <Label Text="{Binding Incident.Resolution_comments, Converter={StaticResource NullToPlaceholderConverter}}">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                         Binding="{Binding IsOpen}"
+                         Value="True">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+            </VerticalStackLayout>
+
 
             <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                 <Button Text="Resolve Incident"

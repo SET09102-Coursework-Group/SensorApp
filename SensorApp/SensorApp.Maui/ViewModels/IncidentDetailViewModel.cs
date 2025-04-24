@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using SensorApp.Shared.Dtos.Incident;
 using SensorApp.Shared.Interfaces;
-using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
 
 namespace SensorApp.Maui.ViewModels;
 
@@ -19,7 +18,6 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
     private string resolutionComments;
 
     public bool IsOpen => Incident?.Status != "Resolved";
-
 
     public void LoadIncident(IncidentDto selectedIncident)
     {
