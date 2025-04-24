@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
              x:Class="SensorApp.Maui.Views.Pages.IncidentList"
-             xmlns:models="clr-namespace:SensorApp.Shared.Models;assembly=SensorApp.Shared"
+             xmlns:models="clr-namespace:SensorApp.Shared.Dtos.Incident;assembly=SensorApp.Shared"
              x:DataType="viewmodel:IncidentListViewModel"
              x:Name="RootPage"
              Title="Operations manager: Incident list">
@@ -12,14 +12,14 @@
 
         <CollectionView Grid.Row="1" ItemsSource="{Binding Incidents}">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Incident">
+                <DataTemplate x:DataType="models:IncidentDto">
                     <Frame Padding="12" Margin="0,6" BorderColor="LightGray" CornerRadius="8" HasShadow="False">
 
                         <Grid ColumnDefinitions="*,Auto">
 
                             <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
 
-                                <Label Text="{Binding Comments, TargetNullValue='No Comments'}" FontAttributes="Bold" FontSize="16" />
+                                <Label Text="{Binding ., Converter={StaticResource IncidentLabelConverter}}" FontAttributes="Bold" FontSize="16" />
 
                             </VerticalStackLayout>
 
