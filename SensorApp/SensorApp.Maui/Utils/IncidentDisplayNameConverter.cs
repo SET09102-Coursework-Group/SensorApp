@@ -12,7 +12,7 @@ public class IncidentDisplayNameConverter : IValueConverter
     {
         if (value is IncidentDto incident)
         {
-            return $"{incident.Sensor?.Type} Sensor {incident.Sensor?.Id} - {incident.Creation_date:dd MMM yyyy}";
+            return $"{incident.Sensor?.Type} Sensor {incident.Sensor?.Id} - {incident.Type} ({incident.Creation_date})";
         }
 
         return string.Empty;
