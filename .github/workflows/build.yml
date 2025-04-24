@@ -1,4 +1,4 @@
-name: SensorApp - Build, Unit & Integration Tests
+name: SensorApp Build & Tests
 
 on:
   pull_request:
@@ -9,13 +9,11 @@ on:
 env:
   DOTNET_VERSION: 8.0.x
   SLN_PATH: SensorApp/SensorApp.sln
-  MAUI_PROJECT: SensorApp/SensorApp.Maui/SensorApp.Maui.csproj
   TEST_PROJ: SensorApp/SensorApp.Tests/SensorApp.Tests.csproj
 
 jobs:
   build:
     runs-on: windows-latest
-    environment: build
 
     steps:
       - name: Checkout code
@@ -35,13 +33,21 @@ jobs:
           name: build-output
           path: '**/bin/Release/**/*'
 
-  unit-tests:
+  test:
     runs-on: windows-latest
     needs: build
+    env:
+       ASPNETCORE_ENVIRONMENT: Testing
+       JwtSettings__Key: ${{ secrets.JWT_TEST_KEY }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -49,25 +55,4 @@ jobs:
           name: build-output
 
       - name: Run unit tests
-        run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
-
-  integration-tests:
-    runs-on: windows-latest
-    environment: integration-tests
-    needs: build
-
-    env:
-      ASPNETCORE_ENVIRONMENT: Testing
-      JwtSettings__Key: ${{ secrets.JWT_TEST_KEY }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-output
-
-      - name: Run integration tests
         run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
