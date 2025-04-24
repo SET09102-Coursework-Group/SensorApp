@@ -1,31 +1,46 @@
 name: SensorApp - Build, Unit & Integration Tests
-  
+
+
 on:
   pull_request:         
   push:
     branches: [main]    
 
 
+env:
+  DOTNET_VERSION: 8.0.x
+  SLN_PATH: ${{ vars.SLN_PATH }}
+  UNIT_TEST_PROJ: ${{ vars.UNIT_TEST_PROJ }}
+  INTEGRATION_TEST_PROJ: ${{ vars.INTEGRATION_TEST_PROJ }}
+
 jobs:
   build:
     runs-on: windows-latest           
-    env:
-      DOTNET_VERSION: '8.0.x'
+    environment: build
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup .NET
+    - name: Install .NET SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Restore workloads
-      run: dotnet workload restore ${{ vars.SLN_PATH }}
+    - name: Install MAUI workloads (Android + Windows)
+      run: dotnet workload install maui-android maui-windows
 
-    - name: Restore dependencies
-      run: dotnet restore ${{ vars.SLN_PATH }} --runtime win-x64
+    - name: Restore
+      run: dotnet restore ${{ vars.SLN_PATH }}
+
+    - name: Build – Android
+      run: dotnet build SensorApp/SensorApp.Maui/SensorApp.Maui.csproj `
+            -c Release -f net8.0-android --no-restore
+
+    - name: Build – Windows
+      run: dotnet build SensorApp/SensorApp.Maui/SensorApp.Maui.csproj `
+            -c Release -f net8.0-windows10.0.19041.0 `
+            -p:RuntimeIdentifier=win10-x64 --no-restore
 
     - name: Build solution
       run: dotnet build ${{ vars.SLN_PATH }} --configuration Release --no-restore
