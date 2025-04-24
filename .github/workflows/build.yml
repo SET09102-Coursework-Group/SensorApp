@@ -40,7 +40,7 @@ jobs:
     - name: Build Windows
       run: dotnet build SensorApp/SensorApp.Maui/SensorApp.Maui.csproj `
             -c Release -f net8.0-windows10.0.19041.0 `
-            -p:RuntimeIdentifier=win10-x64
+            -p:RuntimeIdentifier=win-x64
 
     - name: Build solution
       run: dotnet build ${{ vars.SLN_PATH }} --configuration Release 
