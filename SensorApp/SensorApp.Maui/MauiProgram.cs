@@ -9,6 +9,7 @@ using SensorApp.Maui.Views.Pages;
 using SensorApp.Shared.Factories;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Services;
+using System.Reflection;
 
 namespace SensorApp.Maui;
 
@@ -18,9 +19,19 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
 
-        builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                             .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-                             .AddEnvironmentVariables();
+        var asm = Assembly.GetExecutingAssembly();
+        var baseStream = asm.GetManifestResourceStream("SensorApp.Maui.appsettings.json") ?? throw new InvalidOperationException("Missing appsettings.json embedded resource");
+        builder.Configuration.AddJsonStream(baseStream);
+
+
+        if (asm.GetManifestResourceNames()
+               .Contains("SensorApp.Maui.appsettings.Development.json"))
+        {
+            using var devStream = asm.GetManifestResourceStream("SensorApp.Maui.appsettings.Development.json")!;
+            builder.Configuration.AddJsonStream(devStream);
+        }
+
+        builder.Configuration.AddEnvironmentVariables();
 
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
