@@ -87,5 +87,15 @@ public static class IncidentEndpoints
             return Results.Ok();
         });
 
+        routes.MapDelete("/incident/delete/{id}", async (int id, SensorDbContext db) =>
+        {
+            var incident = await db.Incidents.FindAsync(id);
+            if (incident == null)
+                return Results.NotFound();
+
+            db.Incidents.Remove(incident);
+            await db.SaveChangesAsync();
+            return Results.Ok();
+        });
     }
 }

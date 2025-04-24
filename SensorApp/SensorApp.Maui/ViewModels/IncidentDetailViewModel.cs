@@ -49,4 +49,33 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
             await Shell.Current.DisplayAlert("Error", "Something went wrong.", "OK");
         }
     }
+
+    [RelayCommand]
+    public async Task DeleteIncidentAsync()
+    {
+        bool confirm = await Shell.Current.DisplayAlert("Confirm", "Are you sure you want to delete this incident?", "Yes", "No");
+        if (!confirm)
+            return;
+
+        try
+        {
+            var token = await _tokenProvider.GetTokenAsync();
+            var success = await _incidentService.DeleteIncidentAsync(token, Incident.Id);
+
+            if (success)
+            {
+                await Shell.Current.DisplayAlert("Deleted", "Incident deleted successfully.", "OK");
+                await Shell.Current.GoToAsync("..");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error", "Failed to delete incident.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", "An unexpected error occurred.", "OK");
+        }
+    }
+
 }

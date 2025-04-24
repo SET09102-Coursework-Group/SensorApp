@@ -28,10 +28,19 @@
             <Label Text="Resolution Comments" />
             <Editor Text="{Binding Incident.Resolution_comments}" AutoSize="TextChanges" />
 
-            <Button Text="Resolve Incident"
-            Command="{Binding ResolveIncidentCommand}"
-            BackgroundColor="Indigo"
-            TextColor="White" />
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="Resolve Incident"
+                Command="{Binding ResolveIncidentCommand}"
+                BackgroundColor="Indigo"
+                TextColor="White"
+                WidthRequest="150" />
+
+                <Button Text="Delete Incident"
+                Command="{Binding DeleteIncidentCommand}"
+                BackgroundColor="DarkRed"
+                TextColor="White"
+                WidthRequest="150" />
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

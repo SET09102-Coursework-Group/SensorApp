@@ -47,4 +47,10 @@ public class IncidentApiService : IIncidentApiService
         var request = HttpRequestHelper.Create(HttpMethod.Put, $"/incident/resolve/{incidentId}", token, dto);
         return await HttpRequestHelper.SendAsync(_httpClient, request);
     }
+
+    public async Task<bool> DeleteIncidentAsync(string token, int incidentId)
+    {
+        var request = HttpRequestHelper.Create(HttpMethod.Delete, $"/incident/delete/{incidentId}", token);
+        return await HttpRequestHelper.SendAsync(_httpClient, request);
+    }
 }
