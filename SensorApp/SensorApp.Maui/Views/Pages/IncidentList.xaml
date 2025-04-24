@@ -14,7 +14,7 @@
             <Button Text="Create new incident report" BackgroundColor="Green" TextColor="White" Command="{Binding GoToCreateIncidentCommand}" />
         </VerticalStackLayout>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Incidents}">
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Incidents}" SelectionMode="Single" SelectionChanged="OnIncidentSelected">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:IncidentDto">
                     <Frame Padding="12" Margin="0,6" BorderColor="LightGray" CornerRadius="8" HasShadow="False">

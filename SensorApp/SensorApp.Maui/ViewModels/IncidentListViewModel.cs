@@ -47,4 +47,19 @@ public partial class IncidentListViewModel(IIncidentApiService incidentService, 
     {
         await Shell.Current.GoToAsync(nameof(CreateIncidentPage));
     }
+
+    [RelayCommand]
+    public async Task GoToIncidentDetailsAsync(IncidentDto selected)
+    {
+        if (selected == null)
+            return;
+
+        var navParam = new Dictionary<string, object>
+        {
+            { "Incident", selected }
+        };
+
+        await Shell.Current.GoToAsync(nameof(IncidentDetailPage), navParam);
+    }
+
 }

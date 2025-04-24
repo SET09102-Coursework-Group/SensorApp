@@ -1,0 +1,29 @@
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
+    x:Class="SensorApp.Maui.Views.Pages.IncidentDetailPage"
+    x:DataType="viewmodel:IncidentDetailViewModel"
+    Title="Incident Details">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Incident Type:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Type}" />
+            <Label Text="Status:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Status}" />
+            <Label Text="Date created:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Creation_date}" />
+            <Label Text="Sensor type:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Sensor.Type}" />
+            <Label Text="Location:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Sensor.Site_zone}" />
+            <Label Text="Priority:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Priority}" />
+            <Label Text="Incident reported by:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Responder_id}" />
+            <Label Text="Comments:" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="{Binding Incident.Comments}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

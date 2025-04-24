@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.Input;
 using SensorApp.Maui.ViewModels;
+using SensorApp.Shared.Dtos.Incident;
 
 namespace SensorApp.Maui.Views.Pages;
 
@@ -17,4 +18,13 @@ public partial class IncidentList : ContentPage
         base.OnAppearing();
         await _viewModel.LoadIncidentsAsync();
     }
+
+    private async void OnIncidentSelected(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is IncidentDto selectedIncident)
+        {
+            await _viewModel.GoToIncidentDetailsAsync(selectedIncident);
+        }
+    }
+
 }

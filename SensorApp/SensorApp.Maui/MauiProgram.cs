@@ -81,6 +81,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<IncidentList>();
         builder.Services.AddTransient<CreateIncidentPage>();
+        builder.Services.AddTransient<IncidentDetailPage>();
 
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();
@@ -91,6 +92,7 @@ public static class MauiProgram
         builder.Services.AddTransient<HistoricalDataViewModel>();
         builder.Services.AddTransient<IncidentListViewModel>();
         builder.Services.AddTransient<CreateIncidentViewModel>();
+        builder.Services.AddTransient<IncidentDetailViewModel>();
 
         return builder.Build();
     }
