@@ -33,15 +33,10 @@ jobs:
       run: dotnet restore ${{ env.SLN_PATH }}
 
     - name: Build Android
-      run: |
-        dotnet build ${{ env.MAUI_PROJECT }} \
-          -c Release -f net8.0-android
+      run: dotnet build ${{ env.MAUI_PROJECT }} -c Release -f net8.0-android
 
     - name: Build Windows
-      run: |
-        dotnet build ${{ env.MAUI_PROJECT }} \
-          -c Release -f net8.0-windows10.0.19041.0 \
-          -p:RuntimeIdentifier=win-x64
+      run: dotnet build ${{ env.MAUI_PROJECT }} -c Release -f net8.0-windows10.0.19041.0 -p:RuntimeIdentifier=win-x64
 
     - name: Build solution
       run: dotnet build ${{ env.SLN_PATH }} --configuration Release
