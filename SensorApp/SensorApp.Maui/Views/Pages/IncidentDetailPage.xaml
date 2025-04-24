@@ -24,6 +24,14 @@
             <Label Text="{Binding Incident.Responder_id}" />
             <Label Text="Comments:" FontSize="Medium" FontAttributes="Bold" />
             <Label Text="{Binding Incident.Comments}" />
+
+            <Label Text="Resolution Comments" />
+            <Editor Text="{Binding Incident.Resolution_comments}" AutoSize="TextChanges" />
+
+            <Button Text="Resolve Incident"
+            Command="{Binding ResolveIncidentCommand}"
+            BackgroundColor="Indigo"
+            TextColor="White" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

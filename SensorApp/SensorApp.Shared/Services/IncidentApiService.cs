@@ -41,4 +41,10 @@ public class IncidentApiService : IIncidentApiService
         var request = HttpRequestHelper.Create(HttpMethod.Post, "/incident/create", token, newIncident);
         return await HttpRequestHelper.SendAsync(_httpClient, request);
     }
+
+    public async Task<bool> ResolveIncidentAsync(string token, int incidentId, IncidentResolutionDto dto)
+    {
+        var request = HttpRequestHelper.Create(HttpMethod.Put, $"/incident/resolve/{incidentId}", token, dto);
+        return await HttpRequestHelper.SendAsync(_httpClient, request);
+    }
 }

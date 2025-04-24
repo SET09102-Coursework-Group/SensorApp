@@ -16,4 +16,5 @@ public class IncidentDto
     public string Responder_id { get; set; }
     public UserWithRoleDto Responder { get; set; }
     public string? Comments { get; set; }
+    public string? Resolution_comments { get; set; }
 }

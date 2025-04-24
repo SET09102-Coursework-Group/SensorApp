@@ -72,5 +72,20 @@ public static class IncidentEndpoints
             await db.SaveChangesAsync();
             return Results.Ok();
         });
+
+        routes.MapPut("/incident/resolve/{id}", async (int id, IncidentResolutionDto resolutionDto, SensorDbContext db) =>
+        {
+            var incident = await db.Incidents.FindAsync(id);
+            if (incident == null)
+                return Results.NotFound();
+
+            incident.Status = "Resolved";
+            incident.Resolution_date = DateTime.UtcNow;
+            incident.Comments = resolutionDto.ResolutionComments;
+
+            await db.SaveChangesAsync();
+            return Results.Ok();
+        });
+
     }
 }
