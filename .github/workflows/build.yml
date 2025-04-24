@@ -33,11 +33,11 @@ jobs:
     - name: Restore
       run: dotnet restore ${{ vars.SLN_PATH }}
 
-    - name: Build – Android
+    - name: Build Android
       run: dotnet build SensorApp/SensorApp.Maui/SensorApp.Maui.csproj `
             -c Release -f net8.0-android --no-restore
 
-    - name: Build – Windows
+    - name: Build Windows
       run: dotnet build SensorApp/SensorApp.Maui/SensorApp.Maui.csproj `
             -c Release -f net8.0-windows10.0.19041.0 `
             -p:RuntimeIdentifier=win10-x64 --no-restore
@@ -62,11 +62,13 @@ jobs:
 
   integration-tests:
     runs-on: windows-latest
+    environment: integration-tests
     needs: build
 
     env:
       ASPNETCORE_ENVIRONMENT: Testing
       JwtSettings__Key: ${{ secrets.JWT_TEST_KEY }}
+
 
     steps:
     - name: Download build artifact

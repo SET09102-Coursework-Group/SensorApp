@@ -1,17 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
+using SensorApp.Maui.Helpers.Map;
 using SensorApp.Maui.Helpers.MenuRoles;
+using SensorApp.Maui.Interfaces;
 using SensorApp.Maui.Services;
 using SensorApp.Maui.ViewModels;
 using SensorApp.Maui.Views.Pages;
+using SensorApp.Shared.Factories;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Services;
-using System.Reflection;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Controls.Maps;
-using SensorApp.Maui.Helpers.Map;
-using SensorApp.Maui.Interfaces;
-using SensorApp.Shared.Factories;
 
 namespace SensorApp.Maui;
 
@@ -21,12 +18,12 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
 
-        var assembly = Assembly.GetExecutingAssembly();
-        using var stream = assembly.GetManifestResourceStream("SensorApp.Maui.appsettings.Development.json");
-        var config = new ConfigurationBuilder().AddJsonStream(stream!).Build();
+        builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                             .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+                             .AddEnvironmentVariables();
 
-        builder.Configuration.AddConfiguration(config);
-        builder.Services.AddSingleton<IConfiguration>(config);
+        builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
 
         builder.UseMauiApp<App>()
             .ConfigureFonts(fonts =>
