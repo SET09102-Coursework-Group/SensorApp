@@ -33,7 +33,8 @@
                 Command="{Binding ResolveIncidentCommand}"
                 BackgroundColor="Indigo"
                 TextColor="White"
-                WidthRequest="150" />
+                WidthRequest="150" 
+                IsVisible="{Binding IsOpen}"/>
 
                 <Button Text="Delete Incident"
                 Command="{Binding DeleteIncidentCommand}"

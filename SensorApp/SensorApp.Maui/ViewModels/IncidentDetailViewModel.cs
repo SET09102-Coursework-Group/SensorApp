@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SensorApp.Shared.Dtos.Incident;
 using SensorApp.Shared.Interfaces;
+using static AndroidX.Concurrent.Futures.CallbackToFutureAdapter;
 
 namespace SensorApp.Maui.ViewModels;
 
@@ -17,9 +18,16 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
     [ObservableProperty]
     private string resolutionComments;
 
+    public bool IsOpen => Incident?.Status != "Resolved";
+
+
     public void LoadIncident(IncidentDto selectedIncident)
     {
         Incident = selectedIncident;
+    }
+    partial void OnIncidentChanged(IncidentDto value)
+    {
+        OnPropertyChanged(nameof(IsOpen));
     }
 
     [RelayCommand]
@@ -36,6 +44,8 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
             var success = await _incidentService.ResolveIncidentAsync(token, Incident.Id, dto);
             if (success)
             {
+                Incident.Status = "Resolved";
+                OnPropertyChanged(nameof(IsOpen));
                 await Shell.Current.DisplayAlert("Success", "Incident resolved.", "OK");
                 await Shell.Current.GoToAsync("..");
             }
