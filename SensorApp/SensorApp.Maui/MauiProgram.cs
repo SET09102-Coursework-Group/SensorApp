@@ -55,6 +55,13 @@ public static class MauiProgram
         builder.Services.AddHttpClient<IMeasurandService, MeasurandService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IMeasurementService, MeasurementService>().ConfigureApiHttpClient();
 
+        builder.Services.AddHttpClient<IIncidentApiService, IncidentApiService>()
+            .ConfigureApiHttpClient()
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            });
+
         builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
         builder.Services.AddSingleton<ISensorAnalysisService, SensorAnalysisService>();
@@ -80,6 +87,8 @@ public static class MauiProgram
         builder.Services.AddTransient<NewUserViewModel>();
         builder.Services.AddTransient<EditUserViewModel>();
         builder.Services.AddTransient<HistoricalDataViewModel>();
+        builder.Services.AddTransient<IncidentListViewModel>();
+        builder.Services.AddTransient<IncidentList>();
 
         return builder.Build();
     }

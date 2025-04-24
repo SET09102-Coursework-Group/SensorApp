@@ -112,6 +112,7 @@ public class Program
         app.MapSensorEndpoints();
         app.MapMeasurandEndpoints();
         app.MapMeasurementEndpoints();
+        app.MapIncidentEndpoints();
 
         await app.RunAsync();
     }

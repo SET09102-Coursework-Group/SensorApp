@@ -15,6 +15,8 @@ public class SensorDbContext(DbContextOptions<SensorDbContext> options) : Identi
     public DbSet<Measurand> Measurand { get; set; }
     public DbSet<Measurement> Measurement { get; set; }
     public DbSet<Sensor> Sensors { get; set; }
+    public DbSet<Incident> Incidents { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

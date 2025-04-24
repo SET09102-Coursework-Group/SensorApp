@@ -28,6 +28,8 @@ public static class HttpRequestHelper
         var request = new HttpRequestMessage(method, url);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+        Console.WriteLine("Built request: " + request?.RequestUri);
+
         if (content is not null)
         {
             var json = JsonSerializer.Serialize(content, _jsonOptions);

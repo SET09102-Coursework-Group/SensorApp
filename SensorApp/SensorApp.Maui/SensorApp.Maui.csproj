@@ -104,6 +104,9 @@
 	  <Compile Update="Views\Pages\AdminUsersPage.xaml.cs">
 	    <DependentUpon>AdminUsersPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Pages\IncidentList.xaml.cs">
+	    <DependentUpon>IncidentList.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Pages\SensorMapPage.xaml.cs">
 	    <DependentUpon>SensorMapPage.xaml</DependentUpon>
 	  </Compile>
@@ -123,6 +126,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\IncidentList.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\NewUserPage.xaml">

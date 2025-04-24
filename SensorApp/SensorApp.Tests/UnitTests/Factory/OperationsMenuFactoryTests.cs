@@ -17,5 +17,6 @@ public class OperationsMenuFactoryTests
         menu.Should().NotBeNullOrEmpty("Operations manager menu should have at least one item");
 
         menu.Should().Contain(item => item.Route == "SensorMapPage");
+        menu.Should().Contain(item => item.Route == "IncidentList");
     }
 }
