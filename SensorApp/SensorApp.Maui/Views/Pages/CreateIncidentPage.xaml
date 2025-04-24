@@ -10,7 +10,10 @@
     <ScrollView>
         <VerticalStackLayout Spacing="15" Padding="20">
 
-            <VerticalStackLayout Padding="20" Spacing="10">
+            <ActivityIndicator IsRunning="{Binding IsLoadingSensors}" 
+                   IsVisible="{Binding IsLoadingSensors}"/>
+
+            <VerticalStackLayout Padding="20" Spacing="10" IsVisible="{Binding IsLoadingSensors, Converter={StaticResource InverseBoolConverter}}">
                 <Label Text="Incident Type" />
                 <Picker ItemsSource="{Binding TypeOptions}"
                 SelectedItem="{Binding SelectedType}" />

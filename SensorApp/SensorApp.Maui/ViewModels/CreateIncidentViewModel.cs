@@ -25,6 +25,8 @@ public partial class CreateIncidentViewModel : BaseViewModel
     public List<string> TypeOptions { get; } = ["Max threshold breach", "Min threshold breach", "Sensor unresponsive"];
     public List<string> PriorityOptions { get; } = ["High", "Medium", "Low"];
     public ObservableCollection<SensorModel> Sensors { get; } = new();
+    [ObservableProperty]
+    private bool isLoadingSensors;
 
     public CreateIncidentViewModel(IIncidentApiService incidentService, SensorApiService sensorService, ITokenProvider tokenProvider)
     {
@@ -39,15 +41,29 @@ public partial class CreateIncidentViewModel : BaseViewModel
     }
     private async Task LoadSensorsAsync()
     {
-        var token = await _tokenProvider.GetTokenAsync();
-        var sensors = await _sensorService.GetSensorsAsync(token);
-        Sensors.Clear();
-        foreach (var s in sensors)
+        isLoadingSensors = true;
+
+        try
         {
-            Sensors.Add(s);
+            var token = await _tokenProvider.GetTokenAsync();
+            var sensors = await _sensorService.GetSensorsAsync(token);
+            Sensors.Clear();
+            foreach (var s in sensors)
+            {
+                Sensors.Add(s);
+            }
+
+            SelectedSensor = Sensors.FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to load sensors: {ex.Message}");
+        }
+        finally
+        {
+            IsLoadingSensors = false;
         }
 
-        SelectedSensor = Sensors.FirstOrDefault();
     }
     partial void OnSelectedSensorChanged(SensorModel value)
     {

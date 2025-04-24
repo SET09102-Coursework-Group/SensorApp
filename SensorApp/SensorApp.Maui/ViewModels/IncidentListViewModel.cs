@@ -30,6 +30,7 @@ public partial class IncidentListViewModel(IIncidentApiService incidentService, 
             }
 
             var list = await _incidentService.GetAllIncidentsAsync(token);
+            incidents.Clear();
             foreach (var incident in list)
             {
                 incidents.Add(incident);

@@ -15,6 +15,7 @@
 
             <utils:EnumDisplayNameConverter x:Key="EnumDisplayName" />
             <utils:IncidentDisplayNameConverter x:Key="IncidentLabelConverter" />
+            <utils:InverseBoolConverter x:Key="InverseBoolConverter" />
 
         </ResourceDictionary>
     </Application.Resources>
