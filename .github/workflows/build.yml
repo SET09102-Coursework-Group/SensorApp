@@ -9,8 +9,7 @@ env:
   DOTNET_VERSION: 8.0.x
   SLN_PATH: ${{ vars.SLN_PATH }}
   MAUI_PROJECT: ${{ vars.MAUI_PROJECT }}
-  UNIT_TEST_PROJ: ${{ vars.UNIT_TEST_PROJ }}
-  INTEGRATION_TEST_PROJ: ${{ vars.INTEGRATION_TEST_PROJ }}
+  TEST_PROJ: ${{ vars.TEST_PROJ }}
 
 jobs:
   build:
@@ -54,13 +53,16 @@ jobs:
     needs: build
 
     steps:
+    - name: Checkout code         
+      uses: actions/checkout@v4
+
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
         name: build-output
 
     - name: Run unit tests
-      run: dotnet test ${{ env.UNIT_TEST_PROJ }} --configuration Release --no-build --logger trx
+      run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
 
   integration-tests:
     runs-on: windows-latest
@@ -78,4 +80,4 @@ jobs:
         name: build-output
 
     - name: Run integration tests
-      run: dotnet test ${{ env.INTEGRATION_TEST_PROJ }} --configuration Release --no-build --logger trx
+      run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
