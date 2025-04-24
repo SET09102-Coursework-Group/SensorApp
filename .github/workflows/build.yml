@@ -1,5 +1,5 @@
 name: SensorApp - Build, Unit & Integration Tests
-  
+
 on:
   pull_request:
   push:
@@ -7,9 +7,9 @@ on:
 
 env:
   DOTNET_VERSION: 8.0.x
-  SLN_PATH: ${{ vars.SLN_PATH }}
-  MAUI_PROJECT: ${{ vars.MAUI_PROJECT }}
-  TEST_PROJ: ${{ vars.TEST_PROJ }}
+  SLN_PATH:      SensorApp/SensorApp.sln
+  MAUI_PROJECT:  SensorApp/SensorApp.Maui/SensorApp.Maui.csproj
+  TEST_PROJ:     SensorApp/SensorApp.Tests/SensorApp.Tests.csproj
 
 jobs:
   build:
@@ -17,52 +17,38 @@ jobs:
     environment: build
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Install MAUI workloads (Android + Windows)
-      run: dotnet workload install maui-android maui-windows
+      - name: Restore & Build solution
+        run: dotnet restore ${{ env.SLN_PATH }} && dotnet build ${{ env.SLN_PATH }} --configuration Release
 
-    - name: Restore
-      run: dotnet restore ${{ env.SLN_PATH }}
-
-    - name: Build Android
-      run: dotnet build ${{ env.MAUI_PROJECT }} -c Release -f net8.0-android
-
-    - name: Build Windows
-      run: dotnet build ${{ env.MAUI_PROJECT }} -c Release -f net8.0-windows10.0.19041.0 -p:RuntimeIdentifier=win-x64
-
-    - name: Build solution
-      run: dotnet build ${{ env.SLN_PATH }} --configuration Release
-
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-output
-        path: |
-          **/bin/Release/**/*.dll
-          **/bin/Release/**/*.exe
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: **/bin/Release/**/*
 
   unit-tests:
     runs-on: windows-latest
     needs: build
 
     steps:
-    - name: Checkout code         
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Download build artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: build-output
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
 
-    - name: Run unit tests
-      run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
+      - name: Run unit tests
+        run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
 
   integration-tests:
     runs-on: windows-latest
@@ -74,10 +60,13 @@ jobs:
       JwtSettings__Key: ${{ secrets.JWT_TEST_KEY }}
 
     steps:
-    - name: Download build artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: build-output
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Run integration tests
-      run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+
+      - name: Run integration tests
+        run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
