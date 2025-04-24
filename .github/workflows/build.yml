@@ -3,13 +3,14 @@ name: SensorApp - Build, Unit & Integration Tests
 on:
   pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
 
 env:
   DOTNET_VERSION: 8.0.x
-  SLN_PATH:      SensorApp/SensorApp.sln
-  MAUI_PROJECT:  SensorApp/SensorApp.Maui/SensorApp.Maui.csproj
-  TEST_PROJ:     SensorApp/SensorApp.Tests/SensorApp.Tests.csproj
+  SLN_PATH: SensorApp/SensorApp.sln
+  MAUI_PROJECT: SensorApp/SensorApp.Maui/SensorApp.Maui.csproj
+  TEST_PROJ: SensorApp/SensorApp.Tests/SensorApp.Tests.csproj
 
 jobs:
   build:
@@ -32,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: **/bin/Release/**/*
+          path: '**/bin/Release/**/*'
 
   unit-tests:
     runs-on: windows-latest
