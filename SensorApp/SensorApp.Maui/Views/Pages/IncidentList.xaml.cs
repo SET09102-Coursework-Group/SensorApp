@@ -18,13 +18,4 @@ public partial class IncidentList : ContentPage
         base.OnAppearing();
         await _viewModel.LoadIncidentsAsync();
     }
-
-    private async void OnIncidentSelected(object sender, SelectionChangedEventArgs e)
-    {
-        if (e.CurrentSelection.FirstOrDefault() is IncidentDto selectedIncident)
-        {
-            await _viewModel.GoToIncidentDetailsAsync(selectedIncident);
-        }
-    }
-
 }
