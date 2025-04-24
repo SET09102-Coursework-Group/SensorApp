@@ -59,20 +59,26 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="appsettings.Development.json" />
-	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
 
-	<ItemGroup>
-	  <EmbeddedResource Include="appsettings.Development.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	</ItemGroup>
+    <EmbeddedResource Include="appsettings.json">
+      <LogicalName>SensorApp.Maui.appsettings.json</LogicalName>
+    </EmbeddedResource>
+
+    <EmbeddedResource Include="appsettings.Development.json"
+                      Condition="Exists('appsettings.Development.json')">
+      <LogicalName>SensorApp.Maui.appsettings.Development.json</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+
 
   <ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
