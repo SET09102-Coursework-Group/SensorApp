@@ -25,7 +25,7 @@ jobs:
       run: dotnet workload restore ${{ vars.SLN_PATH }}
 
     - name: Restore dependencies
-      run: dotnet restore ${{ vars.SLN_PATH }}
+      run: dotnet restore ${{ vars.SLN_PATH }} --runtime win-x64
 
     - name: Build solution
       run: dotnet build ${{ vars.SLN_PATH }} --configuration Release --no-restore
