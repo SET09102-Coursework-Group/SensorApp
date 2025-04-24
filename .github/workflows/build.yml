@@ -1,10 +1,10 @@
 name: SensorApp Build & Tests
 
 on:
-  pull_request:
   push:
     branches:
       - main
+  pull_request:
 
 env:
   DOTNET_VERSION: 8.0.x
@@ -14,6 +14,9 @@ env:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: Testing
+      JwtSettings__Key: ${{ secrets.JWT_TEST_KEY }}
 
     steps:
       - name: Checkout code
@@ -27,32 +30,11 @@ jobs:
       - name: Restore & Build solution
         run: dotnet restore ${{ env.SLN_PATH }} && dotnet build ${{ env.SLN_PATH }} --configuration Release
 
+      - name: Run unit tests
+        run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-output
           path: '**/bin/Release/**/*'
-
-  test:
-    runs-on: windows-latest
-    needs: build
-    env:
-       ASPNETCORE_ENVIRONMENT: Testing
-       JwtSettings__Key: ${{ secrets.JWT_TEST_KEY }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-output
-
-      - name: Run unit tests
-        run: dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build --logger trx
