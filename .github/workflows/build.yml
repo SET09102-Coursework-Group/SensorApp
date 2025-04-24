@@ -63,22 +63,16 @@ jobs:
           echo "$(Resolve-Path ./.sonar/scanner)" >> $env:GITHUB_PATH
 
       - name: Start Sonar analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-            ./.sonar/scanner/dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORG_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml   
+        run: ./.sonar/scanner/dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORG_KEY }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
 
       - name: Build solution
         run: dotnet build ${{ env.SLN_PATH }} --configuration Release
 
       - name: Run unit tests with coverage
-        run: dotnet-coverage collect "dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build" \
-          -f xml -o coverage.xml
+        run: dotnet-coverage collect "dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build" -f xml -o coverage.xml
 
       - name: End Sonar analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        run: ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
