@@ -4,7 +4,8 @@ using SensorApp.Database.Data;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Dtos;
 using SensorApp.Shared.Dtos.Incident;
-using SensorApp.Shared.Enums;
+using SensorApp.Database.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace SensorApp.Api.Endpoints;
 
@@ -47,6 +48,29 @@ public static class IncidentEndpoints
             return Results.Ok(incidents);
 
         });
-        //.RequireAuthorization(policy => policy.RequireRole(UserRole.OperationsManager.ToString()));
+
+        routes.MapPost("/incident/create", async (
+            HttpContext context,
+            SensorDbContext db,
+            CreateIncidentDto dto,
+            UserManager<IdentityUser> userManager) =>
+        {
+                var currentUserId = userManager.GetUserId(context.User);
+
+                var incident = new Incident
+            {
+                Type = dto.Type,
+                Status = dto.Status,
+                Sensor_id = dto.SensorId,
+                Creation_date = DateTime.UtcNow,
+                Priority = dto.Priority,
+                Comments = dto.Comments,
+                Responder_id = currentUserId
+                };
+
+            db.Incidents.Add(incident);
+            await db.SaveChangesAsync();
+            return Results.Ok();
+        });
     }
 }

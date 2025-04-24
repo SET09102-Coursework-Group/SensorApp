@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using SensorApp.Shared.Dtos.Incident;
 using SensorApp.Shared.Services;
 using SensorApp.Shared.Interfaces;
+using SensorApp.Maui.Views.Pages;
 
 namespace SensorApp.Maui.ViewModels;
 
@@ -38,5 +39,11 @@ public partial class IncidentListViewModel(IIncidentApiService incidentService, 
         {
             await Shell.Current.DisplayAlert("Error", "Unable to load incidents.", "OK");
         }
+    }
+
+    [RelayCommand]
+    public async Task GoToCreateIncident()
+    {
+        await Shell.Current.GoToAsync(nameof(CreateIncidentPage));
     }
 }

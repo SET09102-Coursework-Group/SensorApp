@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:SensorApp.Maui.ViewModels"
+    x:Class="SensorApp.Maui.Views.Pages.CreateIncidentPage"
+    x:DataType="viewmodel:CreateIncidentViewModel"
+    Title="Create new incident report">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+
+            <VerticalStackLayout Padding="20" Spacing="10">
+                <Label Text="Incident Type" />
+                <Picker ItemsSource="{Binding TypeOptions}"
+                SelectedItem="{Binding SelectedType}" />
+
+                <Label Text="Sensor" />
+                <Picker ItemsSource="{Binding Sensors}"
+                 SelectedItem="{Binding SelectedSensor}"
+                 ItemDisplayBinding="{Binding Id}" />
+                
+                <Label Text="Priority" />
+                <Picker ItemsSource="{Binding PriorityOptions}"
+                SelectedItem="{Binding SelectedPriority}" />
+
+                <Label Text="Comments" />
+                <Editor Text="{Binding Comments}" AutoSize="TextChanges" />
+
+                <Button Text="Submit" Command="{Binding CreateIncidentCommand}" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

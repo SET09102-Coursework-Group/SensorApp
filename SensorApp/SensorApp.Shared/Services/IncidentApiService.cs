@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
+using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Dtos.Incident;
 using SensorApp.Shared.Helpers;
 using SensorApp.Shared.Interfaces;
@@ -33,5 +34,11 @@ public class IncidentApiService : IIncidentApiService
             Console.WriteLine($"Error fetching incidents: {ex.Message}");
             return new List<IncidentDto>();
         }
+    }
+
+    public async Task<bool> AddIncidentAsync(string token, CreateIncidentDto newIncident)
+    {
+        var request = HttpRequestHelper.Create(HttpMethod.Post, "/incident/create", token, newIncident);
+        return await HttpRequestHelper.SendAsync(_httpClient, request);
     }
 }

@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.Input;
 using SensorApp.Maui.ViewModels;
 
 namespace SensorApp.Maui.Views.Pages;
