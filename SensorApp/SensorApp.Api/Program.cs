@@ -24,7 +24,14 @@ public class Program
         builder.Services.AddSwaggerWithJwt();
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            if (builder.Environment.IsDevelopment())
+            {
+                options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            }
+            else
+            {
+                options.AddPolicy("AllowAll", policy => policy.WithOrigins("https://environemtal-monitoring-random-placeholder.com").AllowAnyHeader().AllowAnyMethod());
+            }
         });
 
         builder.Services.Configure<JwtSettings>(
