@@ -114,17 +114,16 @@ public partial class EditUserViewModel : BaseViewModel
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(Password))
+            var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+            var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
+
+            if (!regex.IsMatch(Password))
             {
-                var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
-                if (!Regex.IsMatch(Password, validationPattern))
-                {
-                    await Shell.Current.DisplayAlert(
-                        "Weak Password",
-                        "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
-                        "OK");
-                    return;
-                }
+                await Shell.Current.DisplayAlert(
+                    "Weak Password",
+                    "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
+                    "OK");
+                return;
             }
 
             var updateDto = new UpdateUserDto

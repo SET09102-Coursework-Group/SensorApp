@@ -70,13 +70,14 @@ public partial class NewUserViewModel : BaseViewModel
 
             //This is taken from StackOverflow: https://stackoverflow.com/questions/48635152/regex-for-default-asp-net-core-identity-password
             var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
-            if (!Regex.IsMatch(Password, validationPattern))
+            var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
+
+            if (!regex.IsMatch(Password))
             {
                 await Shell.Current.DisplayAlert(
                     "Weak Password",
                     "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
                     "OK");
-                IsLoading = false;
                 return;
             }
 
