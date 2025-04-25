@@ -11,7 +11,7 @@ public class CreateIncidentDto
 {
     public required string Type { get; set; }
     public required string Status { get; set; }
-    public required int SensorId { get; set; }
+    public int SensorId { get; set; }
     public required string Priority { get; set; }
     public string? Comments { get; set; }
 }

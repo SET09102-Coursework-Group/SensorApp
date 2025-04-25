@@ -128,7 +128,7 @@ public class IncidentServiceTests
         var service = new IncidentService(context);
 
         //Act
-        var result = await service.ResolveIncidentAsync(404, new IncidentResolutionDto());
+        var result = await service.ResolveIncidentAsync(404, new IncidentResolutionDto { ResolutionComments = "Incident resolved" });
 
         //Assert
         Assert.False(result);

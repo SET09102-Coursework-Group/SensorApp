@@ -13,5 +13,5 @@ namespace SensorApp.Shared.Dtos.Incident;
 public class IncidentResolutionDto
 {
     public required string ResolutionComments { get; set; }
-    public required DateTime ResolutionDate { get; set; }
+    public DateTime ResolutionDate { get; set; }
 }

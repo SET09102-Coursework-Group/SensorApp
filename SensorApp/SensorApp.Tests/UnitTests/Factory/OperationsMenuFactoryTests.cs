@@ -8,7 +8,7 @@ public class OperationsMenuFactoryTests
     public void Operations_CreateMenu_ShouldReturnExpectedMenuItems()
     {
         // Arrange
-        AdminMenuFactory factory = new();
+        OperationsMenuFactory factory = new();
 
         // Act
         var menu = factory.CreateMenu().ToList();
