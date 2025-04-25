@@ -116,8 +116,8 @@ public partial class EditUserViewModel : BaseViewModel
 
             if (!string.IsNullOrWhiteSpace(Password))
             {
-                var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
-                if (!Regex.IsMatch(Password, passwordPattern))
+                var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+                if (!Regex.IsMatch(Password, validationPattern))
                 {
                     await Shell.Current.DisplayAlert(
                         "Weak Password",

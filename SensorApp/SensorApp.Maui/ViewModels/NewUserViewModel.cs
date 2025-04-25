@@ -69,8 +69,8 @@ public partial class NewUserViewModel : BaseViewModel
             }
 
             //This is taken from StackOverflow: https://stackoverflow.com/questions/48635152/regex-for-default-asp-net-core-identity-password
-            var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
-            if (!Regex.IsMatch(Password, passwordPattern))
+            var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+            if (!Regex.IsMatch(Password, validationPattern))
             {
                 await Shell.Current.DisplayAlert(
                     "Weak Password",
