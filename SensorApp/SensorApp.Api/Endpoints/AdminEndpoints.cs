@@ -150,6 +150,11 @@ public static class AdminEndpoints
                 return Results.BadRequest(remove.Errors);
             }
 
+            if (!await roleManager.RoleExistsAsync(newRole))
+            {
+                await roleManager.CreateAsync(new IdentityRole(newRole));
+            }
+
             var add = await userManager.AddToRoleAsync(user, newRole);
             if (!add.Succeeded)
             {
@@ -175,8 +180,11 @@ public static class AdminEndpoints
         var roles = await userManager.GetRolesAsync(user);
         var roleName = roles.FirstOrDefault()?? throw new InvalidOperationException($"User '{user.UserName}' has no role.");
 
-        if (!Enum.TryParse<UserRole>(roleName, out var roleEnum)) throw new ArgumentException($"Invalid role: {roleName}", nameof(roleName));
-
+        if (!Enum.TryParse<UserRole>(roleName, out var roleEnum))
+        {
+            var sanitized = roleName.Replace(" ", "");
+            if (!Enum.TryParse<UserRole>(sanitized, out roleEnum)) throw new ArgumentException($"Invalid role: {roleName}", nameof(roleName));
+        }
         return new UserWithRoleDto
         {
             Id = user.Id,
