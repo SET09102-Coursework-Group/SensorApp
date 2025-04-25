@@ -14,7 +14,7 @@ namespace SensorApp.Maui.ViewModels;
 /// </summary>
 public partial class SensorMapViewModel : BaseViewModel
 {
-    private readonly SensorApiService _sensorService;
+    private readonly ISensorApiService _sensorService;
     private readonly ISensorPinInfoFactory pinInfoFactory;
     private readonly ISensorAnalysisService _sensorAnalysisService;
 
@@ -40,7 +40,7 @@ public partial class SensorMapViewModel : BaseViewModel
     /// <param name="sensorService">The service for retrieving sensor data.</param>
     /// <param name="pinInfoFactory">Factory for creating sensor pin information.</param>
     /// <param name="sensorAnalysisService">Service for analyzing sensor data.</param>
-    public SensorMapViewModel(SensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
+    public SensorMapViewModel(ISensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
     {
         this._sensorService = _sensorService;
         this.pinInfoFactory = pinInfoFactory;

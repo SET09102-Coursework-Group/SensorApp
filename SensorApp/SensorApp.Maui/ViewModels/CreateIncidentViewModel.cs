@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Dtos.Incident;
-using SensorApp.Shared.Services;
 using SensorApp.Shared.Dtos;
 using System.Collections.ObjectModel;
 using SensorApp.Shared.Models;
@@ -12,7 +11,7 @@ namespace SensorApp.Maui.ViewModels;
 public partial class CreateIncidentViewModel : BaseViewModel
 {
     private readonly IIncidentApiService _incidentService;
-    private readonly SensorApiService _sensorService;
+    private readonly ISensorApiService _sensorService;
     private readonly ITokenProvider _tokenProvider;
 
     [ObservableProperty] private SensorModel selectedSensor;
@@ -28,7 +27,7 @@ public partial class CreateIncidentViewModel : BaseViewModel
     [ObservableProperty]
     private bool isLoadingSensors;
 
-    public CreateIncidentViewModel(IIncidentApiService incidentService, SensorApiService sensorService, ITokenProvider tokenProvider)
+    public CreateIncidentViewModel(IIncidentApiService incidentService, ISensorApiService sensorService, ITokenProvider tokenProvider)
     {
         _incidentService = incidentService;
         _sensorService = sensorService;

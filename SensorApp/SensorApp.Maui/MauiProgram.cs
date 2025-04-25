@@ -50,7 +50,7 @@ public static class MauiProgram
         //check this is possible error 
         builder.Services.AddHttpClient<IAuthService, AuthService>().ConfigureApiHttpClient();
 
-        builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<ISensorApiService, SensorApiService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IMeasurandService, MeasurandService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IMeasurementService, MeasurementService>().ConfigureApiHttpClient();
