@@ -45,12 +45,9 @@ public static class MauiProgram
             .UseMauiMaps();
 
 
-        builder.Services.AddHttpClient<IAuthService, AuthService>()
-            .ConfigureApiHttpClient()
-            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-            });
+        //check this is possible error 
+        builder.Services.AddHttpClient<IAuthService, AuthService>().ConfigureApiHttpClient();
+
         builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
 
         builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();

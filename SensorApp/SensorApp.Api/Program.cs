@@ -16,6 +16,8 @@ namespace SensorApp.Api;
 
 public class Program
 {
+    protected Program() { }
+
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +26,14 @@ public class Program
         builder.Services.AddSwaggerWithJwt();
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            if (builder.Environment.IsDevelopment())
+            {
+                options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            }
+            else
+            {
+                options.AddPolicy("AllowAll", policy => policy.WithOrigins("https://environemtal-monitoring-random-placeholder.com").AllowAnyHeader().AllowAnyMethod());
+            }
         });
 
         builder.Services.Configure<JwtSettings>(
@@ -101,6 +110,6 @@ public class Program
         app.MapAdminEndpoints();
         app.MapSensorEndpoints();
 
-        app.Run();
+        await app.RunAsync();
     }
 }

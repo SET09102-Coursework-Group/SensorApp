@@ -116,23 +116,22 @@ public partial class EditUserViewModel : BaseViewModel
 
             if (!string.IsNullOrWhiteSpace(Password))
             {
-                var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
-                if (!Regex.IsMatch(Password, passwordPattern))
-                {
-                    await Shell.Current.DisplayAlert(
-                        "Weak Password",
-                        "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
-                        "OK");
-                    return;
-                }
+                var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+                var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
+
+                await Shell.Current.DisplayAlert(
+                    "Weak Password",
+                    "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
+                    "OK");
+                return;
             }
 
             var updateDto = new UpdateUserDto
             {
-                Username = Username?.Trim(),
-                Email = Email?.Trim(),
+                Username = string.IsNullOrWhiteSpace(Username) ? null : Username.Trim(),
+                Email = string.IsNullOrWhiteSpace(Email) ? null : Email.Trim(),
                 Role = SelectedRole,
-                Password = string.IsNullOrWhiteSpace(Password) ? null : Password?.Trim()
+                Password = string.IsNullOrWhiteSpace(Password) ? null : Password
             };
 
             var success = await _adminService.UpdateUserAsync(token!, UserId, updateDto);

@@ -15,6 +15,13 @@ public partial class LogoutViewModel : BaseViewModel
 
         await Task.Delay(100);
 
-        await Shell.Current.GoToAsync(nameof(LoginPage));
+        if (Shell.Current != null)
+        {
+            await Shell.Current.GoToAsync(nameof(LoginPage));
+        }
+        else
+        {
+            Console.WriteLine("Navigation failed: Shell.Current is null.");
+        }
     }
 }
