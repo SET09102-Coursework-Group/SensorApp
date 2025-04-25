@@ -21,6 +21,12 @@ public static class IncidentEndpoints
             UserManager<IdentityUser> userManager) =>
         {
             var userId = userManager.GetUserId(context.User);
+
+            if (string.IsNullOrEmpty(dto.Type) || string.IsNullOrEmpty(dto.Status) || dto.SensorId <= 0)
+            {
+                return Results.BadRequest("Invalid data. Ensure Type, Status, and SensorId are provided.");
+            }
+
             await service.CreateIncidentAsync(dto, userId);
             return Results.Ok();
         });
