@@ -23,6 +23,11 @@ public class AdminMenuFactory : IMenuFactory
             {
                 Title = "Sensor Map",
                 Route = "SensorMapPage"
+            },
+            new AppMenuItem
+            {
+                Title = "Historical Data",        
+                Route = "HistoricalDataPage" 
             }
         ];
     }

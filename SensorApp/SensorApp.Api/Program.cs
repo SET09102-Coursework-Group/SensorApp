@@ -109,6 +109,8 @@ public class Program
         app.MapAuthEndpoints();
         app.MapAdminEndpoints();
         app.MapSensorEndpoints();
+        app.MapMeasurandEndpoints();
+        app.MapMeasurementEndpoints();
 
         await app.RunAsync();
     }

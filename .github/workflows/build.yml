@@ -65,8 +65,10 @@ jobs:
       - name: Start Sonar analysis
         run: ./.sonar/scanner/dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORG_KEY }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
 
-      - name: Build solution
-        run: dotnet build ${{ env.SLN_PATH }} --configuration Release
+      # WORKAROUND: Disable AOT for Android builds
+      # Microcharts.Maui uses SkiaSharp.Views.Android which causes build errors during Ahead-of-Time (AOT) compilation
+      - name: Build solution (disable AOT to avoid SkiaSharp Android crash)
+        run: dotnet build ${{ env.SLN_PATH }} --configuration Release -p:RunAOTCompilation=false -p:UseInterpreter=true
 
       - name: Run unit tests with coverage
         run: dotnet-coverage collect "dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build" -f xml -o coverage.xml

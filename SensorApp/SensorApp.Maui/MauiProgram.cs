@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microcharts.Maui;
+using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
+using SensorApp.Maui.Helpers.Charting;
 using SensorApp.Maui.Helpers.Map;
 using SensorApp.Maui.Helpers.MenuRoles;
 using SensorApp.Maui.Interfaces;
@@ -42,20 +44,23 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             })
-            .UseMauiMaps();
+            .UseMauiMaps().UseMicrocharts();
 
 
         //check this is possible error 
         builder.Services.AddHttpClient<IAuthService, AuthService>().ConfigureApiHttpClient();
 
         builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
-
         builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<IMeasurandService, MeasurandService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<IMeasurementService, MeasurementService>().ConfigureApiHttpClient();
+
         builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
         builder.Services.AddSingleton<ISensorAnalysisService, SensorAnalysisService>();
         builder.Services.AddSingleton<ISensorPinFactory, SensorPinFactory>();
         builder.Services.AddSingleton<ISensorPinInfoFactory, SensorPinInfoFactory>();
+        builder.Services.AddSingleton<IChartFactory, MicrochartsChartFactory>();
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<LoginPage>();
@@ -63,16 +68,18 @@ public static class MauiProgram
         builder.Services.AddTransient<AdminUsersPage>();
         builder.Services.AddSingleton<LoadingPage>();
         builder.Services.AddTransient<SensorMapPage>();
+        builder.Services.AddTransient<NewUserPage>();
+        builder.Services.AddTransient<EditUserPage>();
+        builder.Services.AddTransient<HistoricalDataPage>();
+
 
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<LogoutViewModel>();
         builder.Services.AddTransient<AdminUsersViewModel>();
-
-        builder.Services.AddTransient<NewUserPage>();
         builder.Services.AddTransient<NewUserViewModel>();
-        builder.Services.AddTransient<EditUserPage>();
         builder.Services.AddTransient<EditUserViewModel>();
+        builder.Services.AddTransient<HistoricalDataViewModel>();
 
         return builder.Build();
     }
