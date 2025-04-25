@@ -114,11 +114,11 @@ public partial class EditUserViewModel : BaseViewModel
                 return;
             }
 
-            var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
-            var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
-
-            if (!regex.IsMatch(Password))
+            if (!string.IsNullOrWhiteSpace(Password))
             {
+                var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+                var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
+
                 await Shell.Current.DisplayAlert(
                     "Weak Password",
                     "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
