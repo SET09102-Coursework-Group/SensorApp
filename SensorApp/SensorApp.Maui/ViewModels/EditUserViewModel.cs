@@ -128,10 +128,10 @@ public partial class EditUserViewModel : BaseViewModel
 
             var updateDto = new UpdateUserDto
             {
-                Username = Username?.Trim(),
-                Email = Email?.Trim(),
+                Username = string.IsNullOrWhiteSpace(Username) ? null : Username.Trim(),
+                Email = string.IsNullOrWhiteSpace(Email) ? null : Email.Trim(),
                 Role = SelectedRole,
-                Password = string.IsNullOrWhiteSpace(Password) ? null : Password?.Trim()
+                Password = string.IsNullOrWhiteSpace(Password) ? null : Password
             };
 
             var success = await _adminService.UpdateUserAsync(token!, UserId, updateDto);
