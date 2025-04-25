@@ -118,8 +118,8 @@ public static class AdminEndpoints
             }
 
             //We need to make sure that the username and email are unique in the database
-            var duplicateUsername = await userManager.Users.AnyAsync(u => u.Id != id && u.NormalizedUserName == dto.Username.ToUpper());
-            var duplicateEmail = await userManager.Users.AnyAsync(u => u.Id != id && u.NormalizedEmail == dto.Email.ToUpper());
+            var duplicateUsername = await userManager.Users.AnyAsync(u => u.Id != id && string.Equals(u.UserName, dto.Username, StringComparison.OrdinalIgnoreCase));
+            var duplicateEmail = await userManager.Users.AnyAsync(u => u.Id != id && string.Equals(u.Email, dto.Email, StringComparison.OrdinalIgnoreCase));
 
             if (duplicateUsername)
             {
