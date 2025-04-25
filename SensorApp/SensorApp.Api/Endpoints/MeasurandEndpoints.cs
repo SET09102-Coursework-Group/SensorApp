@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SensorApp.Database.Data;
+using SensorApp.Shared.Dtos;
 using SensorApp.Shared.Enums;
 
 namespace SensorApp.Api.Endpoints;
@@ -11,11 +12,11 @@ public static class MeasurandEndpoints
         routes.MapGet("/sensors/{sensorId}/measurands", async (SensorDbContext db, int sensorId) =>
         {
             var list = await db.Measurement.Where(m => m.Sensor_id == sensorId)
-                                           .Select(m => new               
+                                           .Select(m => new MeasurandTypesDto
                                            {
-                                              m.Measurement_type.Id,
-                                              m.Measurement_type.Name,
-                                              m.Measurement_type.Unit
+                                               Id = m.Measurement_type.Id,
+                                               Name = m.Measurement_type.Name,
+                                               Unit = m.Measurement_type.Unit
                                            }).Distinct().OrderBy(x => x.Name).ToListAsync();
 
             return Results.Ok(list);
