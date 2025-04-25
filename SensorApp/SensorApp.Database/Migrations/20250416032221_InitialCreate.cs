@@ -53,39 +53,6 @@ namespace SensorApp.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "measurand",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Unit = table.Column<string>(type: "TEXT", nullable: false),
-                    Min_safe_threshold = table.Column<float>(type: "REAL", nullable: true),
-                    Max_safe_threshold = table.Column<float>(type: "REAL", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_measurand", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "sensor",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Type = table.Column<string>(type: "TEXT", nullable: false),
-                    Longitude = table.Column<float>(type: "REAL", nullable: false),
-                    Latitude = table.Column<float>(type: "REAL", nullable: false),
-                    Site_zone = table.Column<string>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_sensor", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -191,42 +158,14 @@ namespace SensorApp.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "measurement",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Value = table.Column<float>(type: "REAL", nullable: false),
-                    Sensor_id = table.Column<int>(type: "INTEGER", nullable: false),
-                    Measurement_type_id = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_measurement", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_measurement_measurand_Measurement_type_id",
-                        column: x => x.Measurement_type_id,
-                        principalTable: "measurand",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_measurement_sensor_Sensor_id",
-                        column: x => x.Sensor_id,
-                        principalTable: "sensor",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
                     { "3d52c1e5-6aec-45de-91c1-e0ebf20464e3", null, "Administrator", "ADMINISTRATOR" },
-                    { "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c", null, "OperationsManager", "OPERATIONSMANAGER" },
-                    { "9b7f193f-bfc4-4eb7-927f-55960e45a82a", null, "EnvironmentalScientist", "ENVIRONMENTALSCIENTIST" }
+                    { "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c", null, "Operations Manager", "OPERATIONS MANAGER" },
+                    { "9b7f193f-bfc4-4eb7-927f-55960e45a82a", null, "Environmental Scientist", "ENVIRONMENTAL SCIENTIST" }
                 });
 
             migrationBuilder.InsertData(
@@ -234,38 +173,9 @@ namespace SensorApp.Database.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "a8f1bace-4ad0-4d69-801e-bf45c00735df", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEB1bj/+IolK12C2Opg+wXhflQrIBixbka3IUEk0vMAMgvBAoB2O8L209HCvil0xm7A==", null, false, "5276d612-5223-4217-bc9c-d7604a3c0ce2", false, "scientist@sensor.com" },
-                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "49e79c5c-2390-4339-ad37-6d54c223d93f", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAEJOhe+qAUDKc5FKlj2rna3pezPKR7WFRVOADlUWUXGAWWQ4w/OrmMRx6f5e978AIfg==", null, false, "cb9ff5ac-4538-4a4e-93b4-f23541fb1c7b", false, "ops@sensor.com" },
-                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "988b0307-b96c-4444-8dee-29e387673bc6", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAEH89Zu2sn/IE4J8EcrXpA9TT434ZqtjobX+unEUSfUVZnTGfS9O/nXQWgFlkFC4z9A==", null, false, "c36b5606-4419-4d1b-9a72-1ee2628ce9c8", false, "admin@sensor.com" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "measurand",
-                columns: new[] { "Id", "Max_safe_threshold", "Min_safe_threshold", "Name", "Unit" },
-                values: new object[,]
-                {
-                    { 1, 50f, 10f, "Nitrogen Dioxide", "ug/m3" },
-                    { 2, 2f, 0.8f, "Sulphur Dioxide", "ug/m3" },
-                    { 3, 20f, 1.5f, "PM2.5 Particulate Matter", "ug/m3" },
-                    { 4, 12f, 2f, "PM10 Particulate Matter", "ug/m3" },
-                    { 5, 25f, 20f, "Nitrate", "mg/l" },
-                    { 6, 1.5f, 1.1f, "Nitrite", "mg/l" },
-                    { 7, 0.07f, 0.02f, "Phosphate", "mg/l" },
-                    { 8, 0.1f, 0f, "Escherichia coli", "cfu/100ml" },
-                    { 9, 40f, -10f, "Temperature", "C" },
-                    { 10, 100f, 80f, "Relative Humidity", "%" },
-                    { 11, 30f, 0f, "Wind Speed", "m/s" },
-                    { 12, null, null, "Wind Direction", "degree" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "sensor",
-                columns: new[] { "Id", "Latitude", "Longitude", "Site_zone", "Status", "Type" },
-                values: new object[,]
-                {
-                    { 1, 55.94476f, -3.183991f, "Central Scotland", "Active", "Air Quality" },
-                    { 2, 55.86111f, -3.253889f, "Glencorse B", "Active", "Water Quality" },
-                    { 3, 55.008785f, -3.5856323f, null, "Active", "Weather" }
+                    { "1243c642-7fdf-4224-9404-02dd6ac95bc5", 0, "db3bd552-6112-47f6-8872-6efad06eb18c", "scientist@sensor.com", true, false, null, "SCIENTIST@SENSOR.COM", "SCIENTIST@SENSOR.COM", "AQAAAAIAAYagAAAAEMWF6Eof6SHzlePtb6IbUm/EL1NgXWMwUqkbWIqr8dJg1sBqhXsVKDGJzjdubDUsNg==", null, false, "3ae8d5a3-478b-430b-b9a9-d54dbe4c6b74", false, "scientist@sensor.com" },
+                    { "99166c0c-7f14-442b-8c57-9141f3ac1681", 0, "5b00f504-39e6-4d1e-8e2f-6a9edfebff46", "ops@sensor.com", true, false, null, "OPS@SENSOR.COM", "OPS@SENSOR.COM", "AQAAAAIAAYagAAAAED2nWQOVWgVcKPo5c79Jn3RtbM3deAj+FDc9/Txe715xDu3frePfB/FAlmyWtgaN8A==", null, false, "19284033-5c81-417b-b58b-7b630d87b498", false, "ops@sensor.com" },
+                    { "fab66dad-9f12-45a0-9fd8-6352336a696d", 0, "37db67b8-4faa-49af-bdf3-4f1f261617cf", "admin@sensor.com", true, false, null, "ADMIN@SENSOR.COM", "ADMIN@SENSOR.COM", "AQAAAAIAAYagAAAAEGoxx4Sj1qyGk/0260HWndmE0yxg2n+/dRzSsR76mZYNd8yFM5hDzvbnAMZI8xDpsQ==", null, false, "2545e6c4-13aa-42f4-8128-d07376fa6281", false, "admin@sensor.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -314,16 +224,6 @@ namespace SensorApp.Database.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_measurement_Measurement_type_id",
-                table: "measurement",
-                column: "Measurement_type_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_measurement_Sensor_id",
-                table: "measurement",
-                column: "Sensor_id");
         }
 
         /// <inheritdoc />
@@ -345,19 +245,10 @@ namespace SensorApp.Database.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "measurement");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "measurand");
-
-            migrationBuilder.DropTable(
-                name: "sensor");
         }
     }
 }
