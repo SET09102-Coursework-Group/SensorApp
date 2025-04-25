@@ -15,11 +15,11 @@ public class SensorDbContext(DbContextOptions<SensorDbContext> options) : Identi
     public DbSet<Measurand> Measurand { get; set; }
     public DbSet<Measurement> Measurement { get; set; }
     public DbSet<Sensor> Sensors { get; set; }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.SeedIdentity();
-        modelBuilder.SeedMeasurands();
-        modelBuilder.SeedSensors();
+        base.OnModelCreating(builder);
+        builder.SeedIdentity();
+        builder.SeedMeasurands();
+        builder.SeedSensors();
     }
 }

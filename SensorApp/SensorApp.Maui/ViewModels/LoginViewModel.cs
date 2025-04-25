@@ -17,10 +17,10 @@ public partial class LoginViewModel(IAuthService authService, IMenuBuilder menuB
 
 
     [ObservableProperty]
-    string username;
+    string username = string.Empty;
 
     [ObservableProperty]
-    string password;
+    string password = string.Empty;
 
     [RelayCommand]
     async Task Login()

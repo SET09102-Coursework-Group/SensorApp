@@ -31,7 +31,7 @@ public class SensorPinInfoFactory : ISensorPinInfoFactory
         var latestMeasurements = _sensorAnalysisService.GetLatestMeasurementsByType(sensor);
 
         var measurementsInfo = string.Join(" | ", latestMeasurements.Values.Select(m =>
-            $"{m.MeasurementType?.Name}: {m.Value} ({m.Timestamp:t})"));
+            $"{m.MeasurementType?.Name}: {m.Value} ({m.Timestamp:HH:mm})"));
 
         // Determine the label for the pin, using an alert if the threshold is breached
         var label = _sensorAnalysisService.IsThresholdBreached(sensor)
