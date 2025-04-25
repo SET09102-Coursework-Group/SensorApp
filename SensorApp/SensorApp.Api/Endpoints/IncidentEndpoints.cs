@@ -6,14 +6,20 @@ namespace SensorApp.Api.Endpoints;
 
 public static class IncidentEndpoints
 {
+    /// <summary>
+    /// Maps the incident-related HTTP endpoints to the application route builder.
+    /// </summary>
+    /// <param name="routes">The route builder for registering HTTP endpoints.</param>
     public static void MapIncidentEndpoints(this IEndpointRouteBuilder routes)
     {
+        // GET endpoint to fetch all incidents
         routes.MapGet("/incidents", async (IIncidentService service) =>
         {
             var incidents = await service.GetAllIncidentsAsync();
             return Results.Ok(incidents);
         });
 
+        // POST endpoint to create a new incident
         routes.MapPost("/incident/create", async (
             HttpContext context,
             CreateIncidentDto dto,
@@ -31,6 +37,7 @@ public static class IncidentEndpoints
             return Results.Ok();
         });
 
+        // PUT endpoint to resolve an existing incident by its ID
         routes.MapPut("/incident/resolve/{id}", async (
             int id,
             IncidentResolutionDto dto,
@@ -40,6 +47,7 @@ public static class IncidentEndpoints
             return result ? Results.Ok() : Results.NotFound();
         });
 
+        // DELETE endpoint to delete an incident by its ID
         routes.MapDelete("/incident/delete/{id}", async (
             int id,
             IIncidentService service) =>

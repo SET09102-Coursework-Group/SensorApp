@@ -5,6 +5,10 @@ using SensorApp.Shared.Interfaces;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for managing the detail of a specific incident. 
+/// This handles the logic for resolving or deleting an incident and updating the UI accordingly.
+/// </summary>
 [QueryProperty(nameof(Incident), "Incident")]
 public partial class IncidentDetailViewModel(IIncidentApiService incidentService, ITokenProvider tokenProvider) : BaseViewModel
 {
@@ -19,15 +23,29 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
 
     public bool IsOpen => Incident?.Status != "Resolved";
 
+    /// <summary>
+    /// Method to load the details of a selected incident into the ViewModel.
+    /// </summary>
+    /// <param name="selectedIncident">The incident to load into the ViewModel.</param>
     public void LoadIncident(IncidentDto selectedIncident)
     {
         Incident = selectedIncident;
     }
+
+    /// <summary>
+    /// This partial method is called whenever the incident property changes.
+    /// It updates the IsOpen property to reflect the current status of the incident.
+    /// </summary>
+    /// <param name="value">The updated incident.</param>
     partial void OnIncidentChanged(IncidentDto value)
     {
         OnPropertyChanged(nameof(IsOpen));
     }
 
+    /// <summary>
+    /// Command for resolving an incident. It calls the API to resolve the incident
+    /// and updates the incident's status to "Resolved".
+    /// </summary>
     [RelayCommand]
     public async Task ResolveIncidentAsync()
     {
@@ -58,6 +76,9 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
         }
     }
 
+    /// <summary>
+    /// Command for deleting an incident. It confirms the deletion and calls the API to delete the incident.
+    /// </summary>
     [RelayCommand]
     public async Task DeleteIncidentAsync()
     {

@@ -8,6 +8,11 @@ using SensorApp.Shared.Models;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for creating a new incident report. 
+/// It handles the logic for loading sensors, setting up incident types and priorities, 
+/// and creating an incident report via the API service.
+/// </summary>
 public partial class CreateIncidentViewModel : BaseViewModel
 {
     private readonly IIncidentApiService _incidentService;
@@ -23,10 +28,18 @@ public partial class CreateIncidentViewModel : BaseViewModel
 
     public List<string> TypeOptions { get; } = ["Max threshold breach", "Min threshold breach", "Sensor unresponsive"];
     public List<string> PriorityOptions { get; } = ["High", "Medium", "Low"];
+
     public ObservableCollection<SensorModel> Sensors { get; } = new();
+
     [ObservableProperty]
     private bool isLoadingSensors;
 
+    /// <summary>
+    /// Constructor that initializes services and loads sensor data asynchronously.
+    /// </summary>
+    /// <param name="incidentService">The service for creating incidents.</param>
+    /// <param name="sensorService">The service for fetching sensors.</param>
+    /// <param name="tokenProvider">The provider for authentication tokens.</param>
     public CreateIncidentViewModel(IIncidentApiService incidentService, ISensorApiService sensorService, ITokenProvider tokenProvider)
     {
         _incidentService = incidentService;
@@ -38,6 +51,11 @@ public partial class CreateIncidentViewModel : BaseViewModel
 
         _ = LoadSensorsAsync();
     }
+
+    /// <summary>
+    /// Asynchronously loads the list of sensors from the sensor service and updates the sensor list.
+    /// Also sets the default selected sensor.
+    /// </summary>
     private async Task LoadSensorsAsync()
     {
         isLoadingSensors = true;
@@ -64,12 +82,21 @@ public partial class CreateIncidentViewModel : BaseViewModel
         }
 
     }
+
+    /// <summary>
+    /// Triggered when the selected sensor changes. Updates the stored selectedSensorID based on the selected sensor.
+    /// </summary>
+    /// <param name="value">The newly selected sensor.</param>
     partial void OnSelectedSensorChanged(SensorModel value)
     {
         if (value != null)
             selectedSensorId = value.Id;
     }
 
+    /// <summary>
+    /// Command method that creates a new incident report by calling the incident service.
+    /// It also handles error display and navigation after creating an incident.
+    /// </summary>
     [RelayCommand]
     public async Task CreateIncidentAsync()
     {
@@ -89,8 +116,6 @@ public partial class CreateIncidentViewModel : BaseViewModel
                 Priority = SelectedPriority,
                 Comments = Comments,
             };
-
-            Console.WriteLine(newIncident.SensorId);
 
             var success = await _incidentService.AddIncidentAsync(token, newIncident);
             if (success)

@@ -9,6 +9,10 @@ using SensorApp.Maui.Views.Pages;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for managing a viewable list of sensor incidents.
+/// Handles loading the list of incidents from the API, navigation to create new incidents and details pages.
+/// </summary>
 public partial class IncidentListViewModel(IIncidentApiService incidentService, ITokenProvider tokenProvider) : BaseViewModel
 {
     private readonly ITokenProvider _tokenProvider = tokenProvider;
@@ -42,12 +46,19 @@ public partial class IncidentListViewModel(IIncidentApiService incidentService, 
         }
     }
 
+    /// <summary>
+    /// Command to navigate to the Create Incident page.
+    /// </summary>
     [RelayCommand]
     public async Task GoToCreateIncident()
     {
         await Shell.Current.GoToAsync(nameof(CreateIncidentPage));
     }
 
+    /// <summary>
+    /// Command to navigate to the Incident Detail page for the selected incident.
+    /// </summary>
+    /// <param name="selected">The incident that was selected for viewing.</param>
     [RelayCommand]
     public async Task GoToIncidentDetailsAsync(IncidentDto selected)
     {

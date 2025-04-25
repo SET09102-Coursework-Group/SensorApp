@@ -10,15 +10,14 @@ namespace SensorApp.Api.Endpoints;
 
 /// <summary>
 /// 
-/// Defines the endpoint to fetch sensor data for the interactive map.
-/// This endpoint is used to retrieve a list of sensors and their measurements.
-/// The endpoint is protected and requires authentication, but is not specific to any one role.
+/// Defines endpoints to fetch sensor data for the interactive map.
+/// The endpoints are protected and require authentication, but are not specific to any one role.
 /// </summary>
 public static class SensorMapEndpoint
 {
 
     /// <summary>
-    /// This method maps the /sensors endpoint to the application.
+    /// This method maps the /sensors endpoints to the application.
     /// <param name="routes">The route builder used to define endpoints in the app.</param>
     /// </summary>
     public static void MapSensorEndpoints(this IEndpointRouteBuilder routes)

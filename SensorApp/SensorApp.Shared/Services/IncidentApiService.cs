@@ -7,6 +7,12 @@ using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 
 namespace SensorApp.Shared.Services;
+
+/// <summary>
+/// Service class for interacting with the Incident API.
+/// This class provides methods to perform CRUD operations related to incidents, 
+/// such as fetching, creating, resolving, and deleting incidents.
+/// </summary>
 public class IncidentApiService : IIncidentApiService
 {
     private readonly HttpClient _httpClient;
