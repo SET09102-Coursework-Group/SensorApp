@@ -185,11 +185,11 @@ public static class AdminEndpoints
     public static async Task<UserWithRoleDto> ToUserWithRoleDtoAsync(IdentityUser user, UserManager<IdentityUser> userManager)
     {
         var roles = await userManager.GetRolesAsync(user);
-        var roleName = roles.FirstOrDefault() ?? throw new Exception("User has no role");
+        var roleName = roles.FirstOrDefault() ?? throw new InvalidOperationException($"User '{user.UserName}' does not have any assigned roles.");
 
         if (!Enum.TryParse<UserRole>(roleName, out var roleEnum))
         {
-            throw new Exception($"Invalid role name: {roleName}");
+            throw new ArgumentException($"Invalid role name: {roleName}", nameof(roleName));
         }
 
         return new UserWithRoleDto
