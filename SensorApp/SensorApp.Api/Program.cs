@@ -11,6 +11,8 @@ using SensorApp.Shared.Models;
 using Serilog;
 using System.Text;
 using SensorApp.Database.Data.CSVHandling;
+using SensorApp.Api.Services.Interfaces;
+using SensorApp.Api.Services;
 
 namespace SensorApp.Api;
 
@@ -86,6 +88,7 @@ public class Program
 
         builder.Services.AddScoped<ITokenService, TokenService>()
                         .AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IIncidentService, IncidentService>();
 
         builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 
