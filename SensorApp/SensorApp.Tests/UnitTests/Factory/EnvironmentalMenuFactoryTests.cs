@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using SensorApp.Shared.Factories;
-using SensorApp.Shared.Interfaces;
 
 namespace SensorApp.Tests.UnitTests.Factory;
 public class EnvironmentalMenuFactoryTests
@@ -9,7 +8,7 @@ public class EnvironmentalMenuFactoryTests
     public void Environmental_CreateMenu_ShouldReturnExpectedMenuItems()
     {
         // Arrange
-        IMenuFactory factory = new EnvironmentalMenuFactory();
+        AdminMenuFactory factory = new AdminMenuFactory();
 
         // Act
         var menu = factory.CreateMenu().ToList();
