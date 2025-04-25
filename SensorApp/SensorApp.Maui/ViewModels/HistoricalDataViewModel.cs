@@ -63,22 +63,20 @@ public partial class HistoricalDataViewModel : BaseViewModel
 
     partial void OnSelectedSensorChanged(SensorModel? value)  => _ = ReloadMeasurandsAsync(value);
 
-    async Task ReloadMeasurandsAsync(SensorModel? sensor)
+    private async Task ReloadMeasurandsAsync(SensorModel? sensor)
     {
         MeasurandOptions.Clear();
         SelectedMeasurand = null;
-        if (sensor == null)
-        {
-            return;
-        }
+        if (sensor == null) return;
 
         var token = await _tokenProvider.GetTokenAsync();
-        var measurandsList = await _measurandService.GetMeasurandsAsync(token!, sensor.Id);
+        if (string.IsNullOrWhiteSpace(token)) return;
+
+        var measurandsList = await _measurandService.GetMeasurandsAsync(token, sensor.Id);
         foreach (var measurands in measurandsList)
-        {
             MeasurandOptions.Add(measurands);
-        }
     }
+
 
     [RelayCommand]
     public async Task LoadAsync()
@@ -88,55 +86,27 @@ public partial class HistoricalDataViewModel : BaseViewModel
 
         try
         {
-            var token = await _tokenProvider.GetTokenAsync();
-            if (string.IsNullOrWhiteSpace(token))
+            var token = await EnsureAuthenticatedAsync();
+            if (token == null) return;
+
+            var data = await LoadMeasurementsAsync(token);
+
+            if (data.Any())
             {
-                await Shell.Current.DisplayAlert("Not Authenticated", "You are not logged in. Please log in to view measurements.", "OK");
-                return;
-            }
-
-            var measurements = await _measurementService.GetMeasurementsAsync(sensorId: SelectedSensor?.Id, measurandId: SelectedMeasurand?.Id, from: From, to: To, token: token);
-
-            MeasurementValues.Clear();
-
-            foreach (var measurement in measurements)
-                MeasurementValues.Add(measurement);
-
-            if (measurements.Any())
-            {
-                MinValue = measurements.Min(m => m.Value);
-                MaxValue = measurements.Max(m => m.Value);
-                AverageValue = (float)measurements.Average(m => m.Value);
-                Count = measurements.Count;
-
-                var entries = measurements.Select(m => new ChartEntry(m.Value)
-                {
-                    Label = m.Timestamp.ToString("dd/MM HH:mm"),
-                    ValueLabel = m.Value.ToString("0.##"),
-                    Color = SKColors.DeepSkyBlue
-                }).ToList();
-
-                MeasurementChart = new LineChart
-                {
-                    Entries = entries,
-                    LineMode = LineMode.Straight,
-                    PointMode = PointMode.Circle,
-                    LineSize = 4,
-                    PointSize = 8
-                };
+                CalculateStats(data);
+                MeasurementChart = CreateChart(data);
             }
             else
             {
-                MinValue = null;
-                MaxValue = null;
-                AverageValue = null;
-                Count = 0;
-                MeasurementChart = null;
+                ClearStatsAndChart();
             }
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"Could not load data: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert(
+                "Error",
+                $"Could not load data: {ex.Message}",
+                "OK");
         }
         finally
         {
@@ -144,19 +114,81 @@ public partial class HistoricalDataViewModel : BaseViewModel
         }
     }
 
-    public async Task LoadLookupListsAsync()
+    private async Task<string?> EnsureAuthenticatedAsync()
     {
         var token = await _tokenProvider.GetTokenAsync();
         if (string.IsNullOrWhiteSpace(token))
         {
-            return;
+            await Shell.Current.DisplayAlert(
+                "Not Authenticated",
+                "You are not logged in. Please log in to view measurements.",
+                "OK");
+            return null;
         }
+        return token;
+    }
+
+    private async Task<IReadOnlyList<MeasurementModel>> LoadMeasurementsAsync(string token)
+    {
+        var list = await _measurementService.GetMeasurementsAsync(
+            sensorId: SelectedSensor?.Id,
+            measurandId: SelectedMeasurand?.Id,
+            from: From,
+            to: To,
+            token: token);
+
+        MeasurementValues.Clear();
+        foreach (var measurements in list)
+            MeasurementValues.Add(measurements);
+
+        return list;
+    }
+
+    private void CalculateStats(IEnumerable<MeasurementModel> data)
+    {
+        MinValue = data.Min(m => m.Value);
+        MaxValue = data.Max(m => m.Value);
+        AverageValue = (float)data.Average(m => m.Value);
+        Count = data.Count();
+    }
+
+    private Chart CreateChart(IEnumerable<MeasurementModel> data)
+    {
+        var entries = data.Select(m => new ChartEntry(m.Value)
+        {
+            Label = m.Timestamp.ToString("dd/MM HH:mm"),
+            ValueLabel = m.Value.ToString("0.##"),
+            Color = SKColors.DeepSkyBlue
+        }).ToList();
+
+        return new LineChart
+        {
+            Entries = entries,
+            LineMode = LineMode.Straight,
+            PointMode = PointMode.Circle,
+            LineSize = 4,
+            PointSize = 8
+        };
+    }
+
+    private void ClearStatsAndChart()
+    {
+        MinValue = null;
+        MaxValue = null;
+        AverageValue = null;
+        Count = 0;
+        MeasurementChart = null;
+    }
+
+    public async Task LoadSensorOptionsAsync()
+    {
+        var token = await _tokenProvider.GetTokenAsync();
+        if (string.IsNullOrWhiteSpace(token)) return;
 
         SensorOptions.Clear();
         var sensors = await _sensorService.GetSensorsAsync(token);
-        foreach (var sensor in sensors)
-        {
-            SensorOptions.Add(sensor);
-        }
+        foreach (var s in sensors)
+            SensorOptions.Add(s);
     }
+
 }
