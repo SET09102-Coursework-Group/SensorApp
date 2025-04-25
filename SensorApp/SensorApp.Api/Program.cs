@@ -108,6 +108,6 @@ public class Program
         app.MapAdminEndpoints();
         app.MapSensorEndpoints();
 
-        app.Run();
+        await app.RunAsync();
     }
 }
