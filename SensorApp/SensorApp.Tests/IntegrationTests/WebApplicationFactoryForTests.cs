@@ -47,7 +47,7 @@ public sealed class WebApplicationFactoryForTests : WebApplicationFactory<Progra
               var sp = services.BuildServiceProvider();
               using var scope = sp.CreateScope();
               var db = scope.ServiceProvider.GetRequiredService<SensorDbContext>();
-              db.Database.Migrate();
+              db.Database.EnsureCreated();
           });
     }
 
