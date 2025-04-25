@@ -1,6 +1,7 @@
 ﻿using Microcharts.Maui;
 using Microsoft.Extensions.Configuration;
 using SensorApp.Maui.Extensions;
+using SensorApp.Maui.Helpers.Charting;
 using SensorApp.Maui.Helpers.Map;
 using SensorApp.Maui.Helpers.MenuRoles;
 using SensorApp.Maui.Interfaces;
@@ -53,6 +54,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISensorAnalysisService, SensorAnalysisService>();
         builder.Services.AddSingleton<ISensorPinFactory, SensorPinFactory>();
         builder.Services.AddSingleton<ISensorPinInfoFactory, SensorPinInfoFactory>();
+        builder.Services.AddSingleton<IChartFactory, MicrochartsChartFactory>();
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<LoginPage>();

@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microcharts;
+using SensorApp.Maui.Interfaces;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
-using SkiaSharp;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
@@ -15,8 +15,9 @@ public partial class HistoricalDataViewModel : BaseViewModel
     readonly ITokenProvider _tokenProvider;
     readonly IMeasurandService _measurandService;
     readonly SensorApiService _sensorService;
+    readonly IChartFactory _chartFactory;
 
-    public HistoricalDataViewModel(IMeasurementService measurementService, ITokenProvider tokenProvider, SensorApiService sensorService, IMeasurandService measurandService)
+    public HistoricalDataViewModel(IMeasurementService measurementService, ITokenProvider tokenProvider, SensorApiService sensorService, IMeasurandService measurandService, IChartFactory chartFactory)
     {
         _measurementService = measurementService;
         _tokenProvider = tokenProvider;
@@ -25,8 +26,13 @@ public partial class HistoricalDataViewModel : BaseViewModel
 
         From = DateTime.Today.AddDays(-7);
         To = DateTime.Today;
+        _chartFactory = chartFactory;
+
+        ChartTypeOptions = new ObservableCollection<ChartType>(Enum.GetValues<ChartType>());
+        SelectedChartType = ChartType.Line;
     }
 
+    
     [ObservableProperty]
     DateTime? from;
 
@@ -42,26 +48,35 @@ public partial class HistoricalDataViewModel : BaseViewModel
     [ObservableProperty]
     bool isLoading;
 
+    [ObservableProperty]
+    float? minValue;
+
+    [ObservableProperty]
+    float? maxValue;
+
+    [ObservableProperty]
+    float? averageValue;
+
+    [ObservableProperty]
+    int count;
+
+    [ObservableProperty] Chart? measurementChart;
     public ObservableCollection<MeasurementModel> MeasurementValues { get; } = [];
+
     public ObservableCollection<SensorModel> SensorOptions { get; } = [];
     public ObservableCollection<MeasurandModel> MeasurandOptions { get; } = [];
 
-    [ObservableProperty] 
-    float? minValue;
+    public enum ChartType { Line, Bar }
 
-    [ObservableProperty] 
-    float? maxValue;
+    [ObservableProperty]
+    ChartType selectedChartType;
+    public ObservableCollection<ChartType> ChartTypeOptions { get; }
 
-    [ObservableProperty] 
-    float? averageValue;
 
-    [ObservableProperty] 
-    int count;
 
-    [ObservableProperty] 
-    Chart? measurementChart;
 
-    partial void OnSelectedSensorChanged(SensorModel? value)  => _ = ReloadMeasurandsAsync(value);
+    partial void OnSelectedSensorChanged(SensorModel? value) => _ = ReloadMeasurandsAsync(value);
+
 
     private async Task ReloadMeasurandsAsync(SensorModel? sensor)
     {
@@ -94,7 +109,7 @@ public partial class HistoricalDataViewModel : BaseViewModel
             if (data.Any())
             {
                 CalculateStats(data);
-                MeasurementChart = CreateChart(data);
+                RefreshChart();
             }
             else
             {
@@ -103,15 +118,36 @@ public partial class HistoricalDataViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(
-                "Error",
-                $"Could not load data: {ex.Message}",
-                "OK");
+            await Shell.Current.DisplayAlert("Error", $"Could not load data: {ex.Message}", "OK");
         }
         finally
         {
             IsLoading = false;
         }
+    }
+
+    partial void OnSelectedChartTypeChanged(ChartType value)
+    {
+        if (MeasurementValues?.Count > 0)
+        {
+            RefreshChart();
+        }
+    }
+
+    void RefreshChart()
+    {
+        if (MeasurementValues == null || MeasurementValues.Count == 0)
+        {
+            MeasurementChart = null;
+            return;
+        }
+
+        MeasurementChart = SelectedChartType switch
+        {
+            ChartType.Bar => _chartFactory.CreateBarChart(MeasurementValues),
+            ChartType.Line => _chartFactory.CreateLineChart(MeasurementValues),
+            _ => null
+        };
     }
 
     private async Task<string?> EnsureAuthenticatedAsync()
@@ -150,25 +186,6 @@ public partial class HistoricalDataViewModel : BaseViewModel
         MaxValue = data.Max(m => m.Value);
         AverageValue = (float)data.Average(m => m.Value);
         Count = data.Count();
-    }
-
-    private Chart CreateChart(IEnumerable<MeasurementModel> data)
-    {
-        var entries = data.Select(m => new ChartEntry(m.Value)
-        {
-            Label = m.Timestamp.ToString("dd/MM HH:mm"),
-            ValueLabel = m.Value.ToString("0.##"),
-            Color = SKColors.DeepSkyBlue
-        }).ToList();
-
-        return new LineChart
-        {
-            Entries = entries,
-            LineMode = LineMode.Straight,
-            PointMode = PointMode.Circle,
-            LineSize = 4,
-            PointSize = 8
-        };
     }
 
     private void ClearStatsAndChart()

@@ -16,7 +16,7 @@ public partial class HistoricalDataPage : ContentPage
 
         if (BindingContext is HistoricalDataViewModel vm)
         {
-            await vm.LoadLookupListsAsync();
+            await vm.LoadSensorOptionsAsync();
             await vm.LoadAsync();
         }
     }
