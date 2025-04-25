@@ -8,7 +8,7 @@ public class EnvironmentalMenuFactoryTests
     public void Environmental_CreateMenu_ShouldReturnExpectedMenuItems()
     {
         // Arrange
-        AdminMenuFactory factory = new AdminMenuFactory();
+        AdminMenuFactory factory = new();
 
         // Act
         var menu = factory.CreateMenu().ToList();

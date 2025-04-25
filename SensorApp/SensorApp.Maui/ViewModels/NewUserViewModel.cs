@@ -22,7 +22,7 @@ public partial class NewUserViewModel : BaseViewModel
     }
 
     [ObservableProperty]
-    private string username;
+    private string? username;
 
     [ObservableProperty]
     private string email;
@@ -46,7 +46,7 @@ public partial class NewUserViewModel : BaseViewModel
             var token = await _tokenProvider.GetTokenAsync();
             if (string.IsNullOrWhiteSpace(token))
             {
-                throw new Exception("No auth token");
+                throw new InvalidOperationException("Authentication token could not be retrieved.");
 
             }
 
