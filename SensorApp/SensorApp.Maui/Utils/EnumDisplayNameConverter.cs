@@ -8,6 +8,8 @@ namespace SensorApp.Maui.Utils;
 
 public class EnumDisplayNameConverter : IValueConverter
 {
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is Enum enumValue)
@@ -21,7 +23,9 @@ public class EnumDisplayNameConverter : IValueConverter
             }
 
             // Fallback to split to pascalcase
-            return Regex.Replace(enumValue.ToString(), "(?<!^)([A-Z])", " $1");
+            var fallbackRegex = new Regex("(?<!^)([A-Z])", RegexOptions.None, RegexTimeout);
+            return fallbackRegex.Replace(enumValue.ToString(), " $1");
+
         }
 
         return value?.ToString() ?? string.Empty;
@@ -40,7 +44,8 @@ public class EnumDisplayNameConverter : IValueConverter
                 }
             }
 
-            var enumName = Regex.Replace(displayName, @"\s+", "");
+            var cleanupRegex = new Regex(@"\s+", RegexOptions.None, RegexTimeout);
+            var enumName = cleanupRegex.Replace(displayName, "");
             return Enum.Parse(targetType, enumName);
         }
 
