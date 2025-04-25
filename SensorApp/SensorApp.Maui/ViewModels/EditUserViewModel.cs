@@ -43,6 +43,10 @@ public partial class EditUserViewModel : BaseViewModel
 
     partial void OnUserIdChanged(string value) => _ = LoadUserAsync();
 
+    /// <summary>
+    /// Loads user details for editing.
+    /// Prevents editing the currently logged-in user's own account.
+    /// </summary>
     private async Task LoadUserAsync()
     {
         if (IsLoading) return;
@@ -87,6 +91,11 @@ public partial class EditUserViewModel : BaseViewModel
         }
     }
 
+
+    /// <summary>
+    /// Saves changes made to the user's details.
+    /// Validates required fields and performs basic email/password checks before sending the update.
+    /// </summary>
     [RelayCommand]
     private async Task SaveChanges()
     {
@@ -158,6 +167,11 @@ public partial class EditUserViewModel : BaseViewModel
         }
     }
 
+    /// <summary>
+    /// Validates and retrieves the current user's authentication token.
+    /// Displays an error if the token is missing or invalid.
+    /// </summary>
+    /// <returns>The valid token string if available; otherwise, null.</returns>
     private async Task<string?> CheckValidTokenAsync()
     {
         var token = await _tokenProvider.GetTokenAsync();
