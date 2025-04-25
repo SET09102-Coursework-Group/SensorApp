@@ -1,0 +1,81 @@
+name: SensorApp Build & Tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+env:
+  DOTNET_VERSION: 8.0.x
+  SLN_PATH: SensorApp/SensorApp.sln
+  TEST_PROJ: SensorApp/SensorApp.Tests/SensorApp.Tests.csproj
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: Testing
+      JwtSettings__Key: ${{ secrets.JWT_TEST_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SLN_PATH }}
+
+      - name: Install .NET coverage tool
+        run: dotnet tool install --global dotnet-coverage
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v4
+        with:
+          path: ./.sonar/scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p .sonar/scanner
+          dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
+          echo "$(Resolve-Path ./.sonar/scanner)" >> $env:GITHUB_PATH
+
+      - name: Start Sonar analysis
+        run: ./.sonar/scanner/dotnet-sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /o:"${{ secrets.SONAR_ORG_KEY }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
+
+      - name: Build solution
+        run: dotnet build ${{ env.SLN_PATH }} --configuration Release
+
+      - name: Run unit tests with coverage
+        run: dotnet-coverage collect "dotnet test ${{ env.TEST_PROJ }} --configuration Release --no-build" -f xml -o coverage.xml
+
+      - name: End Sonar analysis
+        run: ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: '**/bin/Release/**/*'
