@@ -64,6 +64,7 @@ public class IncidentServiceTests
     [Fact]
     public async Task CreateIncidentAsync_AddsIncident()
     {
+        //Arrange
         var context = GetDbContext("CreateIncidentDb");
         var service = new IncidentService(context);
 
@@ -89,6 +90,7 @@ public class IncidentServiceTests
     [Fact]
     public async Task ResolveIncidentAsync_UpdatesIncident()
     {
+        //Arrange
         var context = GetDbContext("ResolveIncidentDb");
         var incident = new Incident
         {
@@ -121,25 +123,31 @@ public class IncidentServiceTests
     [Fact]
     public async Task ResolveIncidentAsync_ReturnsFalse_IfNotFound()
     {
+        //Arrange
         var context = GetDbContext("ResolveNotFoundDb");
         var service = new IncidentService(context);
 
+        //Act
         var result = await service.ResolveIncidentAsync(404, new IncidentResolutionDto());
 
+        //Assert
         Assert.False(result);
     }
 
     [Fact]
     public async Task DeleteIncidentAsync_RemovesIncident()
     {
+        //Arrange
         var context = GetDbContext("DeleteIncidentDb");
         context.Incidents.Add(new Incident { Id = 1, Type = "Max threshold breach", Priority = "Medium", Responder_id = "responderID", Status = "Open" });
         await context.SaveChangesAsync();
 
         var service = new IncidentService(context);
 
+        //Act
         var result = await service.DeleteIncidentAsync(1);
 
+        //Assert
         Assert.True(result);
         Assert.Empty(await context.Incidents.ToListAsync());
     }
@@ -147,11 +155,14 @@ public class IncidentServiceTests
     [Fact]
     public async Task DeleteIncidentAsync_ReturnsFalse_IfNotFound()
     {
+        //Arrange
         var context = GetDbContext("DeleteNotFoundDb");
         var service = new IncidentService(context);
 
+        //Act
         var result = await service.DeleteIncidentAsync(404);
 
+        //Assert
         Assert.False(result);
     }
 }

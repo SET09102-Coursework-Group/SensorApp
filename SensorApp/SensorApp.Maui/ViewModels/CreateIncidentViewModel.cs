@@ -95,14 +95,19 @@ public partial class CreateIncidentViewModel : BaseViewModel
 
             var success = await _incidentService.AddIncidentAsync(token, newIncident);
             if (success)
+            {
                 await Shell.Current.DisplayAlert("Success", "Incident created!", "OK");
                 await Shell.Current.GoToAsync("..");
-        }
-        catch
-        {
+            }
+            else
             {
                 await Shell.Current.DisplayAlert("Error", "Failed to create incident report.", "OK");
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error while creating incident: {ex.Message}");
+            await Shell.Current.DisplayAlert("Error", "Failed to create incident report.", "OK");
         }
     }
 }
