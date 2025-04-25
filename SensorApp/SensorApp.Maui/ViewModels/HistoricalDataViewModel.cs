@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Microcharts;
 using SensorApp.Maui.Interfaces;
+using SensorApp.Maui.Utils;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
@@ -42,8 +43,8 @@ public partial class HistoricalDataViewModel : BaseViewModel
     [ObservableProperty] 
     SensorModel? selectedSensor;
 
-    [ObservableProperty] 
-    MeasurandModel? selectedMeasurand;
+    [ObservableProperty]
+    MeasurandDisplayExtension? selectedMeasurand;
 
     [ObservableProperty]
     bool isLoading;
@@ -64,7 +65,7 @@ public partial class HistoricalDataViewModel : BaseViewModel
     public ObservableCollection<MeasurementModel> MeasurementValues { get; } = [];
 
     public ObservableCollection<SensorModel> SensorOptions { get; } = [];
-    public ObservableCollection<MeasurandModel> MeasurandOptions { get; } = [];
+    public ObservableCollection<MeasurandDisplayExtension> MeasurandOptions { get; } = [];
 
     public enum ChartType { Line, Bar }
 
@@ -88,8 +89,10 @@ public partial class HistoricalDataViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(token)) return;
 
         var measurandsList = await _measurandService.GetMeasurandsAsync(token, sensor.Id);
-        foreach (var measurands in measurandsList)
-            MeasurandOptions.Add(measurands);
+        foreach (var measurand in measurandsList)
+        {
+            MeasurandOptions.Add(new MeasurandDisplayExtension(measurand));
+        }
     }
 
 
@@ -168,7 +171,7 @@ public partial class HistoricalDataViewModel : BaseViewModel
     {
         var list = await _measurementService.GetMeasurementsAsync(
             sensorId: SelectedSensor?.Id,
-            measurandId: SelectedMeasurand?.Id,
+            measurandId: SelectedMeasurand?.Model.Id,
             from: From,
             to: To,
             token: token);
