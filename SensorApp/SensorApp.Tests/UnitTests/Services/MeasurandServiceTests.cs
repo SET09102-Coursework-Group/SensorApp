@@ -5,6 +5,10 @@ using System.Text;
 using System.Text.Json;
 
 namespace SensorApp.Tests.UnitTests.Services;
+/// <summary>
+/// Unit tests for the <see cref="MeasurandService"/> class.
+/// Validates measurement retrieval behavior under different API response scenarios.
+/// </summary>
 public class MeasurandServiceTests
 {
     [Fact]

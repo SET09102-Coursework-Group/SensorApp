@@ -23,8 +23,6 @@ public static class MenuFactoryResolver
             UserRole.EnvironmentalScientist => new EnvironmentalMenuFactory(),
             UserRole.OperationsManager => new OperationsMenuFactory(),
 
-            // TODO: Remaining two roles should be defined here with their factory
-
             _ => throw new NotSupportedException($"Role '{role}' is not supported.")
         };
     }

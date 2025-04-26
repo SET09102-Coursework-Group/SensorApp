@@ -75,10 +75,15 @@ public partial class HistoricalDataViewModel : BaseViewModel
 
 
 
-
+    /// <summary>
+    /// Triggered when the selected sensor changes.
+    /// Reloads the available measurands for the selected sensor.
+    /// </summary>
     partial void OnSelectedSensorChanged(SensorModel? value) => _ = ReloadMeasurandsAsync(value);
 
-
+    /// <summary>
+    /// Reloads measurand options based on the selected sensor.
+    /// </summary>
     private async Task ReloadMeasurandsAsync(SensorModel? sensor)
     {
         MeasurandOptions.Clear();
@@ -95,7 +100,10 @@ public partial class HistoricalDataViewModel : BaseViewModel
         }
     }
 
-
+    /// <summary>
+    /// Loads measurement data for the selected sensor and measurand.
+    /// Updates statistics and chart visualization.
+    /// </summary>
     [RelayCommand]
     public async Task LoadAsync()
     {
@@ -129,6 +137,10 @@ public partial class HistoricalDataViewModel : BaseViewModel
         }
     }
 
+    /// <summary>
+    /// Triggered when the selected chart type changes.
+    /// Refreshes the chart accordingly.
+    /// </summary>
     partial void OnSelectedChartTypeChanged(ChartType value)
     {
         if (MeasurementValues?.Count > 0)
@@ -137,6 +149,9 @@ public partial class HistoricalDataViewModel : BaseViewModel
         }
     }
 
+    /// <summary>
+    /// Refreshes the measurement chart based on the selected chart type.
+    /// </summary>
     void RefreshChart()
     {
         if (MeasurementValues == null || MeasurementValues.Count == 0)
@@ -153,6 +168,10 @@ public partial class HistoricalDataViewModel : BaseViewModel
         };
     }
 
+    /// <summary>
+    /// Ensures the user is authenticated by retrieving a valid token.
+    /// Shows an alert if authentication fails.
+    /// </summary>
     private async Task<string?> EnsureAuthenticatedAsync()
     {
         var token = await _tokenProvider.GetTokenAsync();
@@ -167,6 +186,9 @@ public partial class HistoricalDataViewModel : BaseViewModel
         return token;
     }
 
+    /// <summary>
+    /// Loads measurement data from the server based on current filter criteria.
+    /// </summary>
     private async Task<IReadOnlyList<MeasurementModel>> LoadMeasurementsAsync(string token)
     {
         var list = await _measurementService.GetMeasurementsAsync(
@@ -183,6 +205,9 @@ public partial class HistoricalDataViewModel : BaseViewModel
         return list;
     }
 
+    /// <summary>
+    /// Calculates basic statistics (min, max, average, count) from measurement data.
+    /// </summary>
     private void CalculateStats(IEnumerable<MeasurementModel> data)
     {
         MinValue = data.Min(m => m.Value);
@@ -191,6 +216,9 @@ public partial class HistoricalDataViewModel : BaseViewModel
         Count = data.Count();
     }
 
+    /// <summary>
+    /// Clears calculated statistics and chart when no data is available.
+    /// </summary>
     private void ClearStatsAndChart()
     {
         MinValue = null;
@@ -200,6 +228,9 @@ public partial class HistoricalDataViewModel : BaseViewModel
         MeasurementChart = null;
     }
 
+    /// <summary>
+    /// Loads available sensor options for the user to select from.
+    /// </summary>
     public async Task LoadSensorOptionsAsync()
     {
         var token = await _tokenProvider.GetTokenAsync();

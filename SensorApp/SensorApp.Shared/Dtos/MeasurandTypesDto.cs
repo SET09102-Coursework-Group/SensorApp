@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SensorApp.Shared.Dtos;
 
-namespace SensorApp.Shared.Dtos;
-
+/// <summary>
+/// Data Transfer Object (DTO) representing a type of measurand.
+/// A measurand describes a measurable property for instance, temperature, humidity and its unit.
+/// </summary>
 public class MeasurandTypesDto
 {
     public int Id { get; set; }

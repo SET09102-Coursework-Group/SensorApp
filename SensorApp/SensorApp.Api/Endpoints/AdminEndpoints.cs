@@ -11,6 +11,11 @@ namespace SensorApp.Api.Endpoints;
 /// </summary>
 public static class AdminEndpoints
 {
+    /// <summary>
+    /// Maps the admin endpoints related to user management under the route "/admin/users".
+    /// Only users with the Administrator role can access these endpoints.
+    /// </summary>
+    /// <param name="routes">The endpoint route builder used to map the endpoints.</param>
     public static void MapAdminEndpoints(this IEndpointRouteBuilder routes)
     {
         var admin = routes.MapGroup("/admin/users").RequireAuthorization(policy => policy.RequireRole(UserRole.Administrator.ToString()));
@@ -22,7 +27,9 @@ public static class AdminEndpoints
         admin.MapPut("/{id}", UpdateUser);
     }
 
-
+    /// <summary>
+    /// Retrieves all users from the database along with their assigned roles.
+    /// </summary>
     private static async Task<IResult> GetAllUsers(UserManager<IdentityUser> userManager)
     {
         var users = await userManager.Users.ToListAsync();
@@ -34,6 +41,9 @@ public static class AdminEndpoints
         return Results.Ok(result);
     }
 
+    /// <summary>
+    /// Retrieves a specific user by ID along with their role.
+    /// </summary>
     private static async Task<IResult> GetUserById(string id, UserManager<IdentityUser> userManager)
     {
         var user = await userManager.FindByIdAsync(id);
@@ -44,6 +54,9 @@ public static class AdminEndpoints
         return Results.Ok(await ToUserWithRoleDtoAsync(user, userManager));
     }
 
+    /// <summary>
+    /// Creates a new user with the specified role.
+    /// </summary>
     private static async Task<IResult> CreateUser(CreateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         if (await userManager.FindByEmailAsync(dto.Email) != null)
@@ -81,6 +94,9 @@ public static class AdminEndpoints
         return Results.Created($"/admin/users/{user.Id}", resultDto);
     }
 
+    /// <summary>
+    /// Deletes a user by ID, with a check to prevent users from deleting themselves.
+    /// </summary>
     private static async Task<IResult> DeleteUser(string id, UserManager<IdentityUser> userManager, HttpContext httpContext)
     {
         var currentUserId = userManager.GetUserId(httpContext.User);
@@ -101,6 +117,10 @@ public static class AdminEndpoints
             : Results.BadRequest(deleteResult.Errors);
     }
 
+    /// <summary>
+    /// Updates user information including username, email, role, and optionally password.
+    /// Prevents updating the currently logged-in user's own account.
+    /// </summary>
     private static async Task<IResult> UpdateUser(string id, UpdateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, HttpContext httpContext)
     {
         var currentUserId = userManager.GetUserId(httpContext.User);
@@ -175,6 +195,10 @@ public static class AdminEndpoints
         return Results.NoContent();
     }
 
+    /// <summary>
+    /// Helper method to convert an <see cref="IdentityUser"/> into a <see cref="UserWithRoleDto"/>,
+    /// retrieving and validating the user's assigned role.
+    /// </summary>
     private static async Task<UserWithRoleDto> ToUserWithRoleDtoAsync(IdentityUser user,UserManager<IdentityUser> userManager)
     {
         var roles = await userManager.GetRolesAsync(user);

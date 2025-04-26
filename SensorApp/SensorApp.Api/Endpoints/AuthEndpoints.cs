@@ -11,30 +11,23 @@ namespace SensorApp.Api.Endpoints;
 public static class AuthEndpoints
 {
     /// <summary>
-    /// Maps authentication endpoints to the application's route builder.
+    /// Maps all authentication  endpoint to the API application.
     /// </summary>
-    /// <param name="routes">The route builder used to define endpoints in the app.</param>
-    public static void MapAuthEndpoints(this IEndpointRouteBuilder routes)
+    /// <param name="app">The endpoint route builder used to configure the application's endpoints.</param>
+    /// <returns>The modified <see cref="IEndpointRouteBuilder"/> with authentication endpoints mapped.</returns>
+    public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
-        routes.MapPost("/login", async (LoginDto loginDto, UserManager<IdentityUser> userManager, ITokenService tokenService) =>
+        // Define the /login POST endpoint.
+        // This endpoint accepts login credentials (username and password) and attempts to authenticate the user.
+        app.MapPost("/login", async (LoginDto dto, IAuthService auth) =>
         {
-            var user = await userManager.FindByNameAsync(loginDto.Username);
-            if (user is null || !await userManager.CheckPasswordAsync(user, loginDto.Password))
-            {
-                return Results.Unauthorized();
-            }
+            var result = await auth.AuthenticateAsync(dto);
+            return result is null
+                ? Results.Unauthorized()
+                : Results.Ok(result);
 
-            var roles = await userManager.GetRolesAsync(user);
+        }).AllowAnonymous().WithName("Login").WithTags("Authentication");
 
-            var token = tokenService.GenerateToken(user, roles);
-            var response = new AuthResponseDto
-            {
-                UserId = user.Id,
-                Username = user.UserName!,
-                Token = token
-            };
-
-            return Results.Ok(response);
-        }).AllowAnonymous();
+        return app;
     }
 }

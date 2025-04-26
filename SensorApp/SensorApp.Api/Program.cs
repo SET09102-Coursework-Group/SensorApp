@@ -84,7 +84,8 @@ public class Program
         });
 
 
-        builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<ITokenService, TokenService>()
+                        .AddScoped<IAuthService, AuthService>();
 
         builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 

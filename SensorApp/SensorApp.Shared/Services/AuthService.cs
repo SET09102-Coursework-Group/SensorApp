@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SensorApp.Shared.Dtos;
+﻿using SensorApp.Shared.Dtos;
 using SensorApp.Shared.Interfaces;
 using System.Net.Http.Json;
 
@@ -26,10 +25,10 @@ public class AuthService(HttpClient httpClient) : IAuthService
             response.EnsureSuccessStatusCode();
 
             StatusMessage = "Login Successful";
-            var jsonContent = await response.Content.ReadAsStringAsync();
-            var authResponse = JsonConvert.DeserializeObject<AuthResponseDto>(jsonContent) ?? new AuthResponseDto();
+            var authResponse = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
 
-            return authResponse;
+
+            return authResponse ?? new AuthResponseDto();
         }
         catch (Exception)
         {

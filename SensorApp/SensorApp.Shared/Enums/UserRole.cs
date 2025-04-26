@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace SensorApp.Shared.Enums;
 
+/// <summary>
+/// Defines the different user roles available within the application.
+/// Each role controls access permissions and feature visibility.
+/// </summary>
 public enum UserRole
 {
     [Display(Name = "Administrator")]

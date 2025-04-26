@@ -1,11 +1,15 @@
-﻿using Newtonsoft.Json;
-using SensorApp.Shared.Models;
+﻿using SensorApp.Shared.Models;
 using SensorApp.Shared.Services;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 
 namespace SensorApp.Tests.UnitTests.Services;
 
+/// <summary>
+/// Unit tests for the <see cref="MeasurementService"/> class.
+/// Validates measurement retrieval behavior under different API response scenarios.
+/// </summary>
 public class MeasurementServiceTests
 {
     [Fact]
@@ -18,7 +22,7 @@ public class MeasurementServiceTests
                 new() { Id = 2, Sensor_id = 1, Measurement_type_id = 9, Value = 23.0f, Timestamp = new DateTime(2025, 4, 21), MeasurementType = new MeasurandModel { Id = 9, Name = "Temperature", Unit = "C" } }
             };
 
-        var json = JsonConvert.SerializeObject(mockMeasurements);
+        var json = JsonSerializer.Serialize(mockMeasurements);
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent(json, Encoding.UTF8, "application/json")

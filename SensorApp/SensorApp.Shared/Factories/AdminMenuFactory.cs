@@ -3,12 +3,19 @@ using SensorApp.Shared.Models;
 
 namespace SensorApp.Shared.Factories;
 
+/// <summary>
+/// Factory class responsible for creating the navigation menu items 
+/// that are available to administrative users within the application.
+/// </summary>
 public class AdminMenuFactory : IMenuFactory
 {
     /// <summary>
-    /// Creates a collection of menu items specific to admin users that will appear on the apps side menu
+    /// Creates a predefined collection of menu items specifically for admin users. 
+    /// Each menu item corresponds to a page route in the application  and provides access to administrative and general app functionality.
     /// </summary>
-    /// <returns>A list of <see cref="AppMenuItem"/> representing admin navigation options.</returns>
+    /// <returns>
+    /// A collection of <see cref="AppMenuItem"/> representing navigation options for administrative users.
+    /// </returns>
     public IEnumerable<AppMenuItem> CreateMenu()
     {
     
