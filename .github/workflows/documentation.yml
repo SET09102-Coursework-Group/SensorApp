@@ -40,7 +40,7 @@ jobs:
           sed -i 's|^# FILE_PATTERNS .*|FILE_PATTERNS = *.cs|' Doxyfile
           sed -i 's|^# EXTENSION_MAPPING .*|EXTENSION_MAPPING = cs=C#|' Doxyfile
           sed -i 's|^SOURCE_BROWSER .*|SOURCE_BROWSER = YES|' Doxyfile
-          sed -i 's|^INLINE_SOURCES .*|INLINE_SOURCES = YES|' Doxyfile
+          sed -i 's|^INLINE_SOURCES .*|INLINE_SOURCES = NO|' Doxyfile
 
       - name: Generate Doxygen Documentation
         run: doxygen Doxyfile
