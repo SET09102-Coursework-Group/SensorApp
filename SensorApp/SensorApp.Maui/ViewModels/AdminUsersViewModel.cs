@@ -8,6 +8,9 @@ using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for managing admin users, including loading, creating, editing, and deleting users.
+/// </summary>
 public partial class AdminUsersViewModel(IAdminService adminService, ILogger<AdminUsersViewModel> logger, ITokenProvider tokenProvider) : BaseViewModel
 {
     private readonly IAdminService _adminService = adminService;
@@ -17,6 +20,10 @@ public partial class AdminUsersViewModel(IAdminService adminService, ILogger<Adm
     [ObservableProperty]
     private ObservableCollection<UserWithRoleDto> users = new();
 
+    /// <summary>
+    /// Loads all users from the server and populates the Users collection.
+    /// Checks for a valid token before making the request.
+    /// </summary>
     [RelayCommand]
     public async Task LoadUsersAsync()
     {
@@ -49,12 +56,22 @@ public partial class AdminUsersViewModel(IAdminService adminService, ILogger<Adm
         }
     }
 
+    /// <summary>
+    /// Navigates to the page for creating a new user.
+    /// </summary>
     [RelayCommand]
     public async Task GoToCreateUser()
     {
         await Shell.Current.GoToAsync(nameof(NewUserPage));
     }
 
+
+    /// <summary>
+    /// Deletes a user after confirming with the current admin.
+    /// Validates the token before sending the delete request.
+    /// Reloads the user list upon successful deletion.
+    /// </summary>
+    /// <param name="user">The user to delete.</param>
     [RelayCommand]
     private async Task DeleteUser(UserWithRoleDto user)
     {
@@ -91,10 +108,15 @@ public partial class AdminUsersViewModel(IAdminService adminService, ILogger<Adm
         }
     }
 
+    /// <summary>
+    /// Navigates to the edit page for the selected user.
+    /// Passes the user's ID as a query parameter.
+    /// </summary>
+    /// <param name="user">The user to edit.</param>
+
     [RelayCommand]
     public async Task EditUser(UserWithRoleDto user)
     {
         await Shell.Current.GoToAsync($"{nameof(EditUserPage)}?UserId={user.Id}");
     }
-
 }

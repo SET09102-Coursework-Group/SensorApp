@@ -1,0 +1,93 @@
+<ContentPage
+    x:Class="SensorApp.Maui.Views.Pages.HistoricalDataPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SensorApp.Maui.ViewModels"
+    xmlns:models="clr-namespace:SensorApp.Shared.Models;assembly=SensorApp.Shared"
+    xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+    Title="Historical Data"
+    x:DataType="vm:HistoricalDataViewModel">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+
+            <Label Text="Date Range" FontSize="18" FontAttributes="Bold" Margin="0,0,0,8" />
+            <HorizontalStackLayout Spacing="10">
+                <DatePicker Date="{Binding From}" Format="dd/MM/yyyy" HorizontalOptions="FillAndExpand" />
+                <DatePicker Date="{Binding To}" Format="dd/MM/yyyy" HorizontalOptions="FillAndExpand" />
+            </HorizontalStackLayout>
+
+            <Label Text="Filters" FontSize="18" FontAttributes="Bold" Margin="0,12,0,8" />
+            <VerticalStackLayout Spacing="10">
+                <Picker Title="Select Sensor" ItemsSource="{Binding SensorOptions}"
+                                              SelectedItem="{Binding SelectedSensor}"
+                                              ItemDisplayBinding="{Binding Type}"
+                                              IsEnabled="{Binding IsNotLoading}" HorizontalOptions="FillAndExpand" />
+
+                <Picker Title="Select Measurand" ItemsSource="{Binding MeasurandOptions}"
+                                                 SelectedItem="{Binding SelectedMeasurand}"
+                                                 ItemDisplayBinding="{Binding DisplayName}"
+                                                 IsEnabled="{Binding IsNotLoading}" HorizontalOptions="FillAndExpand">
+                    <Picker.Triggers>
+                        <DataTrigger TargetType="Picker" Binding="{Binding SelectedSensor}" Value="{x:Null}">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Picker.Triggers>
+                </Picker>
+            </VerticalStackLayout>
+
+            <Label Text="Chart Options" FontSize="18" FontAttributes="Bold" Margin="0,12,0,8" />
+            <VerticalStackLayout Spacing="10">
+                <Picker Title="Chart Type" ItemsSource="{Binding ChartTypeOptions}"
+                                           SelectedItem="{Binding SelectedChartType}"
+                                           ItemDisplayBinding="{Binding .}" IsEnabled="{Binding IsNotLoading}" HorizontalOptions="FillAndExpand" />
+
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsNotLoading}" HorizontalOptions="Start" />
+                    <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <Label Text="Statistics" FontSize="18" FontAttributes="Bold" Margin="0,12,0,8" />
+            <VerticalStackLayout Spacing="10">
+                <HorizontalStackLayout Spacing="30">
+                    <Label Text="Min:"   FontAttributes="Bold" />
+                    <Label Text="{Binding MinValue, StringFormat='{0:N2}'}" />
+
+                    <Label Text="Max:"   FontAttributes="Bold" />
+                    <Label Text="{Binding MaxValue, StringFormat='{0:N2}'}" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="30">
+                    <Label Text="Avg:"   FontAttributes="Bold" />
+                    <Label Text="{Binding AverageValue, StringFormat='{0:N2}'}" />
+
+                    <Label Text="Count:" FontAttributes="Bold" />
+                    <Label Text="{Binding Count}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <Label Text="Visualization" FontSize="18" FontAttributes="Bold" Margin="0,12,0,8" />
+            <charts:ChartView Chart="{Binding MeasurementChart}" HeightRequest="250" />
+
+            <Label Text="Raw Data" FontSize="18" FontAttributes="Bold" Margin="0,12,0,8" />
+            <CollectionView ItemsSource="{Binding MeasurementValues}">
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="2*,*">
+                        <Label Text="Timestamp" FontAttributes="Bold" />
+                        <Label Text="Value"     FontAttributes="Bold" Grid.Column="1" />
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MeasurementModel">
+                        <Grid ColumnDefinitions="2*,*">
+                            <Label Text="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
+                            <Label Text="{Binding Value}" Grid.Column="1" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

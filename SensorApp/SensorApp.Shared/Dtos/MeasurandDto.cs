@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SensorApp.Shared.Dtos;
+﻿namespace SensorApp.Shared.Dtos;
 
 /// <summary>
 /// Data Transfer Object (DTO) for representing a measurand.

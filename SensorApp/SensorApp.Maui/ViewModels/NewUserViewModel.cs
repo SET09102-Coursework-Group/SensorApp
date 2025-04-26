@@ -35,6 +35,11 @@ public partial class NewUserViewModel : BaseViewModel
 
     public ObservableCollection<UserRole> Roles { get; } = [.. Enum.GetValues<UserRole>()];
 
+    /// <summary>
+    /// Command to create a new user.
+    /// Validates fields, checks email format and password strength,
+    /// and submits the creation request to the server.
+    /// </summary>
     [RelayCommand]
     public async Task CreateUser()
     {
@@ -47,37 +52,32 @@ public partial class NewUserViewModel : BaseViewModel
             if (string.IsNullOrWhiteSpace(token))
             {
                 throw new InvalidOperationException("Authentication token could not be retrieved.");
-
             }
 
-            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            if (!AreFieldsFilled())
             {
-                await Shell.Current.DisplayAlert("Error while submitting form", "All fields are required.", "OK");
-                IsLoading = false;
+                await DisplayAlertAsync("Error while submitting form", "All fields are required.");
                 return;
             }
 
-            try
+            if (!IsValidEmail(Email))
             {
-                _ = new MailAddress(Email);
-            }
-            catch
-            {
-                await Shell.Current.DisplayAlert("Invalid email format", "Please enter a valid email address.", "OK");
-                IsLoading = false;
+                await DisplayAlertAsync("Invalid email format", "Please enter a valid email address.");
                 return;
             }
 
-            //This is taken from StackOverflow: https://stackoverflow.com/questions/48635152/regex-for-default-asp-net-core-identity-password
-            var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
-            var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
-
-            if (!regex.IsMatch(Password))
+            if (!IsValidPassword(Password))
             {
-                await Shell.Current.DisplayAlert(
+                await DisplayAlertAsync(
                     "Weak Password",
-                    "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
-                    "OK");
+                    "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character."
+                );
+                return;
+            }
+
+            if (!IsValidUsername(Username!))
+            {
+                await DisplayAlertAsync("Invalid Username", "Username must start with a letter.");
                 return;
             }
 
@@ -90,23 +90,87 @@ public partial class NewUserViewModel : BaseViewModel
             };
 
             var success = await _adminService.AddUserAsync(token, dto);
+
             if (success)
             {
-                await Shell.Current.DisplayAlert("Success", "User created!", "OK");
+                await DisplayAlertAsync("Success", "User created!");
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "Failed to create user.", "OK");
+                await DisplayAlertAsync("Error", "Failed to create user.");
             }
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            await DisplayAlertAsync("Error", ex.Message);
         }
         finally
         {
             IsLoading = false;
         }
+    }
+
+    /// <summary>
+    /// Validates if required fields are filled.
+    /// </summary>
+    private bool AreFieldsFilled()
+    {
+        return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
+    }
+
+    /// <summary>
+    /// Validates the email format.
+    /// </summary>
+    /// <param name="email">The email address to validate.</param>
+    /// <returns>True if the email format is valid; otherwise, false.</returns>
+    private bool IsValidEmail(string email)
+    {
+        try
+        {
+            _ = new MailAddress(email);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Validates the password strength.
+    /// </summary>
+    /// <param name="password">The password to validate.</param>
+    /// <returns>True if the password meets strength requirements; otherwise, false.</returns>
+    private bool IsValidPassword(string password)
+    {
+        const string validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
+        var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
+        return regex.IsMatch(password);
+    }
+
+    /// <summary>
+    /// Validates that the username starts with a letter.
+    /// </summary>
+    /// <param name="username">The username to validate.</param>
+    /// <returns>True if valid; otherwise, false.</returns>
+    private bool IsValidUsername(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            return false;
+
+        // Check that the first character is a letter
+        return char.IsLetter(username[0]);
+    }
+
+
+    /// <summary>
+    /// Displays an alert message.
+    /// </summary>
+    /// <param name="title">The title of the alert.</param>
+    /// <param name="message">The message content.</param>
+    private async Task DisplayAlertAsync(string title, string message)
+    {
+        await Shell.Current.DisplayAlert(title, message, "OK");
     }
 }

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using SensorApp.Shared.Dtos.Admin;
+﻿using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
 using SensorApp.Shared.Services;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 
 namespace SensorApp.Tests.UnitTests.Services;
 
@@ -22,7 +22,7 @@ public class AdminServiceTests
             new() { Id = "2", Username = "ops",   Email = "ops@sensor.com",      Role = UserRole.OperationsManager }
         };
 
-        var json = JsonConvert.SerializeObject(mockUsers);
+        var json = JsonSerializer.Serialize(mockUsers);
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent(json, Encoding.UTF8, "application/json")
@@ -196,7 +196,7 @@ public class AdminServiceTests
             Role = UserRole.Administrator
         };
 
-        var json = JsonConvert.SerializeObject(user);
+        var json = JsonSerializer.Serialize(user);
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent(json, Encoding.UTF8, "application/json")

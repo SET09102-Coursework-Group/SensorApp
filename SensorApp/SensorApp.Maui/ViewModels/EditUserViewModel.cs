@@ -43,6 +43,10 @@ public partial class EditUserViewModel : BaseViewModel
 
     partial void OnUserIdChanged(string value) => _ = LoadUserAsync();
 
+    /// <summary>
+    /// Loads user details for editing.
+    /// Prevents editing the currently logged-in user's own account.
+    /// </summary>
     private async Task LoadUserAsync()
     {
         if (IsLoading) return;
@@ -87,6 +91,11 @@ public partial class EditUserViewModel : BaseViewModel
         }
     }
 
+
+    /// <summary>
+    /// Saves changes made to the user's details.
+    /// Validates required fields and performs basic email/password checks before sending the update.
+    /// </summary>
     [RelayCommand]
     private async Task SaveChanges()
     {
@@ -101,6 +110,12 @@ public partial class EditUserViewModel : BaseViewModel
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Email))
             {
                 await Shell.Current.DisplayAlert("Error", "Username and Email fields must be populated.", "OK");
+                return;
+            }
+
+            if (!IsValidUsername(Username))
+            {
+                await Shell.Current.DisplayAlert("Invalid Username", "Username must start with a letter.", "OK");
                 return;
             }
 
@@ -119,11 +134,14 @@ public partial class EditUserViewModel : BaseViewModel
                 var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
                 var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
 
-                await Shell.Current.DisplayAlert(
-                    "Weak Password",
-                    "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
-                    "OK");
-                return;
+                if (!regex.IsMatch(Password))
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Weak Password",
+                        "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
+                        "OK");
+                    return;
+                }
             }
 
             var updateDto = new UpdateUserDto
@@ -158,6 +176,11 @@ public partial class EditUserViewModel : BaseViewModel
         }
     }
 
+    /// <summary>
+    /// Validates and retrieves the current user's authentication token.
+    /// Displays an error if the token is missing or invalid.
+    /// </summary>
+    /// <returns>The valid token string if available; otherwise, null.</returns>
     private async Task<string?> CheckValidTokenAsync()
     {
         var token = await _tokenProvider.GetTokenAsync();
@@ -168,5 +191,18 @@ public partial class EditUserViewModel : BaseViewModel
         }
 
         return token;
+    }
+
+    /// <summary>
+    /// Validates that the username starts with a letter.
+    /// </summary>
+    /// <param name="username">The username to validate.</param>
+    /// <returns>True if valid; otherwise, false.</returns>
+    private bool IsValidUsername(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            return false;
+
+        return char.IsLetter(username[0]);
     }
 }

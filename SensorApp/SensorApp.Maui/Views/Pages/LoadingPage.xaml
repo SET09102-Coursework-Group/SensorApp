@@ -3,10 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SensorApp.Maui.Views.Pages.LoadingPage"
              Title="LoadingPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#A084CA" Offset="0.0" />
+            <GradientStop Color="#8E7AB5" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid>
+        <VerticalStackLayout
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Spacing="24">
+
+            <ActivityIndicator IsRunning="True"
+                               WidthRequest="60"
+                               HeightRequest="60"
+                               Color="White" />
+
+            <Label Text="{Binding LoadingMessage, FallbackValue='Loading…'}"
+                   FontSize="18"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

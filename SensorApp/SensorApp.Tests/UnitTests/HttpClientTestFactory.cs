@@ -4,14 +4,18 @@ using Moq;
 namespace SensorApp.Tests.UnitTests;
 
 /// <summary>
-/// A test utility factory for creating mocked <see cref="HttpClient"/> instances with predefined responses and exceptions, used to simulate API calls in unit tests
-/// Set up following guidance from: https://gingter.org/2018/07/26/how-to-mock-httpclient-in-your-net-c-unit-tests/
+/// A utility factory for creating mocked <see cref="HttpClient"/> instances with predefined responses or exceptions.
+/// Useful for simulating API calls during unit testing without needing a real HTTP server.
+/// Based on guidance from: https://gingter.org/2018/07/26/how-to-mock-httpclient-in-your-net-c-unit-tests/
 /// </summary>
 public static class HttpClientTestFactory
 {
     /// <summary>
-    /// Creates an <see cref="HttpClient"/> that returns the specified HTTP response for any request sent during testing.
+    /// Creates a mocked <see cref="HttpClient"/> that always returns the specified <see cref="HttpResponseMessage"/>.
     /// </summary>
+    /// <param name="response">The HTTP response that should be returned for any request.</param>
+    /// <param name="baseUrl">Optional base URL to set for the created client (default is "https://unit-test.com").</param>
+    /// <returns>A configured <see cref="HttpClient"/> instance ready for testing.</returns>
     public static HttpClient Create(HttpResponseMessage response, string baseUrl = "https://unit-test.com")
     {
         var handlerMock = new Mock<HttpMessageHandler>();
@@ -31,8 +35,12 @@ public static class HttpClientTestFactory
     }
 
     /// <summary>
-    /// Creates an <see cref="HttpClient"/> that throws an exception when a request is sent, used to test a fail request
+    /// Creates a mocked <see cref="HttpClient"/> that throws the specified exception when a request is sent.
+    /// Useful for testing how code handles HTTP request failures.
     /// </summary>
+    /// <param name="ex">The exception to throw when a request is made.</param>
+    /// <param name="baseUrl">Optional base URL to set for the created client (default is "https://unit-test.com").</param>
+    /// <returns>A configured <see cref="HttpClient"/> instance that throws on use.</returns>
     public static HttpClient CreateWithException(Exception ex, string baseUrl = "https://unit-test.com")
     {
         var handlerMock = new Mock<HttpMessageHandler>();
@@ -44,6 +52,7 @@ public static class HttpClientTestFactory
                 ItExpr.IsAny<CancellationToken>()
             )
             .ThrowsAsync(ex);
+
 
         return new HttpClient(handlerMock.Object)
         {

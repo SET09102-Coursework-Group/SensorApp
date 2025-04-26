@@ -7,13 +7,16 @@
 
     <Application.Resources>
         <ResourceDictionary>
-
+    
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <utils:EnumDisplayNameConverter x:Key="EnumDisplayName" />
+            <utils:IncidentDisplayNameConverter x:Key="IncidentLabelConverter" />
+            <utils:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <utils:NullToPlaceholderConverter x:Key="NullToPlaceholderConverter" />
 
         </ResourceDictionary>
     </Application.Resources>
