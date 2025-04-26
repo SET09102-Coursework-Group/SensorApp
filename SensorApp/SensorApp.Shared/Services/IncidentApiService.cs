@@ -29,7 +29,7 @@ public class IncidentApiService : IIncidentApiService
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.GetAsync("/incidents");
+            var response = await _httpClient.GetAsync("/incident");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
 

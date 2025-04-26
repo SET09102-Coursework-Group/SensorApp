@@ -24,7 +24,7 @@ namespace SensorApp.Tests.IntegrationTests
         {
             //Arrange
             var token = await _tokenProvider.GetOpsTokenAsync();
-            var request = TestHelpers.CreateAuthorizedRequest("/incidents", token);
+            var request = TestHelpers.CreateAuthorizedRequest("/incident", token);
 
             // Act
             var response = await _client.SendAsync(request);
@@ -40,7 +40,7 @@ namespace SensorApp.Tests.IntegrationTests
         public async Task GetIncidents_ReturnsUnauthorized_WhenNotAuthenticated()
         {
             // Arrange
-            var request = TestHelpers.CreateAuthorizedRequest("/incidents", "");
+            var request = TestHelpers.CreateAuthorizedRequest("/incident", "");
 
             // Act
             var response = await _client.SendAsync(request);
