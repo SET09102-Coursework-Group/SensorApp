@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['name_0',['Name',['../class_sensor_app_1_1_database_1_1_models_1_1_measurand.html#ad0b2f7b4d5b6a48501eb169309fc3c70',1,'SensorApp.Database.Models.Measurand.Name'],['../class_sensor_app_1_1_shared_1_1_dtos_1_1_measurand_dto.html#ad2e66bb35b618259c0ba16266f89b59d',1,'SensorApp.Shared.Dtos.MeasurandDto.Name'],['../class_sensor_app_1_1_shared_1_1_dtos_1_1_measurand_types_dto.html#ab228313d1df7053f0c25af672f18f621',1,'SensorApp.Shared.Dtos.MeasurandTypesDto.Name'],['../class_sensor_app_1_1_shared_1_1_models_1_1_measurand_model.html#a1311057e77e70db9877b419ac219072e',1,'SensorApp.Shared.Models.MeasurandModel.Name']]],
+  ['nitrate_1',['Nitrate',['../class_sensor_app_1_1_database_1_1_data_1_1_c_s_v_handling_1_1_models_1_1_water_quality_measurement.html#a324678c294c8f8b1b63a1e081bcddf1b',1,'SensorApp::Database::Data::CSVHandling::Models::WaterQualityMeasurement']]],
+  ['nitrite_2',['Nitrite',['../class_sensor_app_1_1_database_1_1_data_1_1_c_s_v_handling_1_1_models_1_1_water_quality_measurement.html#a8041b8ff3f4b4c81dc4a09e0adcf50db',1,'SensorApp::Database::Data::CSVHandling::Models::WaterQualityMeasurement']]],
+  ['nitrogendioxide_3',['NitrogenDioxide',['../class_sensor_app_1_1_database_1_1_data_1_1_c_s_v_handling_1_1_models_1_1_air_quality_measurement.html#a2191f8f151014ffd48a7cc2c8c85c2f9',1,'SensorApp::Database::Data::CSVHandling::Models::AirQualityMeasurement']]]
+];

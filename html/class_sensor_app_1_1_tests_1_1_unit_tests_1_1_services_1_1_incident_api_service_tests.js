@@ -1,0 +1,12 @@
+var class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests =
+[
+    [ "AddIncidentAsync_ReturnsFalse_WhenFailedToAddIncident", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#abfae6f0818b20bcfc19c7a704f7e3c90", null ],
+    [ "AddIncidentAsync_ReturnsTrue_WhenIncidentAddedSuccessfully", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#a3019e45f639a64e9a3197ee245a6ce75", null ],
+    [ "DeleteIncidentAsync_ReturnsFalse_WhenFailedToDeleteIncident", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#aeb211d1e68c03d37f2c4f67228164cac", null ],
+    [ "DeleteIncidentAsync_ReturnsTrue_WhenIncidentDeletedSuccessfully", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#a5e536880a2968bcb0c0ace80af39cef1", null ],
+    [ "GetAllIncidentsAsync_ReturnsEmptyList_OnError", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#aa45768605ed2a2b0586d045b843ad95f", null ],
+    [ "GetAllIncidentsAsync_ReturnsEmptyList_WhenUnauthorized_Following401Response", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#aacc294dc0ba71de0ebe66db3883de377", null ],
+    [ "GetAllIncidentsAsync_ReturnsListOfIncidents_WhenSuccessful", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#a3ccd60c41365ed29b3071af04fa4ba05", null ],
+    [ "ResolveIncidentAsync_ReturnsFalse_WhenFailedToResolveIncident", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#a1a14b29cedbeda64773f0d2170a5e24e", null ],
+    [ "ResolveIncidentAsync_ReturnsTrue_WhenIncidentResolvedSuccessfully", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_incident_api_service_tests.html#a01eccc590374a3b7f2e5a03c952127e1", null ]
+];

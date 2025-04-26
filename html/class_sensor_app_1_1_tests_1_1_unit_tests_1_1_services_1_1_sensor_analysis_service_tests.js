@@ -1,0 +1,9 @@
+var class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_analysis_service_tests =
+[
+    [ "GetLatestMeasurementsByType_HandlesManyMeasurementTypes", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_analysis_service_tests.html#a3cb72c2d0ef203f49b35c2eff78b3264", null ],
+    [ "GetLatestMeasurementsByType_ReturnsEmptyDictionary_WhenNoMeasurements", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_analysis_service_tests.html#aea3db39f087214619c6beddd271d6f61", null ],
+    [ "GetLatestMeasurementsByType_ReturnsLatestMeasurementsByType", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_analysis_service_tests.html#a1b36843805e876e70608cdde2bf4f76b", null ],
+    [ "IsThresholdBreached_ReturnsFalse_WhenAllMeasurementsAreSafe", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_analysis_service_tests.html#a48cc159027df1c6ca661e7a35b84f8aa", null ],
+    [ "IsThresholdBreached_ReturnsFalse_WhenNoMeasurements", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_analysis_service_tests.html#a8efcb5b9e01028e58db1ed77b64808fc", null ],
+    [ "IsThresholdBreached_ReturnsTrue_WhenMeasurementExceedsThreshold", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_analysis_service_tests.html#a12ef9b76c9d11cd9bbd2416645bc7fc1", null ]
+];

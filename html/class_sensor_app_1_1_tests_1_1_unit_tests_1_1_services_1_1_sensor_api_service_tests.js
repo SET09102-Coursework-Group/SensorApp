@@ -1,0 +1,6 @@
+var class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_api_service_tests =
+[
+    [ "GetSensorsAsync_ReturnsEmptyList_OnError", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_api_service_tests.html#ad6c5543baafed5b069f204ecea7a9489", null ],
+    [ "GetSensorsAsync_ReturnsEmptyList_WhenUnauthorized_Following401Response", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_api_service_tests.html#ae02e7ef89eac1a95dfb39e02ee9580ab", null ],
+    [ "HappyPath_GetSensorsAsync_ReturnsListOfSensors_WhenSuccessful", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_services_1_1_sensor_api_service_tests.html#af24473118944826b0e226ca14dd8afa9", null ]
+];

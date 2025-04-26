@@ -1,0 +1,6 @@
+var class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_create_users_endpoint =
+[
+    [ "AdminCreateUsersEndpoint", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_create_users_endpoint.html#a9c3c8404097c54c7c4cdbd1c3b33f8ce", null ],
+    [ "Admin_CannotCreateADuplicateUser_ReturnsConflict", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_create_users_endpoint.html#a9e31101cb14acf9750cf121236b2f75a", null ],
+    [ "Admin_CreatesNewUser_ReturnsSuccess", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_create_users_endpoint.html#aeb65740feb8e0c3fb2d221ef29520f4e", null ]
+];

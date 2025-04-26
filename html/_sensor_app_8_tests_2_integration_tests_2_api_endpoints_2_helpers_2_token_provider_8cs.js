@@ -1,0 +1,4 @@
+var _sensor_app_8_tests_2_integration_tests_2_api_endpoints_2_helpers_2_token_provider_8cs =
+[
+    [ "SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers.TokenProvider", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_helpers_1_1_token_provider.html", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_helpers_1_1_token_provider" ]
+];

@@ -1,0 +1,5 @@
+var namespace_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_helpers =
+[
+    [ "TestUserBuilder", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_helpers_1_1_test_user_builder.html", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_helpers_1_1_test_user_builder" ],
+    [ "TokenProvider", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_helpers_1_1_token_provider.html", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_helpers_1_1_token_provider" ]
+];

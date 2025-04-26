@@ -1,0 +1,4 @@
+var _admin_create_users_endpoint_8cs =
+[
+    [ "SensorApp.Tests.IntegrationTests.ApiEndpoints.AdminEndpoints.AdminCreateUsersEndpoint", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_create_users_endpoint.html", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_create_users_endpoint" ]
+];
