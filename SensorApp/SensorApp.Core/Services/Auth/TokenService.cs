@@ -16,30 +16,29 @@ public class TokenService(IOptions<JwtSettings> options) : ITokenService
 {
     private readonly JwtSettings _jwtSettings = options.Value;
 
+    /// <summary>
+    /// Generates a signed JWT token for an authenticated user.
+    /// The token includes the user's ID, email address, and all assigned role claims.
+    /// </summary>
+    /// <param name="user">The authenticated <see cref="IdentityUser"/> object.</param>
+    /// <param name="roles">A list of roles associated with the user.</param>
+    /// <returns>A signed JWT token string containing the user's claims.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the user is null.</exception>
     public string GenerateToken(IdentityUser user, IList<string> roles)
     {
-        return user == null
-            ? throw new ArgumentNullException(nameof(user))
-            : GenerateToken(user.Id, user.Email ?? string.Empty, roles);
-    }
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
 
-    /// <summary>
-    /// This method builds the JWT token using provided user info and roles
-    /// </summary>
-    /// <param name="userId">The user's unique id.</param>
-    /// <param name="email">The user's email address through email claim</param>
-    /// <param name="roles">List of roles to include in the token.</param>
-    /// <returns>A JWT token string signed with the configured secret key.</returns>
-    private string GenerateToken(string userId, string email, IList<string> roles)
-    {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var tokenClaims = new List<Claim>
         {
-            new (JwtRegisteredClaimNames.Sub, userId),
+            new (JwtRegisteredClaimNames.Sub, user.Id),
             new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new (ClaimTypes.Email, email),
+            new (ClaimTypes.Email, user.Email ?? string.Empty),
         };
 
         tokenClaims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
