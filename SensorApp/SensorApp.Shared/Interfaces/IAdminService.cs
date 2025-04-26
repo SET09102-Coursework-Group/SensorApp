@@ -2,6 +2,9 @@
 
 namespace SensorApp.Shared.Interfaces;
 
+/// <summary>
+/// Interface defining administrative operations related to user management, such as creating, retrieving, updating, and deleting users.
+/// </summary>
 public interface IAdminService
 {
     Task<UserWithRoleDto?> GetUserByIdAsync(string token, string userId);
