@@ -6,28 +6,44 @@
              x:DataType ="viewmodel:LoginViewModel"
              Shell.NavBarIsVisible="False"
              Title="Login">
-    
+
     <VerticalStackLayout
-        Spacing="25" 
-        Padding="30,0" 
-        VerticalOptions="Center">
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        Padding="30"
+        Spacing="32"
+        WidthRequest="360">
 
+        <Label Text="Welcome to the Sensor App!" 
+               FontSize="32"
+               FontAttributes="Bold"
+               TextColor="Gray"
+               HorizontalTextAlignment="Center"/>
 
-        <VerticalStackLayout Spacing="5">
-            <Label Text="Welcome!" FontSize="28" TextColor="Gray" HorizontalTextAlignment="Center" />
-            <Label Text="Login to your account" FontSize="18" TextColor="Gray" 
-                   HorizontalTextAlignment="Center" />
-        </VerticalStackLayout>
+        <Label Text="Sign in to continue" 
+               FontSize="18" 
+               TextColor="Gray" 
+               HorizontalTextAlignment="Center"/>
 
-        <StackLayout Orientation="Horizontal">
-            <Entry x:Name="Username" Placeholder="Enter Username" Text="{Binding Username}" />
-        </StackLayout>
+        <Entry x:Name="UsernameEntry"
+               Placeholder="Username"
+               Text="{Binding Username}"
+               Keyboard="Email"
+               ReturnType="Next"
+               HorizontalOptions="FillAndExpand"/>
 
-        <StackLayout Orientation="Horizontal">
-            <Entry x:Name="Password" Placeholder="Enter Password" IsPassword="True" Text="{Binding Password}" />
-        </StackLayout>
+        <Entry x:Name="PasswordEntry" 
+               Placeholder="Password" 
+               IsPassword="True" 
+               Text="{Binding Password}"
+               ReturnType="Done"
+               HorizontalOptions="FillAndExpand"/>
 
-        <Button Text="Sign In" WidthRequest="100" CornerRadius="20" HorizontalOptions="Center" 
-                Command="{Binding LoginCommand}" />
+        <Button Text="Sign In"
+                Command="{Binding LoginCommand}"
+                CornerRadius="24"
+                HeightRequest="48"
+                HorizontalOptions="FillAndExpand"
+                StyleClass="PrimaryButton"/>
     </VerticalStackLayout>
 </ContentPage>
