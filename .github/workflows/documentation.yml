@@ -39,6 +39,8 @@ jobs:
           sed -i 's|^# OPTIMIZE_OUTPUT_FOR_CSHARP .*|OPTIMIZE_OUTPUT_FOR_CSHARP = YES|' Doxyfile
           sed -i 's|^# FILE_PATTERNS .*|FILE_PATTERNS = *.cs|' Doxyfile
           sed -i 's|^# EXTENSION_MAPPING .*|EXTENSION_MAPPING = cs=C#|' Doxyfile
+          sed -i 's|^SOURCE_BROWSER .*|SOURCE_BROWSER = YES|' Doxygen Doxyfile
+          sed -i 's|^INLINE_SOURCES .*|INLINE_SOURCES = YES|' Doxyfile
 
       - name: Generate Doxygen Documentation
         run: doxygen Doxyfile
