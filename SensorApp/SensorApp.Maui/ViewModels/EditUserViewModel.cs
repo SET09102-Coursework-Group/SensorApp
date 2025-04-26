@@ -113,6 +113,12 @@ public partial class EditUserViewModel : BaseViewModel
                 return;
             }
 
+            if (!IsValidUsername(Username))
+            {
+                await Shell.Current.DisplayAlert("Invalid Username", "Username must start with a letter.", "OK");
+                return;
+            }
+
             try
             {
                 _ = new MailAddress(Email);
@@ -128,11 +134,14 @@ public partial class EditUserViewModel : BaseViewModel
                 var validationPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$";
                 var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
 
-                await Shell.Current.DisplayAlert(
-                    "Weak Password",
-                    "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
-                    "OK");
-                return;
+                if (!regex.IsMatch(Password))
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Weak Password",
+                        "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
+                        "OK");
+                    return;
+                }
             }
 
             var updateDto = new UpdateUserDto
@@ -182,5 +191,18 @@ public partial class EditUserViewModel : BaseViewModel
         }
 
         return token;
+    }
+
+    /// <summary>
+    /// Validates that the username starts with a letter.
+    /// </summary>
+    /// <param name="username">The username to validate.</param>
+    /// <returns>True if valid; otherwise, false.</returns>
+    private bool IsValidUsername(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            return false;
+
+        return char.IsLetter(username[0]);
     }
 }

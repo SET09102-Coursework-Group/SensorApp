@@ -125,7 +125,6 @@ public partial class HistoricalDataViewModel : BaseViewModel
             else
             {
                 ClearStatsAndChart();
-                await Shell.Current.DisplayAlert("No Data", "No measurements were found for the selected sensor, measurand, and date range.", "OK");
             }
         }
         catch (Exception ex)

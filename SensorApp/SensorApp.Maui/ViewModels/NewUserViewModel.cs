@@ -75,6 +75,12 @@ public partial class NewUserViewModel : BaseViewModel
                 return;
             }
 
+            if (!IsValidUsername(Username!))
+            {
+                await DisplayAlertAsync("Invalid Username", "Username must start with a letter.");
+                return;
+            }
+
             var dto = new CreateUserDto
             {
                 Username = Username,
@@ -142,6 +148,21 @@ public partial class NewUserViewModel : BaseViewModel
         var regex = new Regex(validationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
         return regex.IsMatch(password);
     }
+
+    /// <summary>
+    /// Validates that the username starts with a letter.
+    /// </summary>
+    /// <param name="username">The username to validate.</param>
+    /// <returns>True if valid; otherwise, false.</returns>
+    private bool IsValidUsername(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            return false;
+
+        // Check that the first character is a letter
+        return char.IsLetter(username[0]);
+    }
+
 
     /// <summary>
     /// Displays an alert message.
