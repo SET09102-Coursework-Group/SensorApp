@@ -1,0 +1,4 @@
+var class_sensor_app_1_1_database_1_1_data_1_1_c_s_v_handling_1_1_c_s_v_mapping_1_1_air_quality_measurement_map =
+[
+    [ "AirQualityMeasurementMap", "class_sensor_app_1_1_database_1_1_data_1_1_c_s_v_handling_1_1_c_s_v_mapping_1_1_air_quality_measurement_map.html#a93b046d1c5ecae4ca1d614baa186cbcf", null ]
+];

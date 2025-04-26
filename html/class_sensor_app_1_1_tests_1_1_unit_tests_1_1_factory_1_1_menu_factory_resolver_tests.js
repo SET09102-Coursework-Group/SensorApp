@@ -1,0 +1,7 @@
+var class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_menu_factory_resolver_tests =
+[
+    [ "Resolve_ShouldReturn_AdminMenuFactory_WhenRoleIsAdministrator", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_menu_factory_resolver_tests.html#a8d28e42482f736441da1de6a293e2cd5", null ],
+    [ "Resolve_ShouldReturn_EnvironmentalMenuFactory_WhenRoleIsEnvironmentalScientist", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_menu_factory_resolver_tests.html#ad38e23ae3a4af505f9ea5dfe4a3729b2", null ],
+    [ "Resolve_ShouldReturn_OperationsMenuFactory_WhenRoleIsOperationsManager", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_menu_factory_resolver_tests.html#aa5979c2ea306c5870b0a63eb51adec75", null ],
+    [ "Resolve_ShouldThrowException_WhenRoleIsNotSupported", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_menu_factory_resolver_tests.html#a05021af233d415f68d3af1c2765df700", null ]
+];

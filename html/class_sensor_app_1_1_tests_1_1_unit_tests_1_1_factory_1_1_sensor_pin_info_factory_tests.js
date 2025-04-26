@@ -1,0 +1,7 @@
+var class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_sensor_pin_info_factory_tests =
+[
+    [ "SensorPinInfoFactoryTests", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_sensor_pin_info_factory_tests.html#ade1a76ee638045de3f7ace910c52f596", null ],
+    [ "CreatePinInfo_AddsAlertToLabel_WhenThresholdBreached", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_sensor_pin_info_factory_tests.html#a1b139d45a82a695b012d4809b6b8c984", null ],
+    [ "CreatePinInfo_ReturnsCorrectInfo_WhenNoThresholdBreached", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_sensor_pin_info_factory_tests.html#ab0eb8a554460c90a7368ba8af4f73de5", null ],
+    [ "CreatePinInfo_WhenNoMeasurements_ReturnsEmptyAddress", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_sensor_pin_info_factory_tests.html#aecb98a5a91aef193672f9b646270f9f6", null ]
+];

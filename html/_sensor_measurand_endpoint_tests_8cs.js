@@ -1,0 +1,4 @@
+var _sensor_measurand_endpoint_tests_8cs =
+[
+    [ "SensorApp.Tests.IntegrationTests.ApiEndpoints.MeasurementEndpoints.SensorMeasurandEndpointTests", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_measurement_endpoints_1_19e1cd99d8bc3486b972bd75060590155.html", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_measurement_endpoints_1_19e1cd99d8bc3486b972bd75060590155" ]
+];

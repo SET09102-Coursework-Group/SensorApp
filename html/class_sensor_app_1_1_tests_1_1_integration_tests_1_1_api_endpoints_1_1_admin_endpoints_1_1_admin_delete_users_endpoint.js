@@ -1,0 +1,7 @@
+var class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_delete_users_endpoint =
+[
+    [ "AdminDeleteUsersEndpoint", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_delete_users_endpoint.html#aaa4b944b1bf9f5b98f45c8fefeef911c", null ],
+    [ "Admin_CannotDeleteOwnAccount_ReturnsBadRequest", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_delete_users_endpoint.html#a91aa52bce6df15ea33e5f2a00a61485d", null ],
+    [ "Admin_DeletesExistingUser_Successfully", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_delete_users_endpoint.html#ad2dc1b7b3a97a2677f0283e495267234", null ],
+    [ "Admin_DeletesNonExistentUser_ReturnsNotFound", "class_sensor_app_1_1_tests_1_1_integration_tests_1_1_api_endpoints_1_1_admin_endpoints_1_1_admin_delete_users_endpoint.html#a5ee7b003295f99b4313c76b858c0797f", null ]
+];

@@ -1,0 +1,4 @@
+var class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_operations_menu_factory_tests =
+[
+    [ "Operations_CreateMenu_ShouldReturnExpectedMenuItems", "class_sensor_app_1_1_tests_1_1_unit_tests_1_1_factory_1_1_operations_menu_factory_tests.html#a10dce43f16bea909e96c2be175f1da1e", null ]
+];
