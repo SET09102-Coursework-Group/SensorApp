@@ -30,6 +30,8 @@ jobs:
           sed -i 's|^# INPUT .*|INPUT = ./|' Doxyfile
           sed -i 's|^RECURSIVE .*|RECURSIVE = YES|' Doxyfile
           sed -i 's|^# EXTRACT_ALL .*|EXTRACT_ALL = YES|' Doxyfile
+          sed -i 's|^# EXTRACT_PRIVATE .*|EXTRACT_PRIVATE = YES|' Doxyfile
+          sed -i 's|^# EXTRACT_STATIC .*|EXTRACT_STATIC = YES|' Doxyfile
 
       - name: Generate Doxygen Documentation
         run: doxygen Doxyfile
