@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using SensorApp.Shared.Dtos.Incident;
 using SensorApp.Shared.Services;
+using SensorApp.Shared.Enums;
 
 namespace SensorApp.Tests.UnitTests.Services;
 
@@ -17,11 +18,11 @@ public class IncidentApiServiceTests
             new IncidentDto
             {
                 Id = 1,
-                Type = "Max threshold breach",
-                Status = "Open",
+                Type = IncidentType.MaxThresholdBreached,
+                Status = IncidentStatus.Open,
                 Sensor_id = 1,
                 Creation_date = DateTime.UtcNow,
-                Priority = "High",
+                Priority = IncidentPriority.High,
                 Comments = "Test incident"
             }
         };
@@ -46,7 +47,7 @@ public class IncidentApiServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Max threshold breach", result[0].Type);
+        Assert.Equal(IncidentType.MaxThresholdBreached, result[0].Type);
     }
 
     [Fact]
@@ -87,10 +88,10 @@ public class IncidentApiServiceTests
         // Arrange
         var newIncident = new CreateIncidentDto
         {
-            Type = "Max threshold breach",
-            Status = "Open",
+            Type = IncidentType.MaxThresholdBreached,
+            Status = IncidentStatus.Open,
             SensorId = 1,
-            Priority = "High",
+            Priority = IncidentPriority.High,
             Comments = "New test incident"
         };
 
@@ -112,10 +113,10 @@ public class IncidentApiServiceTests
         // Arrange
         var newIncident = new CreateIncidentDto
         {
-            Type = "Max threshold breach",
-            Status = "Open",
+            Type = IncidentType.MaxThresholdBreached,
+            Status = IncidentStatus.Open,
             SensorId = 1,
-            Priority = "High",
+            Priority = IncidentPriority.Low,
             Comments = "New test incident"
         };
 

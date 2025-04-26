@@ -25,21 +25,9 @@ public class IncidentApiService : IIncidentApiService
 
     public async Task<List<IncidentDto>> GetAllIncidentsAsync(string token)
     {
-        try
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var response = await _httpClient.GetAsync("/incident");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-
-            return JsonSerializer.Deserialize<List<IncidentDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error fetching incidents: {ex.Message}");
-            return new List<IncidentDto>();
-        }
+        var request = HttpRequestHelper.Create(HttpMethod.Get, "/incident", token);
+        var incidents = await HttpRequestHelper.SendAsync<List<IncidentDto>>(_httpClient, request);
+        return incidents ?? new List<IncidentDto>();
     }
 
     public async Task<bool> AddIncidentAsync(string token, CreateIncidentDto newIncident)

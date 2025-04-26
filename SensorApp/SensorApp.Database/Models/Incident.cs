@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
 using Microsoft.AspNetCore.Identity;
+using SensorApp.Shared.Enums;
 
 namespace SensorApp.Database.Models;
 
@@ -13,9 +14,9 @@ namespace SensorApp.Database.Models;
 public class Incident : BaseEntity
 {
     [Required]
-    public string Type { get; set; }
+    public IncidentType Type { get; set; }
     [Required]
-    public string Status { get; set; }
+    public IncidentStatus Status { get; set; }
     [Required]
     [ForeignKey("Sensor_id")]
     public Sensor Sensor { get; set; }
@@ -24,7 +25,7 @@ public class Incident : BaseEntity
     [Required]
     public DateTime Creation_date { get; set; }
     [Required]
-    public string Priority { get; set; }
+    public IncidentPriority Priority { get; set; }
     public DateTime? Resolution_date { get; set; }
     [ForeignKey("Responder_id")]
     public IdentityUser Responder { get; set; }

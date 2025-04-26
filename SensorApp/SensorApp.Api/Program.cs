@@ -11,7 +11,7 @@ using SensorApp.Shared.Models;
 using Serilog;
 using System.Text;
 using SensorApp.Database.Data.CSVHandling;
-using SensorApp.Api.Services.Interfaces;
+using SensorApp.Api.Interfaces;
 using SensorApp.Api.Services;
 
 namespace SensorApp.Api;

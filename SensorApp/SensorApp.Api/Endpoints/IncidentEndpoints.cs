@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SensorApp.Shared.Dtos.Incident;
-using SensorApp.Api.Services.Interfaces;
+using SensorApp.Api.Interfaces;
+using SensorApp.Shared.Enums;
 
 namespace SensorApp.Api.Endpoints;
 
@@ -12,15 +13,21 @@ public static class IncidentEndpoints
     /// <param name="routes">The route builder for registering HTTP endpoints.</param>
     public static void MapIncidentEndpoints(this IEndpointRouteBuilder routes)
     {
+        var incidents = routes.MapGroup("/incident")
+            .RequireAuthorization(policy => policy.RequireRole(
+                UserRole.OperationsManager.ToString(),
+                UserRole.Administrator.ToString()
+            ));
+
         // GET endpoint to fetch all incidents
-        routes.MapGet("/incidents", async (IIncidentService service) =>
+        incidents.MapGet("", async (IIncidentService service) =>
         {
             var incidents = await service.GetAllIncidentsAsync();
             return Results.Ok(incidents);
         });
 
         // POST endpoint to create a new incident
-        routes.MapPost("/incident/create", async (
+        incidents.MapPost("/create", async (
             HttpContext context,
             CreateIncidentDto dto,
             IIncidentService service,
@@ -28,17 +35,23 @@ public static class IncidentEndpoints
         {
             var userId = userManager.GetUserId(context.User);
 
-            if (string.IsNullOrEmpty(dto.Type) || string.IsNullOrEmpty(dto.Status) || dto.SensorId <= 0)
+            if (dto.Type == null|| dto.Status == null || dto.SensorId <= 0)
             {
                 return Results.BadRequest("Invalid data. Ensure Type, Status, and SensorId are provided.");
             }
 
-            await service.CreateIncidentAsync(dto, userId);
-            return Results.Ok();
+            var createdIncident = await service.CreateIncidentAsync(dto, userId);
+
+            if (createdIncident == null)
+            {
+                return Results.Problem("Failed to create incident. Please try again later.");
+            }
+
+            return Results.Ok(createdIncident);
         });
 
         // PUT endpoint to resolve an existing incident by its ID
-        routes.MapPut("/incident/resolve/{id}", async (
+        incidents.MapPut("/resolve/{id}", async (
             int id,
             IncidentResolutionDto dto,
             IIncidentService service) =>
@@ -48,7 +61,7 @@ public static class IncidentEndpoints
         });
 
         // DELETE endpoint to delete an incident by its ID
-        routes.MapDelete("/incident/delete/{id}", async (
+        incidents.MapDelete("/delete/{id}", async (
             int id,
             IIncidentService service) =>
         {

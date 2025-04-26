@@ -4,6 +4,7 @@ using FluentAssertions;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Dtos.Incident;
 using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
+using SensorApp.Shared.Enums;
 
 
 namespace SensorApp.Tests.IntegrationTests
@@ -55,10 +56,10 @@ namespace SensorApp.Tests.IntegrationTests
             // Arrange
             var newIncident = new CreateIncidentDto
             {
-                Type = "Max threshold breach",
-                Status = "Open",
+                Type = IncidentType.MaxThresholdBreached,
+                Status = IncidentStatus.Open,
                 SensorId = 1,
-                Priority = "High",
+                Priority = IncidentPriority.High,
                 Comments = "High concentration"
             };
 
@@ -70,7 +71,11 @@ namespace SensorApp.Tests.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
+            var created = await response.Content.ReadFromJsonAsync<IncidentDto>();
+
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(newIncident.Type, created.Type);
+            Assert.Equal(newIncident.Comments, created.Comments);
         }
 
         [Fact]
@@ -79,9 +84,9 @@ namespace SensorApp.Tests.IntegrationTests
             // Arrange
             var invalidIncident = new CreateIncidentDto
             {
-                Type = "Max threshold breach",
-                Status = "Open",
-                Priority = "High",
+                Type = IncidentType.MaxThresholdBreached,
+                Status = IncidentStatus.Open,
+                Priority = IncidentPriority.High,
                 Comments = "High concentration"
             };
 
@@ -101,10 +106,10 @@ namespace SensorApp.Tests.IntegrationTests
             // Arrange
             var newIncident = new CreateIncidentDto
             {
-                Type = "Max threshold breach",
-                Status = "Open",
+                Type = IncidentType.MaxThresholdBreached,
+                Status = IncidentStatus.Open,
                 SensorId = 1,
-                Priority = "High",
+                Priority = IncidentPriority.High,
                 Comments = "High concentration"
             };
 

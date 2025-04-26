@@ -5,6 +5,7 @@ using SensorApp.Shared.Dtos.Incident;
 using SensorApp.Shared.Dtos;
 using System.Collections.ObjectModel;
 using SensorApp.Shared.Models;
+using SensorApp.Shared.Enums;
 
 namespace SensorApp.Maui.ViewModels;
 
@@ -20,14 +21,14 @@ public partial class CreateIncidentViewModel : BaseViewModel
     private readonly ITokenProvider _tokenProvider;
 
     [ObservableProperty] private SensorModel selectedSensor;
-    [ObservableProperty] private string selectedType;
+    [ObservableProperty] private IncidentType selectedType;
     [ObservableProperty] private int selectedSensorId;
-    [ObservableProperty] private string selectedPriority;
+    [ObservableProperty] private IncidentPriority selectedPriority;
 
     [ObservableProperty] private string comments;
 
-    public List<string> TypeOptions { get; } = ["Max threshold breach", "Min threshold breach", "Sensor unresponsive"];
-    public List<string> PriorityOptions { get; } = ["High", "Medium", "Low"];
+    public List<IncidentType> TypeOptions { get; } = Enum.GetValues<IncidentType>().ToList();
+    public List<IncidentPriority> PriorityOptions { get; } = Enum.GetValues<IncidentPriority>().ToList();
 
     public ObservableCollection<SensorModel> Sensors { get; } = new();
 
@@ -111,7 +112,7 @@ public partial class CreateIncidentViewModel : BaseViewModel
             var newIncident = new CreateIncidentDto
             {
                 Type = SelectedType,
-                Status = "Open",
+                Status = IncidentStatus.Open,
                 SensorId = SelectedSensorId,
                 Priority = SelectedPriority,
                 Comments = Comments,

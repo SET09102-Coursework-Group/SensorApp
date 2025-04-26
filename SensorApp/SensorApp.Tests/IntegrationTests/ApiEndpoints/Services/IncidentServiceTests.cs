@@ -4,6 +4,7 @@ using SensorApp.Database.Data;
 using SensorApp.Database.Models;
 using SensorApp.Shared.Dtos.Incident;
 using Microsoft.AspNetCore.Identity;
+using SensorApp.Shared.Enums;
 
 public class IncidentServiceTests
 {
@@ -24,10 +25,10 @@ public class IncidentServiceTests
         var incident = new Incident
         {
             Id = 1,
-            Type = "Max threshold breach",
-            Status = "Open",
+            Type = IncidentType.MaxThresholdBreached,
+            Status = IncidentStatus.Open,
             Sensor_id = 1,
-            Priority = "High",
+            Priority = IncidentPriority.High,
             Creation_date = DateTime.UtcNow,
             Comments = "High concentrations of Nitrogen Dioxide",
             Responder_id = "responder",
@@ -56,7 +57,7 @@ public class IncidentServiceTests
 
         // Assert
         Assert.Single(result);
-        Assert.Equal("Max threshold breach", result[0].Type);
+        Assert.Equal(IncidentType.MaxThresholdBreached, result[0].Type);
         Assert.Equal("ResponderUser", result[0].Responder.Username);
         Assert.Equal("Air quality", result[0].Sensor.Type);
     }
@@ -70,10 +71,10 @@ public class IncidentServiceTests
 
         var dto = new CreateIncidentDto
         {
-            Type = "Sensor unresponsive",
-            Status = "Open",
+            Type = IncidentType.SensorUnresponsive,
+            Status = IncidentStatus.Open,
             SensorId = 2,
-            Priority = "High",
+            Priority = IncidentPriority.High,
             Comments = "No measurements in 24h"
         };
 
@@ -83,7 +84,7 @@ public class IncidentServiceTests
         // Assert
         var incident = await context.Incidents.FirstOrDefaultAsync();
         Assert.NotNull(incident);
-        Assert.Equal("Sensor unresponsive", incident.Type);
+        Assert.Equal(IncidentType.SensorUnresponsive, incident.Type);
         Assert.Equal("responder2", incident.Responder_id);
     }
 
@@ -95,11 +96,11 @@ public class IncidentServiceTests
         var incident = new Incident
         {
             Id = 1,
-            Type = "Min threshold breach",
-            Status = "Open",
+            Type = IncidentType.MinThresholdBreached,
+            Status = IncidentStatus.Open,
             Comments = "Low quantities of nitrogen dioxide",
             Creation_date = DateTime.UtcNow,
-            Priority = "High", 
+            Priority = IncidentPriority.Medium, 
             Responder_id = "responderID"
         };
         context.Incidents.Add(incident);
@@ -115,7 +116,7 @@ public class IncidentServiceTests
         // Assert
         Assert.True(result);
         var updated = await context.Incidents.FindAsync(1);
-        Assert.Equal("Resolved", updated.Status);
+        Assert.Equal(IncidentStatus.Resolved, updated.Status);
         Assert.Equal("Incident resolved", updated.Comments);
         Assert.NotNull(updated.Resolution_date);
     }
@@ -139,7 +140,7 @@ public class IncidentServiceTests
     {
         //Arrange
         var context = GetDbContext("DeleteIncidentDb");
-        context.Incidents.Add(new Incident { Id = 1, Type = "Max threshold breach", Priority = "Medium", Responder_id = "responderID", Status = "Open" });
+        context.Incidents.Add(new Incident { Id = 1, Type = IncidentType.MinThresholdBreached, Priority = IncidentPriority.Medium, Responder_id = "responderID", Status = IncidentStatus.Open });
         await context.SaveChangesAsync();
 
         var service = new IncidentService(context);

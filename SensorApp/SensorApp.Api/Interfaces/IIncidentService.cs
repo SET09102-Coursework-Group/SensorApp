@@ -1,6 +1,6 @@
 ﻿using SensorApp.Shared.Dtos.Incident;
 
-namespace SensorApp.Api.Services.Interfaces;
+namespace SensorApp.Api.Interfaces;
 
 /// <summary>
 /// Defines the contract for incident-related operations.
@@ -18,7 +18,7 @@ public interface IIncidentService
     /// <param name="dto">The data transfer object (DTO) containing incident creation details.</param>
     /// <param name="responderId">The ID of the user who is creating the incident.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task CreateIncidentAsync(CreateIncidentDto dto, string? responderId);
+    Task<IncidentDto?> CreateIncidentAsync(CreateIncidentDto dto, string? responderId);
     /// <summary>
     /// Marks an existing incident as resolved by its ID asynchronously.
     /// </summary>

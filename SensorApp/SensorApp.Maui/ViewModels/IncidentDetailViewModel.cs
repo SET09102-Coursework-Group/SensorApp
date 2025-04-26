@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SensorApp.Shared.Dtos.Incident;
+using SensorApp.Shared.Enums;
 using SensorApp.Shared.Interfaces;
 
 namespace SensorApp.Maui.ViewModels;
@@ -21,7 +22,7 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
     [ObservableProperty]
     private string resolutionComments;
 
-    public bool IsOpen => Incident?.Status != "Resolved";
+    public bool IsOpen => Incident?.Status != IncidentStatus.Resolved;
 
     /// <summary>
     /// Method to load the details of a selected incident into the ViewModel.
@@ -60,8 +61,10 @@ public partial class IncidentDetailViewModel(IIncidentApiService incidentService
             var success = await _incidentService.ResolveIncidentAsync(token, Incident.Id, dto);
             if (success)
             {
-                Incident.Status = "Resolved";
+                Incident.Status = IncidentStatus.Resolved;
+                Incident.Resolution_comments = resolutionComments;
                 OnPropertyChanged(nameof(IsOpen));
+                OnPropertyChanged(nameof(Incident));
                 await Shell.Current.DisplayAlert("Success", "Incident resolved.", "OK");
                 await Shell.Current.GoToAsync("..");
             }

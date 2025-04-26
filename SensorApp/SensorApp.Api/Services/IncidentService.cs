@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SensorApp.Api.Services.Interfaces;
+using SensorApp.Api.Interfaces;
 using SensorApp.Database.Data;
 using SensorApp.Database.Models;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Dtos;
 using SensorApp.Shared.Dtos.Incident;
+using SensorApp.Shared.Enums;
 
 namespace SensorApp.Api.Services;
 
@@ -52,7 +53,7 @@ public class IncidentService : IIncidentService
             .ToListAsync();
     }
 
-    public async Task CreateIncidentAsync(CreateIncidentDto dto, string? responderId)
+    public async Task<IncidentDto?> CreateIncidentAsync(CreateIncidentDto dto, string? responderId)
     {
         var incident = new Incident
         {
@@ -66,29 +67,68 @@ public class IncidentService : IIncidentService
         };
 
         _db.Incidents.Add(incident);
-        await _db.SaveChangesAsync();
+        try
+        {
+            await _db.SaveChangesAsync();
+            return new IncidentDto
+            {
+                Id = incident.Id,
+                Type = dto.Type,
+                Status = dto.Status,
+                Sensor_id = dto.SensorId,
+                Creation_date = DateTime.UtcNow,
+                Priority = dto.Priority,
+                Comments = dto.Comments,
+                Responder_id = responderId
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Unexpected error saving changes: {ex.Message}");
+            return null;
+        }
     }
 
     public async Task<bool> ResolveIncidentAsync(int id, IncidentResolutionDto dto)
     {
-        var incident = await _db.Incidents.FindAsync(id);
+        var incident = await GetIncidentByIdAsync(id);
         if (incident == null) return false;
 
-        incident.Status = "Resolved";
+        incident.Status = IncidentStatus.Resolved;
         incident.Resolution_date = DateTime.UtcNow;
         incident.Comments = dto.ResolutionComments;
 
-        await _db.SaveChangesAsync();
-        return true;
+        try
+        {
+            await _db.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Unexpected error saving changes: {ex.Message}");
+            return false;
+        }
     }
 
     public async Task<bool> DeleteIncidentAsync(int id)
     {
-        var incident = await _db.Incidents.FindAsync(id);
+        var incident = await GetIncidentByIdAsync(id);
         if (incident == null) return false;
 
         _db.Incidents.Remove(incident);
-        await _db.SaveChangesAsync();
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
         return true;
+    }
+
+    private async Task<Incident?> GetIncidentByIdAsync(int id)
+    {
+        return await _db.Incidents.FindAsync(id);
     }
 }

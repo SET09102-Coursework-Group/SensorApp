@@ -240,16 +240,16 @@ public static class ModelBuilderExtensions
             new Incident
             {
                 Id = 1,
-                Type = "Max threshold breach",
-                Status = "Open",
+                Type = IncidentType.MaxThresholdBreached,
+                Status = 0,
                 Sensor_id = 1,
                 Creation_date = DateTime.UtcNow,
-                Priority = "High",
+                Priority = IncidentPriority.High,
                 Resolution_date = null,
                 Responder_id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
                 Comments = "Max threshold breach for Nitrogen Dioxide"
             }
-            );
-        }
+         );
+    }
 }
 

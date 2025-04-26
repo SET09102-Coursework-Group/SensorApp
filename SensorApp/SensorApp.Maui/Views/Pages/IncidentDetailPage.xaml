@@ -11,7 +11,7 @@
         <VerticalStackLayout Padding="20" Spacing="15">
             <VerticalStackLayout>
                 <Label Text="Incident Type:" FontSize="Medium" FontAttributes="Bold" />
-                <Label Text="{Binding Incident.Type}" />
+                <Label Text="{Binding Incident.Type, Converter={StaticResource EnumDisplayName}}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout>
@@ -36,7 +36,7 @@
 
             <VerticalStackLayout>
                 <Label Text="Priority:" FontSize="Medium" FontAttributes="Bold" />
-                <Label Text="{Binding Incident.Priority}" />
+                <Label Text="{Binding Incident.Priority, Converter={StaticResource EnumDisplayName}}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout>

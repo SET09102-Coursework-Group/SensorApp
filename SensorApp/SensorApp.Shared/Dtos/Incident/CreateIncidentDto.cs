@@ -1,5 +1,6 @@
 ﻿using System;
 using SensorApp.Shared.Dtos.Admin;
+using SensorApp.Shared.Enums;
 
 namespace SensorApp.Shared.Dtos.Incident;
 
@@ -9,9 +10,9 @@ namespace SensorApp.Shared.Dtos.Incident;
 /// </summary>
 public class CreateIncidentDto
 {
-    public required string Type { get; set; }
-    public required string Status { get; set; }
+    public required IncidentType Type { get; set; }
+    public required IncidentStatus Status { get; set; }
     public int SensorId { get; set; }
-    public required string Priority { get; set; }
+    public required IncidentPriority Priority { get; set; }
     public string? Comments { get; set; }
 }

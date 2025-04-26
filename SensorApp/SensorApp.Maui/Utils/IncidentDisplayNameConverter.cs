@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 using SensorApp.Shared.Dtos.Incident;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
 
 namespace SensorApp.Maui.Utils;
 
@@ -17,10 +19,17 @@ public class IncidentDisplayNameConverter : IValueConverter
     {
         if (value is IncidentDto incident)
         {
-            return $"{incident.Sensor?.Type} Sensor {incident.Sensor?.Id} - {incident.Type} ({incident.Creation_date})";
+            var incidentTypeDisplayName = GetEnumDisplayName(incident.Type);
+            return $"Sensor {incident.Sensor?.Id} ({incident.Sensor?.Type}) - {incidentTypeDisplayName} ({incident.Creation_date})";
         }
 
         return string.Empty;
+    }
+    private string GetEnumDisplayName(Enum value)
+    {
+        var field = value.GetType().GetField(value.ToString());
+        var attribute = field?.GetCustomAttribute<DisplayAttribute>();
+        return attribute?.Name ?? value.ToString();
     }
 
     /// <summary>

@@ -16,7 +16,8 @@
             <VerticalStackLayout Padding="20" Spacing="10" IsVisible="{Binding IsLoadingSensors, Converter={StaticResource InverseBoolConverter}}">
                 <Label Text="Incident Type" />
                 <Picker ItemsSource="{Binding TypeOptions}"
-                SelectedItem="{Binding SelectedType}" />
+                SelectedItem="{Binding SelectedType}" 
+                ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDisplayName}}"/>
 
                 <Label Text="Sensor" />
                 <Picker ItemsSource="{Binding Sensors}"
@@ -25,7 +26,8 @@
                 
                 <Label Text="Priority" />
                 <Picker ItemsSource="{Binding PriorityOptions}"
-                SelectedItem="{Binding SelectedPriority}" />
+                SelectedItem="{Binding SelectedPriority}"
+                ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDisplayName}}"/>
 
                 <Label Text="Comments" />
                 <Editor Text="{Binding Comments}" AutoSize="TextChanges" />
