@@ -1,4 +1,5 @@
-﻿using SensorApp.Shared.Models;
+﻿using SensorApp.Shared.Interfaces;
+using SensorApp.Shared.Models;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -8,7 +9,7 @@ namespace SensorApp.Shared.Services;
 /// <summary>
 /// Provides services for interacting with the API to retrieve sensor data.
 /// </summary>
-public class SensorApiService
+public class SensorApiService : ISensorApiService
 {
     private readonly HttpClient _httpClient;
 

@@ -15,10 +15,10 @@ public partial class HistoricalDataViewModel : BaseViewModel
     readonly IMeasurementService _measurementService;
     readonly ITokenProvider _tokenProvider;
     readonly IMeasurandService _measurandService;
-    readonly SensorApiService _sensorService;
+    readonly ISensorApiService _sensorService;
     readonly IChartFactory _chartFactory;
 
-    public HistoricalDataViewModel(IMeasurementService measurementService, ITokenProvider tokenProvider, SensorApiService sensorService, IMeasurandService measurandService, IChartFactory chartFactory)
+    public HistoricalDataViewModel(IMeasurementService measurementService, ITokenProvider tokenProvider, ISensorApiService sensorService, IMeasurandService measurandService, IChartFactory chartFactory)
     {
         _measurementService = measurementService;
         _tokenProvider = tokenProvider;

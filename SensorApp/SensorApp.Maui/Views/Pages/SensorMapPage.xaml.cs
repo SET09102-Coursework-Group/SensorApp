@@ -21,7 +21,7 @@ public partial class SensorMapPage : ContentPage
     /// <param name="sensorService">Service for fetching sensor data.</param>
     /// <param name="pinInfoFactory">Factory for creating sensor pin information.</param>
     /// <param name="sensorAnalysisService">Service for analyzing sensor data.</param>
-    public SensorMapPage(SensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
+    public SensorMapPage(ISensorApiService _sensorService, ISensorPinInfoFactory pinInfoFactory, ISensorAnalysisService _sensorAnalysisService)
     {
         InitializeComponent();
         this._sensorAnalysisService = _sensorAnalysisService;

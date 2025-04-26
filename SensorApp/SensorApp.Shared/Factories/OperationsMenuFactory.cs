@@ -17,6 +17,11 @@ public class OperationsMenuFactory : IMenuFactory
             {
                 Title = "Sensor Map",
                 Route = "SensorMapPage"
+            },
+            new AppMenuItem
+            {
+                Title = "Incident List",
+                Route = "IncidentList"
             }
         ];
     }

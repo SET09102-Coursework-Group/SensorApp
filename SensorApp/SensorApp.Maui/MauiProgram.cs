@@ -50,10 +50,12 @@ public static class MauiProgram
         //check this is possible error 
         builder.Services.AddHttpClient<IAuthService, AuthService>().ConfigureApiHttpClient();
 
-        builder.Services.AddHttpClient<SensorApiService>().ConfigureApiHttpClient();
+        builder.Services.AddHttpClient<ISensorApiService, SensorApiService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IAdminService, AdminService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IMeasurandService, MeasurandService>().ConfigureApiHttpClient();
         builder.Services.AddHttpClient<IMeasurementService, MeasurementService>().ConfigureApiHttpClient();
+
+        builder.Services.AddHttpClient<IIncidentApiService, IncidentApiService>().ConfigureApiHttpClient();
 
         builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
         builder.Services.AddSingleton<IMenuBuilder, MenuBuilder>();
@@ -72,6 +74,9 @@ public static class MauiProgram
         builder.Services.AddTransient<EditUserPage>();
         builder.Services.AddTransient<HistoricalDataPage>();
 
+        builder.Services.AddTransient<IncidentList>();
+        builder.Services.AddTransient<CreateIncidentPage>();
+        builder.Services.AddTransient<IncidentDetailPage>();
 
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();
@@ -80,6 +85,9 @@ public static class MauiProgram
         builder.Services.AddTransient<NewUserViewModel>();
         builder.Services.AddTransient<EditUserViewModel>();
         builder.Services.AddTransient<HistoricalDataViewModel>();
+        builder.Services.AddTransient<IncidentListViewModel>();
+        builder.Services.AddTransient<CreateIncidentViewModel>();
+        builder.Services.AddTransient<IncidentDetailViewModel>();
 
         return builder.Build();
     }

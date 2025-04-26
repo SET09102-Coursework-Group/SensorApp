@@ -35,6 +35,11 @@ public class AdminMenuFactory : IMenuFactory
             {
                 Title = "Historical Data",        
                 Route = "HistoricalDataPage" 
+            },
+            new AppMenuItem
+            {
+                Title = "Incident List",
+                Route = "IncidentList"
             }
         ];
     }

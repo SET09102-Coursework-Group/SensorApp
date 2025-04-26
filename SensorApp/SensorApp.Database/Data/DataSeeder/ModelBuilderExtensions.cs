@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SensorApp.Shared.Enums;
 using SensorApp.Database.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SensorApp.Database.Data.DataSeeder;
 
@@ -76,18 +77,18 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<IdentityUserRole<string>>().HasData(
             new IdentityUserRole<string>
             {
-                RoleId = "3d52c1e5-6aec-45de-91c1-e0ebf20464e3",   
-                UserId = "fab66dad-9f12-45a0-9fd8-6352336a696d"   
+                RoleId = "3d52c1e5-6aec-45de-91c1-e0ebf20464e3",
+                UserId = "fab66dad-9f12-45a0-9fd8-6352336a696d"
             },
             new IdentityUserRole<string>
             {
-                RoleId = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c",   
-                UserId = "99166c0c-7f14-442b-8c57-9141f3ac1681"    
+                RoleId = "71136dd8-0a29-4d9a-b3fe-bd176ba7aa9c",
+                UserId = "99166c0c-7f14-442b-8c57-9141f3ac1681"
             },
             new IdentityUserRole<string>
             {
-                RoleId = "9b7f193f-bfc4-4eb7-927f-55960e45a82a",    
-                UserId = "1243c642-7fdf-4224-9404-02dd6ac95bc5"   
+                RoleId = "9b7f193f-bfc4-4eb7-927f-55960e45a82a",
+                UserId = "1243c642-7fdf-4224-9404-02dd6ac95bc5"
             }
         );
     }
@@ -230,6 +231,24 @@ public static class ModelBuilderExtensions
                     Status = "Active",
                 }
             );
+    }
+
+    public static void SeedIncidents(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Incident>().HasData(
+            new Incident
+            {
+                Id = 1,
+                Type = IncidentType.MaxThresholdBreached,
+                Status = 0,
+                Sensor_id = 1,
+                Creation_date = DateTime.UtcNow,
+                Priority = IncidentPriority.High,
+                Resolution_date = null,
+                Responder_id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
+                Comments = "Max threshold breach for Nitrogen Dioxide"
+            }
+         );
     }
 }
 
