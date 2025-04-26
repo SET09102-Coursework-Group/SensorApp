@@ -31,4 +31,5 @@ public class Incident : BaseEntity
     public IdentityUser Responder { get; set; }
     public string Responder_id { get; set; }
     public string? Comments { get; set; }
+    public string? Resolution_comments { get; set; }
 }

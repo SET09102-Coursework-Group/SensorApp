@@ -246,7 +246,8 @@ public static class ModelBuilderExtensions
                 Priority = IncidentPriority.High,
                 Resolution_date = null,
                 Responder_id = "99166c0c-7f14-442b-8c57-9141f3ac1681",
-                Comments = "Max threshold breach for Nitrogen Dioxide"
+                Comments = "Max threshold breach for Nitrogen Dioxide",
+                Resolution_comments = null
             }
          );
     }

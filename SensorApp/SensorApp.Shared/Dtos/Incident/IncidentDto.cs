@@ -3,7 +3,6 @@ using SensorApp.Shared.Enums;
 
 namespace SensorApp.Shared.Dtos.Incident;
 
-
 public class IncidentDto
 {
     public required int Id { get; set; }

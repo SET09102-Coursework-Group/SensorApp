@@ -48,7 +48,8 @@ public class IncidentService : IIncidentService
                     Id = i.Responder.Id,
                     Username = i.Responder.UserName
                 },
-                Comments = i.Comments
+                Comments = i.Comments,
+                Resolution_comments = i.Resolution_comments
             })
             .ToListAsync();
     }
@@ -96,7 +97,7 @@ public class IncidentService : IIncidentService
 
         incident.Status = IncidentStatus.Resolved;
         incident.Resolution_date = DateTime.UtcNow;
-        incident.Comments = dto.ResolutionComments;
+        incident.Resolution_comments = dto.ResolutionComments;
 
         try
         {
@@ -122,6 +123,7 @@ public class IncidentService : IIncidentService
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine($"Unexpected error saving changes: {ex.Message}");
             return false;
         }
         return true;
