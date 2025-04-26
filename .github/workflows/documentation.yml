@@ -20,11 +20,18 @@ jobs:
       - name: Install Doxygen
         run: sudo apt-get install doxygen -y
 
-      - name: Generate Doxyfile
+      - name: Generate default Doxyfile
         run: doxygen -g
 
+      - name: Configure Doxyfile
+        run: |
+          sed -i 's|^OUTPUT_DIRECTORY .*|OUTPUT_DIRECTORY = html|' Doxyfile
+          sed -i 's|^# GENERATE_HTML .*|GENERATE_HTML = YES|' Doxyfile
+          sed -i 's|^# INPUT .*|INPUT = ./|' Doxyfile
+          sed -i 's|^RECURSIVE .*|RECURSIVE = YES|' Doxyfile
+
       - name: Generate Doxygen Documentation
-        run: doxygen .
+        run: doxygen Doxyfile
 
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
@@ -49,4 +56,4 @@ jobs:
         uses: actions/deploy-pages@v4
 
       - name: Output Page URL
-        run: echo "Github pages URL at ${{ steps.deployment.outputs.page_url }}"
+        run: echo "GitHub Pages URL at ${{ steps.deployment.outputs.page_url }}"
