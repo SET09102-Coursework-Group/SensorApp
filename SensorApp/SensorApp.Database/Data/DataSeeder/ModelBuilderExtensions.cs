@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SensorApp.Shared.Enums;
 using SensorApp.Database.Models;
-using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace SensorApp.Database.Data.DataSeeder;
