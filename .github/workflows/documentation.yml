@@ -25,10 +25,15 @@ jobs:
 
       - name: Configure Doxyfile
         run: |
-          sed -i 's|^OUTPUT_DIRECTORY .*|OUTPUT_DIRECTORY = html|' Doxyfile
+          sed -i 's|^OUTPUT_DIRECTORY .*|OUTPUT_DIRECTORY = . |' Doxyfile
           sed -i 's|^# GENERATE_HTML .*|GENERATE_HTML = YES|' Doxyfile
           sed -i 's|^# INPUT .*|INPUT = ./|' Doxyfile
           sed -i 's|^RECURSIVE .*|RECURSIVE = YES|' Doxyfile
+          sed -i 's|^# EXTRACT_ALL .*|EXTRACT_ALL = YES|' Doxyfile
+          sed -i 's|^# EXTRACT_PRIVATE .*|EXTRACT_PRIVATE = YES|' Doxyfile
+          sed -i 's|^# EXTRACT_STATIC .*|EXTRACT_STATIC = YES|' Doxyfile
+          sed -i 's|^# FILE_PATTERNS .*|FILE_PATTERNS = *.cpp *.h *.hpp|' Doxyfile
+
 
       - name: Generate Doxygen Documentation
         run: doxygen Doxyfile
