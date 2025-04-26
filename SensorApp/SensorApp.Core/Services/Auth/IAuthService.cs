@@ -3,18 +3,17 @@
 namespace SensorApp.Core.Services.Auth;
 
 /// <summary>
-/// Interface that defines authentication services for the application,
-/// including user login and retrieval of authentication tokens.
+/// Defines authentication-related operations for users.
 /// </summary>
 public interface IAuthService
 {
-    // <summary>
-    /// Authenticates a user based on provided login credentials.
+    /// <summary>
+    /// Authenticates a user using their login credentials.
     /// </summary>
-    /// <param name="login">The login details containing username and password.</param>
+    /// <param name="login">An object containing the user's username and password.</param>
     /// <returns>
-    /// An <see cref="AuthResponseDto"/> containing authentication result details and a token if successful;
-    /// otherwise, null if authentication fails.
+    /// An <see cref="AuthResponseDto"/> containing user details and a JWT token if authentication succeeds;
+    /// otherwise, <c>null</c> if the credentials are invalid.
     /// </returns>
     Task<AuthResponseDto?> AuthenticateAsync(LoginDto login);
 }
