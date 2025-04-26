@@ -3,8 +3,16 @@ using SensorApp.Shared.Dtos;
 
 namespace SensorApp.Api.Endpoints.Extensions;
 
+/// <summary>
+/// Provides extension methods to map Measurement entities to MeasurementDto objects.
+/// </summary>
 public static class MeasurementDtoMap
 {
+    /// <summary>
+    /// Converts a Measurement entity to a MeasurementDto.
+    /// </summary>
+    /// <param name="measurement">The Measurement entity to convert.</param>
+    /// <returns>A populated MeasurementDto object.</returns>
     public static MeasurementDto ConvertToDto(this Measurement measurement)
     {
         return new MeasurementDto
