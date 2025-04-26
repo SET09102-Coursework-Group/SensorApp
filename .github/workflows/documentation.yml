@@ -32,6 +32,9 @@ jobs:
           sed -i 's|^# EXTRACT_ALL .*|EXTRACT_ALL = YES|' Doxyfile
           sed -i 's|^# EXTRACT_PRIVATE .*|EXTRACT_PRIVATE = YES|' Doxyfile
           sed -i 's|^# EXTRACT_STATIC .*|EXTRACT_STATIC = YES|' Doxyfile
+          sed -i 's|^# OPTIMIZE_OUTPUT_FOR_CSHARP .*|OPTIMIZE_OUTPUT_FOR_CSHARP = YES|' Doxyfile
+          sed -i 's|^# FILE_PATTERNS .*|FILE_PATTERNS = *.cs|' Doxyfile
+          sed -i 's|^# EXTENSION_MAPPING .*|EXTENSION_MAPPING = cs=C#|' Doxyfile
 
       - name: Generate Doxygen Documentation
         run: doxygen Doxyfile
