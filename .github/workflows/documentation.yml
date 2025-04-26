@@ -2,43 +2,34 @@ name: Documentation
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-
     permissions:
       pages: write
       id-token: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install Doxygen
-        run: sudo apt-get update && sudo apt-get install doxygen -y
-
-      - name: Generate Doxyfile
-        run: doxygen -g
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
 
       - name: Build Doxygen docs
         run: doxygen Doxyfile
 
-      - name: Upload static files as artifact
+      - name: Upload HTML to Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: html
+          path: docs/html
 
   deploy:
     needs: generate
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-
     permissions:
       pages: write
       id-token: write
