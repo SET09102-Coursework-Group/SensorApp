@@ -38,7 +38,7 @@ public class IncidentServiceTests
                 Type = "Air quality",
                 Latitude = 52f,
                 Longitude = 10f,
-                Site_zone = "Zone ",
+                Site_zone = "Zone",
                 Status = "Active"
             },
             Responder = new IdentityUser
@@ -117,7 +117,7 @@ public class IncidentServiceTests
         Assert.True(result);
         var updated = await context.Incidents.FindAsync(1);
         Assert.Equal(IncidentStatus.Resolved, updated.Status);
-        Assert.Equal("Incident resolved", updated.Comments);
+        Assert.Equal("Incident resolved", updated.Resolution_comments);
         Assert.NotNull(updated.Resolution_date);
     }
 
