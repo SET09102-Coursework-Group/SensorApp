@@ -5,11 +5,14 @@ using SensorApp.Maui.Interfaces;
 using SensorApp.Maui.Utils;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
-using SensorApp.Shared.Services;
 using System.Collections.ObjectModel;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel responsible for loading, managing, and displaying historical measurement data,
+/// including generating charts and basic statistics.
+/// </summary>
 public partial class HistoricalDataViewModel : BaseViewModel
 {
     readonly IMeasurementService _measurementService;
@@ -18,6 +21,14 @@ public partial class HistoricalDataViewModel : BaseViewModel
     readonly ISensorApiService _sensorService;
     readonly IChartFactory _chartFactory;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HistoricalDataViewModel"/> class.
+    /// </summary>
+    /// <param name="measurementService">Service for retrieving measurement data.</param>
+    /// <param name="tokenProvider">Service for retrieving authentication tokens.</param>
+    /// <param name="sensorService">Service for retrieving sensor information.</param>
+    /// <param name="measurandService">Service for retrieving measurand types.</param>
+    /// <param name="chartFactory">Factory for creating charts.</param>
     public HistoricalDataViewModel(IMeasurementService measurementService, ITokenProvider tokenProvider, ISensorApiService sensorService, IMeasurandService measurandService, IChartFactory chartFactory)
     {
         _measurementService = measurementService;

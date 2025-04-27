@@ -9,11 +9,20 @@ using System.Text.RegularExpressions;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for creating new users. Handles input validation, user creation requests,
+/// and displays feedback to the user.
+/// </summary>
 public partial class NewUserViewModel : BaseViewModel
 {
     private readonly IAdminService _adminService;
     private readonly ITokenProvider _tokenProvider;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NewUserViewModel"/> class.
+    /// </summary>
+    /// <param name="adminService">Service for managing admin-related operations.</param>
+    /// <param name="tokenProvider">Service for retrieving authentication tokens.</param>
     public NewUserViewModel(IAdminService adminService, ITokenProvider tokenProvider)
     {
         _adminService = adminService;
@@ -112,8 +121,9 @@ public partial class NewUserViewModel : BaseViewModel
     }
 
     /// <summary>
-    /// Validates if required fields are filled.
+    /// Validates that all required input fields are filled.
     /// </summary>
+    /// <returns>True if all required fields are filled; otherwise, false.</returns>
     private bool AreFieldsFilled()
     {
         return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
