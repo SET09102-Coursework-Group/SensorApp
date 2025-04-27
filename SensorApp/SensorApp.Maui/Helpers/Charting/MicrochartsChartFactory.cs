@@ -14,12 +14,6 @@ public class MicrochartsChartFactory : IChartFactory
     private readonly SKColor _lineColor = SKColors.DeepSkyBlue;
     private readonly SKColor _barColor = SKColors.Purple;
 
-    /// <summary>
-    /// Creates a LineChart based on the provided measurement data.
-    /// Each point represents a measurement at a specific timestamp.
-    /// </summary>
-    /// <param name="data">The collection of measurement values to plot.</param>
-    /// <returns>A configured <see cref="LineChart"/> representing the data.</returns>
     public LineChart CreateLineChart(IEnumerable<MeasurementModel> data)
     {
         var entries = data.Select(m => new ChartEntry(m.Value)
@@ -39,12 +33,6 @@ public class MicrochartsChartFactory : IChartFactory
         };
     }
 
-    /// <summary>
-    /// Creates a BarChart based on the provided measurement data.
-    /// Each bar represents a measurement value, grouped by date.
-    /// </summary>
-    /// <param name="data">The collection of measurement values to display.</param>
-    /// <returns>A configured <see cref="BarChart"/> representing the data.</returns>
     public BarChart CreateBarChart(IEnumerable<MeasurementModel> data)
     {
         var entries = data.Select(m => new ChartEntry(m.Value)

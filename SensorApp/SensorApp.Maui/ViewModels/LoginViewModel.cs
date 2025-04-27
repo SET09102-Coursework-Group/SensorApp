@@ -9,10 +9,25 @@ using System.Security.Claims;
 
 namespace SensorApp.Maui.ViewModels;
 
-public partial class LoginViewModel(IAuthService authService, IMenuBuilder menuBuilder) : BaseViewModel
+/// <summary>
+/// ViewModel responsible for handling user login functionality,
+/// including authentication, token parsing, and navigation after login.
+/// </summary>
+public partial class LoginViewModel : BaseViewModel
 {
-    private readonly IAuthService _authService = authService;
-    private readonly IMenuBuilder _menuBuilder = menuBuilder;
+    private readonly IAuthService _authService;
+    private readonly IMenuBuilder _menuBuilder;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
+    /// </summary>
+    /// <param name="authService">Service to authenticate user credentials.</param>
+    /// <param name="menuBuilder">Service to build the application menu based on user roles.</param>
+    public LoginViewModel(IAuthService authService, IMenuBuilder menuBuilder)
+    {
+        _authService = authService;
+        _menuBuilder = menuBuilder;
+    }
 
 
     [ObservableProperty]
@@ -72,10 +87,12 @@ public partial class LoginViewModel(IAuthService authService, IMenuBuilder menuB
     }
 
     /// <summary>
-    /// Parses the JWT token and extracts user information.
+    /// Parses a JWT token and extracts the user information such as email and role.
     /// </summary>
-    /// <param name="token">The JWT token string.</param>
-    /// <returns>Parsed <see cref="UserInfo"/> object or null if parsing fails.</returns>
+    /// <param name="token">The JWT token string to parse.</param>
+    /// <returns>
+    /// A <see cref="UserInfo"/> object if parsing is successful; otherwise, <c>null</c>.
+    /// </returns>
     private UserInfo? ParseToken(string token)
     {
         try

@@ -6,12 +6,22 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.AdminEndpoints;
 
-public class AdminGetUsersEndpoint(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
+
+/// <summary>
+/// Integration tests for the admin endpoint responsible for retrieving all users/ getting them by Id
+/// </summary>
+public class AdminGetUsersEndpoint : IClassFixture<WebApplicationFactoryForTests>
 {
-    private readonly HttpClient _client = factory.CreateClient();
-    private readonly TokenProvider _tokenProvider = new(factory.CreateClient());
+    private readonly HttpClient _client;
+    private readonly TokenProvider _tokenProvider;
 
     private const string _adminEmail = "admin@sensor.com";
+
+    public AdminGetUsersEndpoint(WebApplicationFactoryForTests factory)
+    {
+        _client = factory.CreateClient();
+        _tokenProvider = new TokenProvider(factory.CreateClient());
+    }
 
 
     [Fact]

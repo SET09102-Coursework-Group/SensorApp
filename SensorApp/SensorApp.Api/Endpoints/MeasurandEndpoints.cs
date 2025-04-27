@@ -7,6 +7,7 @@ namespace SensorApp.Api.Endpoints;
 
 /// <summary>
 /// Defines API endpoints related to measurand data retrieval for sensors.
+/// Access is restricted to users with Environmental Scientist or Administrator roles.
 /// </summary>
 public static class MeasurandEndpoints
 {

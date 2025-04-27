@@ -2,11 +2,16 @@
 
 namespace SensorApp.Shared.Interfaces;
 
+/// <summary>
+/// Defines a contract for building the application's navigation menu dynamically based on user role.
+/// Typically called after user authentication is validated.
+/// </summary>
 public interface IMenuBuilder
 {
     /// <summary>
-    /// This is the main entry point for menu generation. Called in LoginViewModel or LoadingPageViewModel after login/token validation.
+    /// Generates and configures the application's navigation menu according to the authenticated user's role.
+    /// This method is called after login or token validation in the <see cref="LoginViewModel"/> or <see cref="LoadingPageViewModel"/>.
     /// </summary>
-    /// <param name="userInfo">The authenticated user's info, including role and username.</param>
+    /// <param name="userInfo">Information about the authenticated user, including role and username.</param>
     void BuildMenu(UserInfo userInfo);
 }

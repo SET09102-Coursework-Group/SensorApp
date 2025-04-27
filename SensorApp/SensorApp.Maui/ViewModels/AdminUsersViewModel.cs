@@ -11,11 +11,24 @@ namespace SensorApp.Maui.ViewModels;
 /// <summary>
 /// ViewModel for managing admin users, including loading, creating, editing, and deleting users.
 /// </summary>
-public partial class AdminUsersViewModel(IAdminService adminService, ILogger<AdminUsersViewModel> logger, ITokenProvider tokenProvider) : BaseViewModel
+public partial class AdminUsersViewModel : BaseViewModel
 {
-    private readonly IAdminService _adminService = adminService;
-    private readonly ILogger<AdminUsersViewModel> _logger = logger;
-    private readonly ITokenProvider _tokenProvider = tokenProvider;
+    private readonly IAdminService _adminService;
+    private readonly ILogger<AdminUsersViewModel> _logger;
+    private readonly ITokenProvider _tokenProvider;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AdminUsersViewModel"/> class.
+    /// </summary>
+    /// <param name="adminService">Service for admin-related operations.</param>
+    /// <param name="logger">Logger for recording application events.</param>
+    /// <param name="tokenProvider">Provider for retrieving authentication tokens.</param>
+    public AdminUsersViewModel(IAdminService adminService, ILogger<AdminUsersViewModel> logger, ITokenProvider tokenProvider)
+    {
+        _adminService = adminService;
+        _logger = logger;
+        _tokenProvider = tokenProvider;
+    }
 
     [ObservableProperty]
     private ObservableCollection<UserWithRoleDto> users = new();

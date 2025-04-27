@@ -16,14 +16,6 @@ public class TokenService(IOptions<JwtSettings> options) : ITokenService
 {
     private readonly JwtSettings _jwtSettings = options.Value;
 
-    /// <summary>
-    /// Generates a signed JWT token for an authenticated user.
-    /// The token includes the user's ID, email address, and all assigned role claims.
-    /// </summary>
-    /// <param name="user">The authenticated <see cref="IdentityUser"/> object.</param>
-    /// <param name="roles">A list of roles associated with the user.</param>
-    /// <returns>A signed JWT token string containing the user's claims.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if the user is null.</exception>
     public string GenerateToken(IdentityUser user, IList<string> roles)
     {
         if (user == null)

@@ -2,6 +2,11 @@
 using SensorApp.Shared.Factories;
 
 namespace SensorApp.Tests.UnitTests.Factory;
+
+/// <summary>
+/// Unit tests for the <see cref="EnvironmentalMenuFactory"/> class.
+/// Verifies that the Environmental Scientist menu factory generates the expected menu items.
+/// </summary>
 public class EnvironmentalMenuFactoryTests
 {
     [Fact]

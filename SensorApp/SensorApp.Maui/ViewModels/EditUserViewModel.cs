@@ -10,12 +10,20 @@ using System.Text.RegularExpressions;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for editing an existing user's details, including username, email, role, and password.
+/// </summary>
 [QueryProperty(nameof(UserId), "UserId")]
 public partial class EditUserViewModel : BaseViewModel
 {
     private readonly IAdminService _adminService;
     private readonly ITokenProvider _tokenProvider;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EditUserViewModel"/> class.
+    /// </summary>
+    /// <param name="adminService">Service to perform admin operations like user management.</param>
+    /// <param name="tokenProvider">Provider to retrieve the current authentication token.</param>
     public EditUserViewModel(IAdminService adminService, ITokenProvider tokenProvider)
     {
         _adminService = adminService;
@@ -41,6 +49,12 @@ public partial class EditUserViewModel : BaseViewModel
     public ObservableCollection<UserRole> Roles { get; }
     private string? _currentUserId;
 
+
+    /// <summary>
+    /// Called automatically when <see cref="UserId"/> changes.
+    /// Triggers loading of the user's existing details.
+    /// </summary>
+    /// <param name="value">The new UserId value.</param>
     partial void OnUserIdChanged(string value) => _ = LoadUserAsync();
 
     /// <summary>

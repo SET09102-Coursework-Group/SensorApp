@@ -1,13 +1,15 @@
 ﻿using FluentAssertions;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
-using SensorApp.Tests.IntegrationTests.ApiEndpoints.AuthEndpoints;
 using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
 using System.Net;
 using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.AdminEndpoints;
 
+/// <summary>
+/// Integration tests for the admin endpoint responsible for deleting users.
+/// </summary>
 public class AdminDeleteUsersEndpoint : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client;
