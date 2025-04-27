@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
 
-internal class TestHelpers
+public class TestHelpers
 {
     /// <summary>
     /// Creates an authorized HTTP request by attaching a Bearer token and optional JSON content.

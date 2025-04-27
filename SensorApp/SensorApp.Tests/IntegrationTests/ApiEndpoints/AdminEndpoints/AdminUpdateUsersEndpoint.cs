@@ -8,11 +8,20 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.AdminEndpoints;
 
-public class AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
+/// <summary>
+/// Integration tests for the admin endpoint responsible for updating user information.
+/// </summary>
+public class AdminUpdateUserEndpointTests : IClassFixture<WebApplicationFactoryForTests>
 {
-    private readonly HttpClient _client = factory.CreateClient();
-    private readonly TokenProvider _tokenProvider = new(factory.CreateClient());
-    private string _adminEmail = "admin@sensor.com";
+    private readonly HttpClient _client;
+    private readonly TokenProvider _tokenProvider;
+    private readonly string _adminEmail = "admin@sensor.com";
+
+    public AdminUpdateUserEndpointTests(WebApplicationFactoryForTests factory)
+    {
+        _client = factory.CreateClient();
+        _tokenProvider = new TokenProvider(factory.CreateClient());
+    }
 
     [Fact]
     public async Task Admin_Can_Update_Another_User()

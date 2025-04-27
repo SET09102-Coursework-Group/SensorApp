@@ -7,10 +7,15 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.AdminEndpoints;
 
+/// <summary>
+/// Integration tests for the admin endpoint responsible for creating new users.
+/// Verifies that an administrator can successfully create users through the API.
+/// </summary>
 public class AdminCreateUsersEndpoint : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client;
     private readonly TokenProvider _tokenProvider;
+
 
     public AdminCreateUsersEndpoint(WebApplicationFactoryForTests factory)
     {

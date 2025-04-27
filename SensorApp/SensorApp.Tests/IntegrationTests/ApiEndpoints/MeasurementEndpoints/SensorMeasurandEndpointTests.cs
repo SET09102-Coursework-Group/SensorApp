@@ -6,6 +6,10 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.MeasurementEndpoints;
 
+/// <summary>
+/// Integration tests for the /sensors/{sensorId}/measurands API endpoint.
+/// Verifies that an authenticated admin user can successfully retrieve the list of measurands associated with a sensor.
+/// </summary>
 public class SensorMeasurandEndpointTests: IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client;
