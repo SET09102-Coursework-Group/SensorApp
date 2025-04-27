@@ -9,11 +9,22 @@ namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.AuthEndpoints;
 
 /// <summary>
 /// Integration tests for the /login authentication endpoint.
-/// These tests verify the behavior by making real HTTP requests against the running API in-memory
+/// These tests verify the behavior by making real HTTP requests against the running API in-memory.
 /// </summary>
-public class AuthEndpointTests(WebApplicationFactoryForTests factory) : IClassFixture<WebApplicationFactoryForTests>
+public class AuthEndpointTests : IClassFixture<WebApplicationFactoryForTests>
 {
-    private readonly HttpClient _client = factory.CreateClient();
+    private readonly HttpClient _client;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthEndpointTests"/> class.
+    /// Sets up the HTTP client for testing authentication endpoints.
+    /// </summary>
+    /// <param name="factory">A factory for creating a configured web application client instance.</param>
+    public AuthEndpointTests(WebApplicationFactoryForTests factory)
+    {
+        _client = factory.CreateClient();
+    }
+
 
     [Fact]
     public async Task HappyPath_UserLogin_WithValidCredentials_SystemReturnsToken()

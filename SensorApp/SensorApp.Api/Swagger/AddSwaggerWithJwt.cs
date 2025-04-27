@@ -2,8 +2,16 @@
 
 namespace SensorApp.Api.Swagger;
 
+/// <summary>
+/// Provides extension methods for configuring Swagger with JWT authentication support.
+/// </summary>
 public static class SwaggerConfiguration
 {
+    /// <summary>
+    /// Adds Swagger generation services to the application with JWT Bearer token security configured.
+    /// This enables API documentation and testing through Swagger UI, requiring JWT tokens for authorized endpoints.
+    /// </summary>
+    /// <param name="services">The service collection to which the Swagger services will be added.</param>
     public static void AddSwaggerWithJwt(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>

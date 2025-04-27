@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SensorApp.Core.Services.Auth;
+﻿using SensorApp.Core.Services.Auth;
 using SensorApp.Shared.Dtos;
 
 namespace SensorApp.Api.Endpoints;

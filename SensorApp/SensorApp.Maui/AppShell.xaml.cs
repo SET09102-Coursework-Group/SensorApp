@@ -2,8 +2,16 @@
 
 namespace SensorApp.Maui;
 
+/// <summary>
+/// Defines the application's main navigation structure using Shell.
+/// Registers all page routes for navigation throughout the app.
+/// </summary>
 public partial class AppShell : Shell
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AppShell"/> class.
+    /// Sets up all page routes for the application.
+    /// </summary>
     public AppShell()
     {
         InitializeComponent();

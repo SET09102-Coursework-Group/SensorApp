@@ -1,21 +1,33 @@
 ﻿using SensorApp.Maui.Views.Controls;
 using SensorApp.Maui.Views.Pages;
-using SensorApp.Shared.Enums;
 using SensorApp.Shared.Factories;
 using SensorApp.Shared.Interfaces;
 using SensorApp.Shared.Models;
 
 namespace SensorApp.Maui.Helpers.MenuRoles;
 
-public class MenuBuilder(IServiceProvider serviceProvider) : IMenuBuilder
+/// <summary>
+/// Builds the application's navigation menu dynamically based on the user's role.
+/// Utilizes the <see cref="IMenuFactory"/> to generate role-specific menu items and attaches them to the app shell.
+/// </summary>
+public class MenuBuilder : IMenuBuilder
 {
-    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
-    /// Builds the application's navigation menu dynamically based on the user's role.
-    /// Works with the <see cref="IMenuFactory"/> to get the user's menu base on their specific role, and converts them to UI elements that are shown in the app Shell.
+    /// Initializes a new instance of the <see cref="MenuBuilder"/> class.
     /// </summary>
-    /// <param name="userInfo">Information about the currently logged-in user in the app.</param>
+    /// <param name="serviceProvider">The application's service provider for resolving page instances.</param>
+    public MenuBuilder(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    /// <summary>
+    /// Builds the navigation menu based on the authenticated user's role.
+    /// Clears existing shell items, creates new flyout menu items, and adds a logout item.
+    /// </summary>
+    /// <param name="userInfo">Information about the currently authenticated user, including their role.</param>
     public void BuildMenu(UserInfo userInfo)
     {
         if (userInfo is null)
@@ -38,8 +50,11 @@ public class MenuBuilder(IServiceProvider serviceProvider) : IMenuBuilder
     }
 
     /// <summary>
-    /// Creates a <see cref="FlyoutItem"/> for the given menu item.
+    /// Creates a <see cref="FlyoutItem"/> for a given application menu item.
+    /// Dynamically resolves the associated page type from the service provider.
     /// </summary>
+    /// <param name="item">The application menu item to convert into a flyout item.</param>
+    /// <returns>A configured <see cref="FlyoutItem"/> for the Shell menu.</returns>
     private FlyoutItem CreateFlyoutItem(AppMenuItem item)
     {
         var pageType = Type.GetType($"SensorApp.Maui.Views.Pages.{item.Route}") ?? throw new InvalidOperationException($"Page type '{item.Route}' not found.");
@@ -62,7 +77,8 @@ public class MenuBuilder(IServiceProvider serviceProvider) : IMenuBuilder
     }
 
     /// <summary>
-    /// Adds a fixed Logout item to the end of the menu.
+    /// Adds a fixed logout option to the Shell menu,
+    /// allowing the user to sign out from the application.
     /// </summary>
     private void AddLogoutItem()
     {

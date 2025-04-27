@@ -7,11 +7,20 @@ using System.Security.Claims;
 
 namespace SensorApp.Maui.ViewModels;
 
+/// <summary>
+/// ViewModel for the loading page that verifies user authentication and navigates accordingly.
+/// </summary>
 public partial class LoadingPageViewModel : BaseViewModel
 {
     private readonly IMenuBuilder _menuBuilder;
     private readonly ITokenProvider _tokenProvider;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LoadingPageViewModel"/> class.
+    /// Starts the authentication validation process.
+    /// </summary>
+    /// <param name="menuBuilder">Service responsible for dynamically building the application menu based on user roles.</param>
+    /// <param name="tokenProvider">Service for retrieving and managing authentication tokens.</param>
     public LoadingPageViewModel(IMenuBuilder menuBuilder, ITokenProvider tokenProvider)
     {
         _menuBuilder = menuBuilder;

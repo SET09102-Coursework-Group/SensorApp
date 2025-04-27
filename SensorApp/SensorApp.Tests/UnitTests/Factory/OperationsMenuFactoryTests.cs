@@ -2,6 +2,11 @@
 using SensorApp.Shared.Factories;
 
 namespace SensorApp.Tests.UnitTests.Factory;
+
+/// <summary>
+/// Unit tests for the <see cref="OperationsMenuFactory"/> class.
+/// Verifies that the Operations Manager menu factory generates the expected menu items.
+/// </summary>
 public class OperationsMenuFactoryTests
 {
     [Fact]

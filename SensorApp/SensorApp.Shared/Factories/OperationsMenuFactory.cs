@@ -3,6 +3,10 @@ using SensorApp.Shared.Models;
 
 namespace SensorApp.Shared.Factories;
 
+/// <summary>
+/// Factory class responsible for creating the navigation menu items 
+/// that are available to Operations Manager users within the application.
+/// </summary>
 public class OperationsMenuFactory : IMenuFactory
 {
     /// <summary>

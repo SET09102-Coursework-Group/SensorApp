@@ -14,16 +14,6 @@ public class AuthService : IAuthService
 
     public AuthService(UserManager<IdentityUser> users, ITokenService tokenService) => (_users, _tokenService) = (users, tokenService);
 
-
-    /// <summary>
-    /// Authenticates a user based on provided login credentials.
-    /// If successful, generates a JWT token and returns basic user information.
-    /// </summary>
-    /// <param name="login">The login credentials entered by the user.</param>
-    /// <returns>
-    /// An <see cref="AuthResponseDto"/> containing the user ID, username, and JWT token if authentication succeeds;
-    /// otherwise, <c>null</c> if authentication fails.
-    /// </returns>
     public async Task<AuthResponseDto?> AuthenticateAsync(LoginDto login)
     {
         var user = await _users.FindByNameAsync(login.Username);

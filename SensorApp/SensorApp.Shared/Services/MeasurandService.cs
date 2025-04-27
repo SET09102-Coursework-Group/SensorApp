@@ -8,19 +8,19 @@ namespace SensorApp.Shared.Services;
 /// Service responsible for retrieving measurands (measurable properties)
 /// associated with a specific sensor by communicating with the backend API.
 /// </summary>
-public class MeasurandService(HttpClient httpClient) : IMeasurandService
+public class MeasurandService : IMeasurandService
 {
-    private readonly HttpClient _httpClient = httpClient;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
-    /// Retrieves a list of measurands available for a specific sensor.
+    /// Initializes a new instance of the <see cref="MeasurandService"/> class.
     /// </summary>
-    /// <param name="token">Authentication token required to authorize the request.</param>
-    /// <param name="sensorId">The unique identifier of the sensor whose measurands are requested.</param>
-    /// <returns>
-    /// A list of <see cref="MeasurandModel"/> representing the measurable properties for the specified sensor.
-    /// If no measurands are found or the request fails, an empty list is returned.
-    /// </returns>
+    /// <param name="httpClient">The <see cref="HttpClient"/> used to communicate with the backend API.</param>
+    public MeasurandService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
     public async Task<List<MeasurandModel>> GetMeasurandsAsync(string token, int sensorId)
     {
         var request = HttpRequestHelper.Create(HttpMethod.Get, $"/sensors/{sensorId}/measurands", token);

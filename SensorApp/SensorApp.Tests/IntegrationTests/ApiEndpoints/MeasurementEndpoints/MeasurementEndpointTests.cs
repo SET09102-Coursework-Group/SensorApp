@@ -6,6 +6,9 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.MeasurementEndpoints;
 
+/// <summary>
+/// Integration tests for the /measurements API endpoint.
+/// </summary>
 public class MeasurementEndpointTests : IClassFixture<WebApplicationFactoryForTests>
 {
     private readonly HttpClient _client;
