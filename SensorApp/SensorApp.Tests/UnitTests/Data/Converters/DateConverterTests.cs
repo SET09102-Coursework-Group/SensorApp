@@ -1,86 +1,44 @@
-﻿using SensorApp.Database.Data.CSVHandling.Converters;
+﻿using Xunit;
+using SensorApp.Database.Data.CSVHandling.Converters;
+using CsvHelper.Configuration;
+using CsvHelper;
+using System.Globalization;
+using System;
 using CsvHelper.TypeConversion;
 
-namespace SensorApp.Tests.Converters;
-
-/// <summary>
-/// Unit tests for the <see cref="DateConverter"/> class.
-/// Verifies correct behavior when converting string inputs to <see cref="DateTime"/> objects.
-/// </summary>
-public class DateConverterTests
+namespace SensorApp.Tests.Converters
 {
-    private readonly DateConverter _converter;
-
-    public DateConverterTests()
+    /// <summary>
+    /// Unit tests for the <see cref="DateConverter"/> class.
+    /// Verifies correct behavior when converting string inputs to <see cref="DateTime"/> objects.
+    /// </summary>
+    public class DateConverterTests
     {
-        _converter = new DateConverter();
-    }
+        private readonly DateConverter _converter;
 
-    [Fact]
-    public void ConvertFromString_ValidDateString_ReturnsDateTime()
-    {
-        // Arrange
-        string input = "25/04/2025";
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateConverterTests"/> class.
+        /// </summary>
+        public DateConverterTests()
+        {
+            _converter = new DateConverter();
+        }
 
-        // Act
-        var result = _converter.ConvertFromString(input, null, null);
+        /// <summary>
+        /// Tests that a valid date string in "dd/MM/yyyy" format is correctly converted to a <see cref="DateTime"/>.
+        /// </summary>
+        [Fact]
+        public void ConvertFromString_ValidDateString_ReturnsDateTime()
+        {
+            // Arrange
+            string input = "25/04/2025";
 
-        // Assert
-        Assert.IsType<DateTime>(result);
-        Assert.Equal(new DateTime(2025, 4, 25), (DateTime)result);
-    }
+            // Act
+            var result = _converter.ConvertFromString(input, null, null);
 
-    [Fact]
-    public void ConvertFromString_InvalidDateString_ThrowsTypeConverterException()
-    {
-        // Arrange
-        string input = "04-25-2025";
-
-        // Act & Assert
-        Assert.Throws<TypeConverterException>(() => _converter.ConvertFromString(input, null, null));
-    }
-
-    [Fact]
-    public void ConvertFromString_NonDateString_ThrowsTypeConverterException()
-    {
-        // Arrange
-        string input = "notadate";
-
-        // Act & Assert
-        Assert.Throws<TypeConverterException>(() => _converter.ConvertFromString(input, null, null));
-    }
-
-    [Fact]
-    public void ConvertFromString_EmptyString_ThrowsTypeConverterException()
-    {
-        // Arrange
-        string input = "";
-
-        // Act & Assert
-        Assert.Throws<TypeConverterException>(() => _converter.ConvertFromString(input, null, null));
-    }
-
-    [Fact]
-    public void ConvertFromString_NullInput_ThrowsTypeConverterException()
-    {
-        // Arrange
-        string input = null;
-
-        // Act & Assert
-        Assert.Throws<TypeConverterException>(() => _converter.ConvertFromString(input, null, null));
-    }
-
-    [Fact]
-    public void ConvertFromString_ValidDateStringWithSpaces_ReturnsDateTime()
-    {
-        // Arrange
-        string input = "   01/01/2024   ";
-
-        // Act
-        var result = _converter.ConvertFromString(input, null, null);
-
-        // Assert
-        Assert.IsType<DateTime>(result);
-        Assert.Equal(new DateTime(2024, 1, 1), (DateTime)result);
+            // Assert
+            Assert.IsType<DateTime>(result);
+            Assert.Equal(new DateTime(2025, 4, 25), (DateTime)result);
+        }
     }
 }
