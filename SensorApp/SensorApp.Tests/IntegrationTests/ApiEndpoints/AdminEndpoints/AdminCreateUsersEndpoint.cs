@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using SensorApp.Shared.Dtos.Admin;
 using SensorApp.Shared.Enums;
-using SensorApp.Tests.IntegrationTests.ApiEndpoints.AuthEndpoints;
 using SensorApp.Tests.IntegrationTests.ApiEndpoints.Helpers;
 using System.Net;
 using System.Net.Http.Json;

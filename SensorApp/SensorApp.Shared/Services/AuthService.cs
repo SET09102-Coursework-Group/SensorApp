@@ -4,19 +4,25 @@ using System.Net.Http.Json;
 
 namespace SensorApp.Shared.Services;
 
-public class AuthService(HttpClient httpClient) : IAuthService
+/// <summary>
+/// Service responsible for handling user authentication by communicating with the backend API.
+/// Implements the <see cref="IAuthService"/> interface to perform login operations and track authentication status.
+/// </summary>
+public class AuthService : IAuthService
 {
-    private readonly HttpClient _httpClient = httpClient;
+    private readonly HttpClient _httpClient;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthService"/> class.
+    /// </summary>
+    /// <param name="httpClient">The <see cref="HttpClient"/> used to send authentication requests.</param>
+    public AuthService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
 
     public string StatusMessage { get; private set; } = string.Empty;
 
-
-    /// <summary>
-    /// Sends the user's login credentials to the backend and processes the response
-    /// </summary>
-    /// <param name="loginDto">The login credentials entered by the user.</param>
-    /// <returns> a <see cref="AuthResponseDto"/> with JWT  and basic user info
-    /// </returns>
     public async Task<AuthResponseDto> Login(LoginDto loginDto)
     {
         try
