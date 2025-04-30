@@ -59,6 +59,11 @@ public static class AdminEndpoints
     /// </summary>
     private static async Task<IResult> CreateUser(CreateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
+        if (await userManager.FindByNameAsync(dto.Username) is not null)
+        {
+            return Results.Conflict("Username already exists");
+        }
+        
         if (await userManager.FindByEmailAsync(dto.Email) != null)
         {
             return Results.Conflict("User already exists");
@@ -123,76 +128,73 @@ public static class AdminEndpoints
     /// </summary>
     private static async Task<IResult> UpdateUser(string id, UpdateUserDto dto, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, HttpContext httpContext)
     {
-        var currentUserId = userManager.GetUserId(httpContext.User);
-        if (currentUserId == id)
-        {
-            return Results.BadRequest("You cannot update your own account.");
-        }
-
-        var normalizedUsername = dto.Username.ToUpperInvariant();
-        var duplicateUsername = await userManager.Users.AnyAsync(u => u.Id != id && u.NormalizedUserName == normalizedUsername);
-        if (duplicateUsername)
-        {
-            return Results.Conflict("Username is already in use.");
-        }
-
-        var normalizedEmail = dto.Email.ToUpperInvariant();
-        var duplicateEmail = await userManager.Users.AnyAsync(u => u.Id != id && u.NormalizedEmail == normalizedEmail);
-        if (duplicateEmail)
-        {
-            return Results.Conflict("Email is already in use.");
-        }
+        var validationError = await ValidateUpdateRequestAsync(id, dto, userManager, httpContext);
+        if (validationError is not null) return validationError;
 
         var user = await userManager.FindByIdAsync(id);
-        if (user == null)
-        {
-            return Results.NotFound();
-        }
+        if (user == null) return Results.NotFound();
 
-        if (user.UserName != dto.Username || user.Email != dto.Email)
-        {
-            user.UserName = dto.Username;
-            user.Email = dto.Email;
-            var updateResult = await userManager.UpdateAsync(user);
-            if (!updateResult.Succeeded)
-            {
-                return Results.BadRequest(updateResult.Errors);
-            }
-        }
+        var coreUpdateError = await UpdateUsernameAndEmailAsync(user, dto, userManager);
+        if (coreUpdateError is not null) return coreUpdateError;
 
-        var currentRoles = await userManager.GetRolesAsync(user);
-        var newRole = dto.Role.ToString();
-        if (!currentRoles.Contains(newRole))
-        {
-            var remove = await userManager.RemoveFromRolesAsync(user, currentRoles);
-            if (!remove.Succeeded)
-            {
-                return Results.BadRequest(remove.Errors);
-            }
-
-            if (!await roleManager.RoleExistsAsync(newRole))
-            {
-                await roleManager.CreateAsync(new IdentityRole(newRole));
-            }
-
-            var add = await userManager.AddToRoleAsync(user, newRole);
-            if (!add.Succeeded)
-            {
-                return Results.BadRequest(add.Errors);
-            }
-        }
+        var roleUpdateError = await UpdateRoleAsync(user, dto.Role, userManager, roleManager);
+        if (roleUpdateError is not null) return roleUpdateError;
 
         if (!string.IsNullOrWhiteSpace(dto.Password))
         {
-            var token = await userManager.GeneratePasswordResetTokenAsync(user);
-            var passwordResult = await userManager.ResetPasswordAsync(user, token, dto.Password);
-            if (!passwordResult.Succeeded)
-            {
-                return Results.BadRequest(passwordResult.Errors);
-            }
+            var pwError = await ResetPasswordAsync(user, dto.Password, userManager);
+            if (pwError is not null) return pwError;
         }
 
         return Results.NoContent();
+    }
+
+    private static async Task<IResult?> ValidateUpdateRequestAsync(string id, UpdateUserDto dto, UserManager<IdentityUser> userManager, HttpContext httpContext)
+    {
+        if (userManager.GetUserId(httpContext.User) == id)
+            return Results.BadRequest("You cannot update your own account.");
+
+        var nameExists = await userManager.Users.AnyAsync(u =>
+            u.Id != id && u.NormalizedUserName == dto.Username.ToUpperInvariant());
+        if (nameExists) return Results.Conflict("Username is already in use.");
+
+        var mailExists = await userManager.Users.AnyAsync(u =>
+            u.Id != id && u.NormalizedEmail == dto.Email.ToUpperInvariant());
+        return mailExists ? Results.Conflict("Email is already in use.") : null;
+    }
+
+    private static async Task<IResult?> UpdateUsernameAndEmailAsync(IdentityUser user, UpdateUserDto dto, UserManager<IdentityUser> userManager)
+    {
+        if (user.UserName == dto.Username && user.Email == dto.Email) return null;
+
+        user.UserName = dto.Username;
+        user.Email = dto.Email;
+
+        var update = await userManager.UpdateAsync(user);
+        return update.Succeeded ? null : Results.BadRequest(update.Errors);
+    }
+
+    private static async Task<IResult?> UpdateRoleAsync(IdentityUser user, UserRole newRoleEnum, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+    {
+        var newRole = newRoleEnum.ToString();
+        var currentRoles = await userManager.GetRolesAsync(user);
+        if (currentRoles.Contains(newRole)) return null;
+
+        var remove = await userManager.RemoveFromRolesAsync(user, currentRoles);
+        if (!remove.Succeeded) return Results.BadRequest(remove.Errors);
+
+        if (!await roleManager.RoleExistsAsync(newRole))
+            await roleManager.CreateAsync(new IdentityRole(newRole));
+
+        var add = await userManager.AddToRoleAsync(user, newRole);
+        return add.Succeeded ? null : Results.BadRequest(add.Errors);
+    }
+
+    private static async Task<IResult?> ResetPasswordAsync(IdentityUser user, string newPassword, UserManager<IdentityUser> userManager)
+    {
+        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        var result = await userManager.ResetPasswordAsync(user, token, newPassword);
+        return result.Succeeded ? null : Results.BadRequest(result.Errors);
     }
 
     /// <summary>
