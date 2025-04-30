@@ -94,4 +94,31 @@ public class AdminDeleteUsersEndpoint : IClassFixture<WebApplicationFactoryForTe
         // Assert
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
+
+    [Fact]
+    public async Task NonAdmin_Cannot_DeleteUser_ReturnsForbidden()
+    {
+        // Arrange 
+        var adminToken = await _tokenProvider.GetAdminTokenAsync();
+        var opsToken = await _tokenProvider.GetOpsTokenAsync();
+        var email = $"cantDelete_{Guid.NewGuid()}@sensor.com";
+        var dto = new CreateUserDto
+        {
+            Username = email,
+            Email = email,
+            Password = "DeleteMe123!",
+            Role = UserRole.EnvironmentalScientist
+        };
+        var createReq = TestHelpers.CreateAuthorizedRequest("/admin/users", adminToken, HttpMethod.Post, dto);
+        var createResp = await _client.SendAsync(createReq);
+        var created = await createResp.Content.ReadFromJsonAsync<UserWithRoleDto>();
+
+        // Act – 
+        var delReq = TestHelpers.CreateAuthorizedRequest($"/admin/users/{created!.Id}", opsToken, HttpMethod.Delete);
+        var delResp = await _client.SendAsync(delReq);
+
+        // Assert
+        delResp.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
 }
