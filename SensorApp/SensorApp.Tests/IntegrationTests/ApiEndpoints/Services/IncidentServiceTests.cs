@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SensorApp.Api.Services;
 using SensorApp.Database.Data;
 using SensorApp.Database.Models;
 using SensorApp.Shared.Dtos.Incident;
-using Microsoft.AspNetCore.Identity;
 using SensorApp.Shared.Enums;
 
+namespace SensorApp.Tests.IntegrationTests.ApiEndpoints.Services;
 public class IncidentServiceTests
 {
     private SensorDbContext GetDbContext(string dbName)

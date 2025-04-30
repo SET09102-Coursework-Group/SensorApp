@@ -159,4 +159,58 @@ public class AdminUpdateUserEndpointTests : IClassFixture<WebApplicationFactoryF
         var response = await _client.SendAsync(request);
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
+
+    [Fact]
+    public async Task UpdateUser_DuplicateEmail_ReturnsConflict()
+    {
+        var adminToken = await _tokenProvider.GetAdminTokenAsync();
+        var emailA = $"dupA_{Guid.NewGuid()}@sensor.com";
+        var emailB = $"dupB_{Guid.NewGuid()}@sensor.com";
+
+        async Task<string> Create(string mail)
+        {
+            var dto = new CreateUserDto { Username = mail, Email = mail, Password = "Password123!", Role = UserRole.EnvironmentalScientist };
+            var req = TestHelpers.CreateAuthorizedRequest("/admin/users", adminToken, HttpMethod.Post, dto);
+            var resp = await _client.SendAsync(req);
+            var created = await resp.Content.ReadFromJsonAsync<UserWithRoleDto>();
+            return created!.Id;
+        }
+
+        var idA = await Create(emailA);
+        var idB = await Create(emailB);
+
+        var updateDto = new UpdateUserDto { Username = emailA, Email = emailB, Role = UserRole.EnvironmentalScientist };
+        var updReq = TestHelpers.CreateAuthorizedRequest($"/admin/users/{idA}", adminToken, HttpMethod.Put, updateDto);
+
+        var updResp = await _client.SendAsync(updReq);
+
+        updResp.StatusCode.Should().Be(HttpStatusCode.Conflict);
+    }
+
+    [Fact]
+    public async Task Admin_UpdateUser_WithUnchangedRole_IsNoContent()
+    {
+        var token = await _tokenProvider.GetAdminTokenAsync();
+
+        var listReq = TestHelpers.CreateAuthorizedRequest("/admin/users", token, HttpMethod.Get);
+        var listResp = await _client.SendAsync(listReq);
+        listResp.EnsureSuccessStatusCode();
+
+        var allUsers = await listResp.Content.ReadFromJsonAsync<List<UserWithRoleDto>>();
+        var target = allUsers!.First(u => u.Email != _adminEmail);  
+
+        var dto = new UpdateUserDto
+        {
+            Username = target.Username + "_update",
+            Email = "_update" + target.Email,
+            Role = target.Role               
+        };
+
+        var updReq = TestHelpers.CreateAuthorizedRequest($"/admin/users/{target.Id}", token, HttpMethod.Put, dto);
+        var updResp = await _client.SendAsync(updReq);
+
+        updResp.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+
 }
